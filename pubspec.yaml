@@ -202,3 +202,12 @@ flutter:
     - family: splash
       fonts:
         - asset: assets/fonts/antonio-Regular.ttf
+
+
+icons_launcher:
+  image_path: "assets/images/png/logo.png"
+  platforms:
+    android:
+      enable: true
+    ios:
+      enable: true
