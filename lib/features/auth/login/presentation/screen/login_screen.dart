@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:exponile_customer/core/util/resources/extensions_manager.dart';
 import 'package:exponile_customer/core/util/widgets/main_appbar.dart';
+import 'package:exponile_customer/core/util/widgets/my_icon_button.dart';
 import 'package:exponile_customer/features/home/presentation/controller/cubit.dart';
-import 'package:exponile_customer/features/home/presentation/screens/main_layout/home_screen.dart';
+import 'package:exponile_customer/features/home/presentation/screens/main_layout/main_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,23 +43,31 @@ class LoginScreen extends StatelessWidget {
     return BlocConsumer<AppBloc,AppState>(
       listener: (context, state) {
         AppBloc appBloc = AppBloc.get(context);
-        // if(state is AppInfoSuccessState && merchantVersion != state.appInfoEntity.merchantVersion){
-        //   showDialog(
-        //     context: context,
-        //     barrierDismissible: state.appInfoEntity.merchantRequired == 'no' ? true : false,
-        //     builder: (context) {
-        //       return VersionDialog(
-        //         message: appBloc.translationModel!.sure,
-        //         popButtonVoidCallback: () {
-        //
-        //         },
-        //         pushButtonVoidCallback: state.appInfoEntity.merchantRequired == 'no'?  () {
-        //           Navigator.pop(context);
-        //         } : null,
-        //       );
-        //     },
-        //   );
-        // }
+        if(state is AppInfoSuccessState && customerVersion != state.appInfoEntity.customerVersion) {
+          showDialog(
+            context: context,
+            barrierDismissible: state.appInfoEntity.customerRequired == 'no' ? true : false,
+            builder: (context) {
+              return VersionDialog(
+                message: appBloc.translationModel!.sure,
+                popButtonVoidCallback:
+                state.appInfoEntity.customerRequired == 'no'?  () {
+                  Navigator.pop(context);
+                } : null,
+
+                pushButtonVoidCallback: () {
+                  Platform.isAndroid ?
+                  appBloc.launchGooglePlayStore(
+                      storeLink: state.appInfoEntity.customerAndroidLink!
+                  ) :
+                  appBloc.launchGooglePlayStore(
+                      storeLink: state.appInfoEntity.customerIosLink!
+                  );
+                },
+              );
+            },
+          );
+        }
       },
       builder: (context, state) {
           return Directionality(
@@ -282,14 +293,28 @@ class LoginScreen extends StatelessWidget {
                                           ),
 
                                           verticalSpace(4.h),
-                                          Center(
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
 
-                                              children: [
-                                                DefaultText(
-                                                  title: appBloc.translationModel!.newUser,
-                                                  color: ColorsManager.mainColor,
+                                            children: [
+                                              DefaultText(
+                                                title: appBloc.translationModel!.newUser,
+                                                color: ColorsManager.mainColor,
+                                                fontFamily: 'splash',
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 14.rSp,
+                                                maxLines: 1,
+                                                style: Style.medium,
+                                                align: TextAlign.end,
+                                              ),
+                                              horizontalSpace(2.w),
+                                              InkWell(
+                                                onTap: () {
+                                                  navigateTo(context, RegisterScreen());
+                                                },
+                                                child: DefaultText(
+                                                  title: appBloc.translationModel!.registerNow,
+                                                  color: ColorsManager.orangePrimary,
                                                   fontFamily: 'splash',
                                                   fontWeight: FontWeight.w400,
                                                   fontSize: 14.rSp,
@@ -297,26 +322,40 @@ class LoginScreen extends StatelessWidget {
                                                   style: Style.medium,
                                                   align: TextAlign.end,
                                                 ),
-                                                horizontalSpace(2.w),
-                                                InkWell(
-                                                  onTap: () {
-                                                    navigateTo(context, RegisterScreen());
-                                                  },
-                                                  child: DefaultText(
-                                                    title: appBloc.translationModel!.registerNow,
-                                                    color: ColorsManager.orangePrimary,
-                                                    fontFamily: 'splash',
-                                                    fontWeight: FontWeight.w400,
-                                                    fontSize: 14.rSp,
-                                                    maxLines: 1,
-                                                    style: Style.medium,
-                                                    align: TextAlign.end,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
+                                              ),
+                                            ],
                                           ),
-
+                                          verticalSpace(2.h),
+                                          Row(
+                                            children: [
+                                              svgImage(
+                                                path: Assets.images.svg.guest,
+                                                color: ColorsManager.black,
+                                                width: 3.w,
+                                                height: 3.h,
+                                              ),
+                                              horizontalSpace(2.w),
+                                              DefaultText(
+                                                title: appBloc.translationModel!.guest,
+                                                color: ColorsManager.mainColor,
+                                                fontFamily: 'splash',
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 14.rSp,
+                                                maxLines: 1,
+                                                style: Style.medium,
+                                                align: TextAlign.end,
+                                              ),
+                                              const Spacer(),
+                                              DefaultIconButton(
+                                                  icon: const Icon(Icons.login,color: ColorsManager.success,),
+                                                  onPressed: (){
+                                                    HomeCubit homeCubit = HomeCubit.get(context);
+                                                    homeCubit.currentNavIndex = 0;
+                                                    navigateAndFinish(context, const MainLayout());
+                                                  }
+                                              )
+                                            ],
+                                          )
                                         ],
                                       ),
                                     ),

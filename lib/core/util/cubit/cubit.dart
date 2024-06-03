@@ -4,6 +4,9 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../../../features/home/domain/entities/app_info_entity.dart';
+import '../../../features/home/domain/usecase/app_info_usecase.dart';
 import '../../error/failures.dart';
 import '../../usecase/use_case.dart';
 import '../resources/constants_manager.dart';
@@ -15,14 +18,14 @@ import '../../network/local/cache_helper.dart';
 
 
 class AppBloc extends Cubit<AppState> {
-  // final AppInfoUseCase _appInfoUseCase;
+  final AppInfoUseCase _appInfoUseCase;
 
   AppBloc(
-  //     {
-  //   required AppInfoUseCase appInfoUseCase,
-  // }
+      {
+    required AppInfoUseCase appInfoUseCase,
+  }
   ) :
-        // _appInfoUseCase = appInfoUseCase,
+        _appInfoUseCase = appInfoUseCase,
         super(Empty());
 
   static AppBloc get(context) => BlocProvider.of(context);
@@ -388,20 +391,32 @@ class AppBloc extends Cubit<AppState> {
   }
 
 
-  // AppInfoEntity? appInfoEntity;
-  // void getAppInfo() async {
-  //   emit(AppInfoLoadingState());
-  //   final result = await _appInfoUseCase(NoParams());
-  //   result.fold((failure) {
-  //     emit(AppInfoErrorState(
-  //         failure: mapFailureToMessage(failure)
-  //     ));
-  //   }, (data) {
-  //     appInfoEntity = data;
-  //     emit(AppInfoSuccessState(
-  //         appInfoEntity: data
-  //     ));
-  //   });
-  // }
+  AppInfoEntity? appInfoEntity;
+  void getAppInfo() async {
+    emit(AppInfoLoadingState());
+    final result = await _appInfoUseCase(NoParams());
+    result.fold((failure) {
+      emit(AppInfoErrorState(
+          failure: mapFailureToMessage(failure)
+      ));
+    }, (data) {
+      appInfoEntity = data;
+      emit(AppInfoSuccessState(
+          appInfoEntity: data
+      ));
+    });
+  }
+
+
+  void launchGooglePlayStore({required String storeLink}) async {
+    emit(InitState());
+    if (await canLaunch(storeLink)) {
+      await launch(storeLink);
+    } else {
+      throw 'Could not launch $storeLink';
+    }
+    emit(ChangeStates());
+  }
+
 
 }

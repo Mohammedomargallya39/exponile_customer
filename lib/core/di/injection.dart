@@ -1,5 +1,6 @@
 import 'package:exponile_customer/features/auth/forget_password/domain/usecase/forget_password_usecase.dart';
 import 'package:exponile_customer/features/auth/forget_password/presentation/controller/forget_password_cubit.dart';
+import 'package:exponile_customer/features/home/domain/usecase/app_info_usecase.dart';
 import 'package:exponile_customer/features/home/presentation/controller/cubit.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,6 +19,10 @@ import '../../features/auth/register/data/repository/register_repository.dart';
 import '../../features/auth/register/domain/repository/register_base_rebository.dart';
 import '../../features/auth/register/domain/usecase/register_usecase.dart';
 import '../../features/auth/register/presentation/controller/register_cubit.dart';
+import '../../features/home/data/data_source/home_remote_data_source.dart';
+import '../../features/home/data/repository/home_repository.dart';
+import '../../features/home/domain/repository/home_base_rebository.dart';
+import '../../features/home/domain/usecase/main_search_product_usecase.dart';
 import '/core/network/local/cache_helper.dart';
 import '/core/network/remote/dio_helper.dart';
 import '/core/network/repository.dart';
@@ -29,27 +34,25 @@ Future<void> init() async {
   // Bloc
   sl.registerLazySingleton(
         () => AppBloc(
-          // appInfoUseCase: sl(),
-        ),
+      appInfoUseCase: sl(),
+    ),
   );
 
   sl.registerLazySingleton<LoginCubit>(() => LoginCubit(logInUseCase: sl()));
   sl.registerLazySingleton<ForgetPasswordCubit>(() => ForgetPasswordCubit(
-      forgetPasswordUseCase: sl(),
-      otpUseCase: sl(),
-      resetPasswordUseCase: sl(),
-  ),
-  );
+    forgetPasswordUseCase: sl(),
+    otpUseCase: sl(),
+    resetPasswordUseCase: sl(),
+  ));
 
   sl.registerLazySingleton<RegisterCubit>(() => RegisterCubit(
     registerUseCase: sl(),
   ));
 
-
   sl.registerLazySingleton(
         () => HomeCubit(
-
-        ),
+          mainSearchProductUseCase: sl(),
+    ),
   );
 
   sl.registerLazySingleton<Repository>(
@@ -72,20 +75,18 @@ Future<void> init() async {
         () => RegisterRepoImplementation(remoteDataSource: sl()),
   );
 
-  // sl.registerLazySingleton<HomeBaseRepository>(
-  //       () => HomeRepoImplementation(remoteDataSource: sl()),
-  // );
+  sl.registerLazySingleton<HomeBaseRepository>(
+        () => HomeRepoImplementation(remoteDataSource: sl()),
+  );
 
-
-  //Use Cases
+  // Use Cases
   sl.registerLazySingleton(() => LoginUseCase(sl()));
+  sl.registerLazySingleton(() => AppInfoUseCase(sl()));
   sl.registerLazySingleton(() => ForgetPasswordUseCase(sl()));
   sl.registerLazySingleton(() => OTPUseCase(sl()));
   sl.registerLazySingleton(() => ResetPasswordUseCase(sl()));
   sl.registerLazySingleton(() => RegisterUseCase(sl()));
-
-
-
+  sl.registerLazySingleton(() => MainSearchProductUseCase(sl()));
 
   sl.registerLazySingleton<LogInBaseRemoteDataSource>(
         () => LogInRemoteDataSourceImpl(dioHelper: sl()),
@@ -95,14 +96,13 @@ Future<void> init() async {
         () => ForgetPasswordRemoteDataSourceImpl(dioHelper: sl()),
   );
 
-
   sl.registerLazySingleton<RegisterBaseRemoteDataSource>(
         () => RegisterRemoteDataSourceImpl(dioHelper: sl()),
   );
 
-  // sl.registerLazySingleton<HomeBaseRemoteDataSource>(
-  //       () => HomeRemoteDataSourceImpl(dioHelper: sl()),
-  // );
+  sl.registerLazySingleton<HomeBaseRemoteDataSource>(
+        () => HomeRemoteDataSourceImpl(dioHelper: sl()),
+  );
 
   // Core
   sl.registerLazySingleton<DioHelper>(
@@ -119,3 +119,4 @@ Future<void> init() async {
   final sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton(() => sharedPreferences);
 }
+

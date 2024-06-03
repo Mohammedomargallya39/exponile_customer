@@ -87,7 +87,7 @@ class MyApp extends StatelessWidget {
               translation: translation,
             )
             ..connectivityListener()
-            //..getAppInfo(),
+            ..getAppInfo(),
         ),
         BlocProvider(
           create: (BuildContext context) => sl<LoginCubit>(),

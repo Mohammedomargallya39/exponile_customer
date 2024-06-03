@@ -202,6 +202,8 @@ class TranslationModel {
   late String emptyBannerOffer;
   late String validationPercentage;
   late String selectProducts;
+  late String guest;
+  late String stores;
 
   TranslationModel.fromJson(Map<String, dynamic> json) {
     yesOnly = json['yesOnly'];
@@ -406,5 +408,7 @@ class TranslationModel {
     emptyBannerOffer= json['emptyBannerOffer'];
     validationPercentage= json['validationPercentage'];
     selectProducts= json['selectProducts'];
+    guest= json['guest'];
+    stores= json['stores'];
   }
 }

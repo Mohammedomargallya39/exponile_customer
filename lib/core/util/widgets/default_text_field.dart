@@ -27,6 +27,8 @@ class DefaultTextField extends StatelessWidget {
   final int? maxLines;
   final VoidCallback? onTap;
   final int? maxLength;
+  final Color? svgColor;
+  final Color? mainInputColor;
 
   const DefaultTextField({super.key,
     required this.controller,
@@ -49,7 +51,9 @@ class DefaultTextField extends StatelessWidget {
     this.showSuffix = false,
     this.maxLines = 1,
     this.onTap,
-    this.maxLength
+    this.maxLength,
+    this.svgColor,
+    this.mainInputColor,
   });
 
   @override
@@ -74,6 +78,7 @@ class DefaultTextField extends StatelessWidget {
                   svgImg!,
                   height: 3.h,
                   width: 6.w,
+                  color: svgColor ?? ColorsManager.black,
                   // fit: BoxFit.scaleDown,
                 ),
               ),
@@ -87,7 +92,8 @@ class DefaultTextField extends StatelessWidget {
                   obscureText:isPassword,
                   style: Theme.of(context).textTheme.displaySmall!.copyWith(
                       fontFamily: 'english',
-                      fontSize: 14.rSp
+                      fontSize: 14.rSp,
+                      color: mainInputColor?? ColorsManager.black
                   ),
                   maxLines: maxLines,
                   onChanged: onChanged,
@@ -96,7 +102,7 @@ class DefaultTextField extends StatelessWidget {
                   validator: validate,
                   controller: controller,
                   autocorrect: true,
-                  cursorColor: ColorsManager.mainColor,
+                  cursorColor: mainInputColor ?? ColorsManager.mainColor,
                   decoration: InputDecoration(
                     counter: const Offstage(),
                     suffixIcon: suffixIcon,
@@ -104,6 +110,7 @@ class DefaultTextField extends StatelessWidget {
                     border: InputBorder.none,
                     hintText: hint,
                     hintStyle: hintStyle,
+
                     errorStyle: const TextStyle(color: ColorsManager.redPrimary),
                   ),
                 ),

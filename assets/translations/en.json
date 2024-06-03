@@ -201,5 +201,7 @@
   "percentage": "Discount percentage",
   "emptyBannerOffer": "Please, Add image for Offer",
   "validationPercentage": "Please enter a number between 0 and 100",
-  "selectProducts": "Please Select Products"
+  "selectProducts": "Please Select Products",
+  "guest": "Guest",
+  "stores": "Stores"
 }

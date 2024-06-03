@@ -150,6 +150,9 @@ class $AssetsImagesSvgGen {
   /// File path: assets/images/svg/free.svg
   String get free => 'assets/images/svg/free.svg';
 
+  /// File path: assets/images/svg/guest.svg
+  String get guest => 'assets/images/svg/guest.svg';
+
   /// File path: assets/images/svg/percentage.svg
   String get percentage => 'assets/images/svg/percentage.svg';
 

@@ -201,5 +201,8 @@
   "percentage": "نسبة الخصم",
   "emptyBannerOffer": "من فضلك إختر صورة للعرض",
   "validationPercentage": "الرجاء إدخال رقم بين 0 و 100",
-  "selectProducts": "من فضلك إختار المنتجات"
+  "selectProducts": "من فضلك إختار المنتجات",
+  "guest": "زائر",
+  "stores": "متاجر"
+
 }

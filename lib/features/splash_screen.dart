@@ -9,7 +9,7 @@ import '../core/util/resources/constants_manager.dart';
 import '../core/util/resources/extensions_manager.dart';
 import '../core/util/widgets/default_text.dart';
 import 'auth/login/presentation/screen/login_screen.dart';
-import 'home/presentation/screens/main_layout/home_screen.dart';
+import 'home/presentation/screens/main_layout/main_layout.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

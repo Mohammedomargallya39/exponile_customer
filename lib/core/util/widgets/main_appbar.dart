@@ -1,5 +1,6 @@
 import 'package:exponile_customer/core/util/cubit/cubit.dart';
 import 'package:exponile_customer/core/util/cubit/state.dart';
+import 'package:exponile_customer/core/util/resources/assets.gen.dart';
 import 'package:exponile_customer/core/util/resources/colors_manager.dart';
 import 'package:exponile_customer/core/util/resources/constants_manager.dart';
 import 'package:exponile_customer/core/util/resources/extensions_manager.dart';
@@ -10,8 +11,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const MainAppBar({super.key,required this.title, required this.isBack, required this.isLang});
-  final String title;
+  const MainAppBar({super.key,required this.title, required this.isBack, required this.isLang,this.widget});
+  final String? title;
+  final Widget? widget;
   final bool? isBack;
   final bool? isLang;
   @override
@@ -49,8 +51,8 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
               if(isLang == false)
               Container()
             ],
-            title: DefaultText(
-              title: title,
+            title: title != null ?DefaultText(
+              title: title!,
               style: Style.medium,
               fontWeight: FontWeight.w700,
               fontSize: 16.rSp,
@@ -58,7 +60,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
               maxLines: 1,
               fontFamily: 'splash',
               letterSpacing: 2.rSp,
-            ),
+            ): widget,
             centerTitle: true,
             leading: Padding(
               padding: EdgeInsets.symmetric(horizontal: 2.w),
@@ -68,7 +70,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
                 {
                   Navigator.pop(context);
                 },
-              ) : Container(),
+              ) : title == null ? Image.asset(Assets.images.png.logo):null,
             ),
             elevation: 0,
             backgroundColor: ColorsManager.mainColor,

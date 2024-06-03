@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../features/home/domain/entities/app_info_entity.dart';
+
 abstract class AppState extends Equatable{}
 
 class Empty extends AppState {
@@ -57,34 +59,39 @@ class InitState extends AppState{
   List<Object?> get props => [];
 }
 
+class ChangeStates extends AppState{
+  @override
+  List<Object?> get props => [];
+}
+
 class ChangeConfirmPasswordVisibilityState extends AppState{
   @override
   List<Object?> get props => [];
 }
 
 
-// class AppInfoLoadingState extends AppState {
-//   @override
-//   List<Object?> get props => [];
-// }
-//
-// class AppInfoSuccessState extends AppState {
-//   final AppInfoEntity appInfoEntity;
-//
-//
-//   AppInfoSuccessState({required this.appInfoEntity});
-//
-//   @override
-//   List<Object?> get props => [appInfoEntity];
-// }
-//
-// class AppInfoErrorState extends AppState {
-//   final String failure;
-//
-//   AppInfoErrorState({required this.failure});
-//   @override
-//   List<Object?> get props => [failure];
-// }
+class AppInfoLoadingState extends AppState {
+  @override
+  List<Object?> get props => [];
+}
+
+class AppInfoSuccessState extends AppState {
+  final AppInfoEntity appInfoEntity;
+
+
+  AppInfoSuccessState({required this.appInfoEntity});
+
+  @override
+  List<Object?> get props => [appInfoEntity];
+}
+
+class AppInfoErrorState extends AppState {
+  final String failure;
+
+  AppInfoErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
 
 
 
