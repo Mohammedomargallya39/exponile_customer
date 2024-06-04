@@ -203,5 +203,10 @@
   "validationPercentage": "Please enter a number between 0 and 100",
   "selectProducts": "Please Select Products",
   "guest": "Guest",
-  "stores": "Stores"
+  "stores": "Stores",
+  "reviews": "Reviews",
+  "relatedProductsFromOtherStores": "Related Products From Other Stores",
+  "relatedProductsFromSameStores": "Related Products From Same Store",
+  "addToCart": "Add To Cart",
+  "shop": "Shop"
 }

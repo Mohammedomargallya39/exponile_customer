@@ -1,11 +1,44 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
+import '../entities/add_favourite_entity.dart';
+import '../entities/add_to_cart_entity.dart';
 import '../entities/app_info_entity.dart';
-import '../entities/main_search_entity.dart';
+import '../entities/main_search_product_entity.dart';
+import '../entities/main_search_shop_entity.dart';
+import '../entities/product_data_entity.dart';
+import '../entities/product_details_entity.dart';
+import '../entities/shop_data_entity.dart';
 
 abstract class HomeBaseRepository {
   Future<Either<Failure, AppInfoEntity>> appInfo();
   Future<Either<Failure, MainSearchProductEntity>> mainSearchProduct({
     required String searchText,
-});
+  });
+  Future<Either<Failure, MainSearchShopEntity>> mainSearchShop({
+    required String searchText,
+  });
+  Future<Either<Failure, ProductDetailsEntity>> productDetails({
+    required int? productID,
+  });
+  Future<Either<Failure, ProductDataEntity>> productData({
+    required int? productID,
+  });
+  Future<Either<Failure, AddFavouriteEntity>> addFavourite({
+    required int? itemID,
+    required String? itemType,
+  });
+  Future<Either<Failure, AddToCartEntity>> addToCart({
+    required int? featureID,
+    required String? featureImage,
+    required int? qty,
+    required String? featureSlug,
+  });
+
+  Future<Either<Failure, ShopDataEntity>> shopData({
+    required int? shopID,
+    required List? category,
+    required List? subCategory,
+    required String? from,
+    required String? to,
+  });
 }

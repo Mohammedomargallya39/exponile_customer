@@ -1,4 +1,4 @@
-import '../../domain/entities/main_search_entity.dart';
+import '../../domain/entities/main_search_product_entity.dart';
 
 class MainSearchProductModel extends MainSearchProductEntity {
   const MainSearchProductModel({

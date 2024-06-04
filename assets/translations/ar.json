@@ -203,6 +203,11 @@
   "validationPercentage": "الرجاء إدخال رقم بين 0 و 100",
   "selectProducts": "من فضلك إختار المنتجات",
   "guest": "زائر",
-  "stores": "متاجر"
+  "stores": "متاجر",
+  "reviews": "التقيمات",
+  "relatedProductsFromOtherStores": "منتجات ذات صله من متاجر أخرى",
+  "relatedProductsFromSameStores": "منتجات ذات صله من نفس المتاجر",
+  "addToCart": "أضف إلي العربة",
+  "shop": "المتجر"
 
 }

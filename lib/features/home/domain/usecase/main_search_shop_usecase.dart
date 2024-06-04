@@ -3,26 +3,27 @@ import 'package:equatable/equatable.dart';
 import '../../../../../core/error/failures.dart';
 import '../../../../../core/usecase/use_case.dart';
 import '../entities/main_search_product_entity.dart';
+import '../entities/main_search_shop_entity.dart';
 import '../repository/home_base_rebository.dart';
 
-class MainSearchProductUseCase implements UseCase<MainSearchProductEntity, MainSearchProductParams> {
+class MainSearchShopUseCase implements UseCase<MainSearchShopEntity, MainSearchShopParams> {
   final HomeBaseRepository repository;
 
-  MainSearchProductUseCase(this.repository);
+  MainSearchShopUseCase(this.repository);
 
   @override
-  Future<Either<Failure, MainSearchProductEntity>> call(MainSearchProductParams params) async {
-    return await repository.mainSearchProduct(
+  Future<Either<Failure, MainSearchShopEntity>> call(MainSearchShopParams params) async {
+    return await repository.mainSearchShop(
       searchText: params.searchText!,
     );
   }
 }
 
-class MainSearchProductParams extends Equatable {
+class MainSearchShopParams extends Equatable {
 
   final String? searchText;
 
-  const  MainSearchProductParams({
+  const  MainSearchShopParams({
     required this.searchText,
 
   });

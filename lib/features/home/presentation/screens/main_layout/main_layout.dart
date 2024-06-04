@@ -11,6 +11,8 @@ import 'package:exponile_customer/core/util/widgets/my_icon_button.dart';
 import 'package:exponile_customer/core/util/widgets/two_option_dialog.dart';
 import 'package:exponile_customer/features/home/presentation/controller/cubit.dart';
 import 'package:exponile_customer/features/home/presentation/controller/state.dart';
+import 'package:exponile_customer/features/home/presentation/screens/product_screen/show_product_details.dart';
+import 'package:exponile_customer/features/home/presentation/screens/shop_screen/shop_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -115,6 +117,10 @@ class _MainLayoutState extends State<MainLayout> {
                                     homeCubit.mainSearchProduct(
                                         searchText: homeCubit.mainSearchController.text
                                     );
+                                  }else{
+                                    homeCubit.mainSearchShop(
+                                        searchText: homeCubit.mainSearchController.text
+                                    );
                                   }
                                 },
                               ),
@@ -170,6 +176,7 @@ class _MainLayoutState extends State<MainLayout> {
                                                                 mainSearchName: homeCubit.filterMainSearch.values.toList()[i],
                                                                 mainSearchType: homeCubit.filterMainSearch.keys.toList()[i],
                                                               );
+                                                              homeCubit.mainSearchController.text = '';
                                                               Navigator.pop(context);
                                                             },
                                                             child: Column(
@@ -300,92 +307,212 @@ class _MainLayoutState extends State<MainLayout> {
                           child: Column(
                             children: [
                               if(homeCubit.mainSearchController.text.isNotEmpty && homeCubit.mainSearchProductEntity != null && homeCubit.mainSearchProductEntity!.data.isNotEmpty && (homeCubit.selectedMainSearchType == null || homeCubit.selectedMainSearchType == 'product'))
-                              Expanded(
+                              SizedBox(
+                                height: 25.h,
+                                width: 100.w,
                                 child: ListView.builder(
                                     itemCount: homeCubit.mainSearchProductEntity!.data.length,
+                                    scrollDirection: Axis.horizontal,
                                     itemBuilder: (context, index) {
                                       return Padding(
-                                        padding: EdgeInsets.symmetric(horizontal: 2.w,vertical: 1.h),
-                                        child: Column(
-                                          children: [
-                                            Row(
-                                              children: [
-                                                SizedBox(
-                                                  height: 10.h,
-                                                  width: 20.w,
-                                                  child: CachedNetworkImage(
-                                                    imageUrl: homeCubit.mainSearchProductEntity!.data[index].images[0].imagePath ?? '',
-                                                    imageBuilder: (context, imageProvider) => Container(
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: const BorderRadius.all(Radius.circular(10)),
-                                                        image: DecorationImage(image: imageProvider, fit: BoxFit.fill),
-                                                      ),
-                                                    ),
-                                                    errorWidget: (context, url, error) => Container(
-                                                        height: MediaQuery.of(context).size.height / 4,
-                                                        width: double.infinity,
-                                                        decoration: const BoxDecoration(
-                                                          borderRadius: BorderRadius.only(
-                                                              topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-                                                        ),
-                                                        child: svgImage(path: Assets.images.svg.noImage)
-                                                    ),
-                                                    placeholder: (context, url) => Container(
-                                                      color: Colors.black.withOpacity(0.5),
-                                                    ),
-                                                    fit: BoxFit.fill,
-                                                    memCacheHeight: 300,
-                                                    memCacheWidth: 300,
-                                                  ),
+                                        padding: EdgeInsets.symmetric(horizontal: 1.w,vertical: 1.h),
+                                        child: InkWell(
+                                          onTap: () {
+                                            navigateTo(
+                                                context, ShowProductDetails(
+                                                productID: homeCubit.mainSearchProductEntity!.data[index].id!
+                                            )
+                                            );
+                                          },
+                                          child: Container(
+                                            height: 25.h,
+                                            width: 30.w,
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: ColorsManager.black,
+                                                    width: 1.rSp
                                                 ),
-                                                horizontalSpace(2.w),
-                                                Expanded(
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      DefaultText(
-                                                          title: homeCubit.mainSearchProductEntity!.data[index].name!,
-                                                          style: Style.small,
-                                                          fontSize: 10.rSp,
-                                                          maxLines: 1,
-                                                          fontWeight: FontWeight.w700,
-                                                      ),
-                                                      verticalSpace(1.h),
-                                                      DefaultText(
-                                                        title: homeCubit.mainSearchProductEntity!.data[index].description!,
-                                                        style: Style.small,
-                                                        fontSize: 10.rSp,
-                                                        maxLines: 2,
-                                                        fontWeight: FontWeight.w400,
-                                                      ),
-                                                      verticalSpace(1.h),
-                                                      RatingBar.builder(
-                                                        initialRating: double.parse(homeCubit.mainSearchProductEntity!.data[index].rate!),
-                                                        minRating: 0,
-                                                        ignoreGestures: true,
-                                                        direction: Axis.horizontal,
-                                                        allowHalfRating: true,
-                                                        itemCount: 5,
-                                                        itemSize: 10.rSp,
-                                                        itemPadding: EdgeInsets.symmetric(horizontal: 5.0.rSp),
-                                                        itemBuilder: (context, _) => const Icon(
-                                                          Icons.star,
-                                                          color: Colors.amber,
-                                                        ),
-                                                        onRatingUpdate: (rating) {
-                                                        },
-                                                      )
-                                                    ],
-                                                  ),
-                                                )
-                                              ],
+                                              borderRadius: BorderRadius.all(Radius.circular(10.rSp))
                                             ),
-                                          ],
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(horizontal: 1.w),
+                                              child: Column(
+                                                children: [
+                                                  verticalSpace(1.h),
+                                                  SizedBox(
+                                                    height: 10.h,
+                                                    width: 20.w,
+                                                    child: CachedNetworkImage(
+                                                      imageUrl: homeCubit.mainSearchProductEntity!.data[index].images[0].imagePath ?? '',
+                                                      imageBuilder: (context, imageProvider) => Container(
+                                                        decoration: BoxDecoration(
+                                                          borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                                          image: DecorationImage(image: imageProvider, fit: BoxFit.fill),
+                                                        ),
+                                                      ),
+                                                      errorWidget: (context, url, error) => Container(
+                                                          height: MediaQuery.of(context).size.height / 4,
+                                                          width: double.infinity,
+                                                          decoration: const BoxDecoration(
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+                                                          ),
+                                                          child: svgImage(path: Assets.images.svg.noImage)
+                                                      ),
+                                                      placeholder: (context, url) => Container(
+                                                        color: Colors.black.withOpacity(0.5),
+                                                      ),
+                                                      fit: BoxFit.fill,
+                                                      memCacheHeight: 300,
+                                                      memCacheWidth: 300,
+                                                    ),
+                                                  ),
+                                                  verticalSpace(2.h),
+                                                  RatingBar.builder(
+                                                    initialRating: double.parse(homeCubit.mainSearchProductEntity!.data[index].rate!),
+                                                    minRating: 0,
+                                                    ignoreGestures: true,
+                                                    direction: Axis.horizontal,
+                                                    allowHalfRating: true,
+                                                    itemCount: 5,
+                                                    itemSize: 10.rSp,
+                                                    itemPadding: EdgeInsets.symmetric(horizontal: 5.0.rSp),
+                                                    itemBuilder: (context, _) => const Icon(
+                                                      Icons.star,
+                                                      color: Colors.amber,
+                                                    ),
+                                                    onRatingUpdate: (rating) {
+                                                    },
+                                                  ),
+                                                  verticalSpace(1.h),
+                                                  DefaultText(
+                                                    title: homeCubit.mainSearchProductEntity!.data[index].name!,
+                                                    style: Style.small,
+                                                    fontSize: 10.rSp,
+                                                    maxLines: 1,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                  verticalSpace(1.h),
+                                                  DefaultText(
+                                                    title: homeCubit.mainSearchProductEntity!.data[index].description!,
+                                                    style: Style.small,
+                                                    fontSize: 10.rSp,
+                                                    maxLines: 2,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       );
                                     },
                                 ),
                               ),
+                              if(homeCubit.mainSearchController.text.isNotEmpty && homeCubit.mainSearchShopEntity != null && homeCubit.mainSearchShopEntity!.data.isNotEmpty && homeCubit.selectedMainSearchType == 'store')
+                              SizedBox(
+                                  height: 25.h,
+                                  width: 100.w,
+                                  child: ListView.builder(
+                                    itemCount: homeCubit.mainSearchShopEntity!.data.length,
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (context, index) {
+                                      return InkWell(
+                                        onTap: () {
+                                          navigateTo(
+                                              context,
+                                              ShopScreen(
+                                                  shopID: homeCubit.mainSearchShopEntity!.data[index].id!
+                                              ),
+                                          );
+                                        },
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(horizontal: 1.w,vertical: 1.h),
+                                          child: Container(
+                                            height: 25.h,
+                                            width: 30.w,
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: ColorsManager.black,
+                                                    width: 1.rSp
+                                                ),
+                                                borderRadius: BorderRadius.all(Radius.circular(10.rSp))
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(horizontal: 1.w),
+                                              child: Column(
+                                                children: [
+                                                  verticalSpace(1.h),
+                                                  SizedBox(
+                                                    height: 10.h,
+                                                    width: 20.w,
+                                                    child: CachedNetworkImage(
+                                                      imageUrl: homeCubit.mainSearchShopEntity!.data[index].logoPath ?? '',
+                                                      imageBuilder: (context, imageProvider) => Container(
+                                                        decoration: BoxDecoration(
+                                                          borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                                          image: DecorationImage(image: imageProvider, fit: BoxFit.fill),
+                                                        ),
+                                                      ),
+                                                      errorWidget: (context, url, error) => Container(
+                                                          height: MediaQuery.of(context).size.height / 4,
+                                                          width: double.infinity,
+                                                          decoration: const BoxDecoration(
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+                                                          ),
+                                                          child: svgImage(path: Assets.images.svg.noImage)
+                                                      ),
+                                                      placeholder: (context, url) => Container(
+                                                        color: Colors.black.withOpacity(0.5),
+                                                      ),
+                                                      fit: BoxFit.fill,
+                                                      memCacheHeight: 300,
+                                                      memCacheWidth: 300,
+                                                    ),
+                                                  ),
+                                                  verticalSpace(2.h),
+                                                  RatingBar.builder(
+                                                    initialRating: double.parse(homeCubit.mainSearchShopEntity!.data[index].rate!),
+                                                    minRating: 0,
+                                                    ignoreGestures: true,
+                                                    direction: Axis.horizontal,
+                                                    allowHalfRating: true,
+                                                    itemCount: 5,
+                                                    itemSize: 10.rSp,
+                                                    itemPadding: EdgeInsets.symmetric(horizontal: 5.0.rSp),
+                                                    itemBuilder: (context, _) => const Icon(
+                                                      Icons.star,
+                                                      color: Colors.amber,
+                                                    ),
+                                                    onRatingUpdate: (rating) {
+                                                    },
+                                                  ),
+                                                  verticalSpace(1.h),
+                                                  DefaultText(
+                                                    title: homeCubit.mainSearchShopEntity!.data[index].shopName!,
+                                                    style: Style.small,
+                                                    fontSize: 10.rSp,
+                                                    maxLines: 1,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                  verticalSpace(1.h),
+                                                  DefaultText(
+                                                    title: homeCubit.mainSearchShopEntity!.data[index].categories[0].name!,
+                                                    style: Style.small,
+                                                    fontSize: 10.rSp,
+                                                    maxLines: 2,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
                               homeCubit.customer.elementAt(homeCubit.currentNavIndex),
                             ],
                           )

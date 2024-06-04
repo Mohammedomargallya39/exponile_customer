@@ -22,7 +22,13 @@ import '../../features/auth/register/presentation/controller/register_cubit.dart
 import '../../features/home/data/data_source/home_remote_data_source.dart';
 import '../../features/home/data/repository/home_repository.dart';
 import '../../features/home/domain/repository/home_base_rebository.dart';
+import '../../features/home/domain/usecase/add_favourite_usecase.dart';
+import '../../features/home/domain/usecase/add_to_cart_usecase.dart';
 import '../../features/home/domain/usecase/main_search_product_usecase.dart';
+import '../../features/home/domain/usecase/main_search_shop_usecase.dart';
+import '../../features/home/domain/usecase/product_data_usecase.dart';
+import '../../features/home/domain/usecase/product_details_usecase.dart';
+import '../../features/home/domain/usecase/shop_data_usecase.dart';
 import '/core/network/local/cache_helper.dart';
 import '/core/network/remote/dio_helper.dart';
 import '/core/network/repository.dart';
@@ -52,6 +58,12 @@ Future<void> init() async {
   sl.registerLazySingleton(
         () => HomeCubit(
           mainSearchProductUseCase: sl(),
+          mainSearchShopUseCase: sl(),
+          productDetailsUseCase: sl(),
+          productDataUseCase: sl(),
+          addFavouriteUseCase: sl(),
+          addToCartUseCase: sl(),
+          shopDataUseCase: sl(),
     ),
   );
 
@@ -87,6 +99,12 @@ Future<void> init() async {
   sl.registerLazySingleton(() => ResetPasswordUseCase(sl()));
   sl.registerLazySingleton(() => RegisterUseCase(sl()));
   sl.registerLazySingleton(() => MainSearchProductUseCase(sl()));
+  sl.registerLazySingleton(() => MainSearchShopUseCase(sl()));
+  sl.registerLazySingleton(() => ProductDetailsUseCase(sl()));
+  sl.registerLazySingleton(() => ProductDataUseCase(sl()));
+  sl.registerLazySingleton(() => AddFavouriteUseCase(sl()));
+  sl.registerLazySingleton(() => AddToCartUseCase(sl()));
+  sl.registerLazySingleton(() => ShopDataUseCase(sl()));
 
   sl.registerLazySingleton<LogInBaseRemoteDataSource>(
         () => LogInRemoteDataSourceImpl(dioHelper: sl()),

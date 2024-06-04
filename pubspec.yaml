@@ -158,6 +158,9 @@ dependencies:
   #Nav Bar
   curved_navigation_bar: ^1.0.3
 
+  #Carousel Slider
+  carousel_slider: ^4.2.1
+
 
 
 dev_dependencies:
