@@ -15,4 +15,7 @@ const productDetailsURL = 'merchant/stocks/special/show';
 const productDataURL = 'website/product/';
 const favouriteURL = 'website/favorites/action';
 const addToCartURL = 'website/cart/store/product';
+const addOfferToCartURL = 'website/cart/store/offer';
 const shopDataURL = 'website/stores/show';
+const storeOffersURL = 'website/stores/offers';
+const storeOfferDetailsURL = 'website/offers/show';

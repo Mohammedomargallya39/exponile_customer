@@ -1,12 +1,15 @@
 import 'package:equatable/equatable.dart';
 
 import '../../domain/entities/add_favourite_entity.dart';
+import '../../domain/entities/add_offer_to_cart_entity.dart';
 import '../../domain/entities/add_to_cart_entity.dart';
 import '../../domain/entities/main_search_product_entity.dart';
 import '../../domain/entities/main_search_shop_entity.dart';
 import '../../domain/entities/product_data_entity.dart';
 import '../../domain/entities/product_details_entity.dart';
 import '../../domain/entities/shop_data_entity.dart';
+import '../../domain/entities/store_offer_details_entity.dart';
+import '../../domain/entities/store_offers_entity.dart';
 
 abstract class HomeState extends Equatable{}
 
@@ -213,6 +216,79 @@ class ShopDataErrorState extends HomeState {
   final String failure;
 
   ShopDataErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+class StoreOffersLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class StoreOffersSuccessState extends HomeState {
+  final StoreOffersEntity storeOffersEntity;
+
+
+  StoreOffersSuccessState({required this.storeOffersEntity});
+
+  @override
+  List<Object?> get props => [storeOffersEntity];
+}
+
+class StoreOffersErrorState extends HomeState {
+  final String failure;
+
+  StoreOffersErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+class StoreOfferDetailsLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class StoreOfferDetailsSuccessState extends HomeState {
+  final StoreOfferDetailsEntity storeOfferDetailsEntity;
+
+
+  StoreOfferDetailsSuccessState({required this.storeOfferDetailsEntity});
+
+  @override
+  List<Object?> get props => [storeOfferDetailsEntity];
+}
+
+class StoreOfferDetailsErrorState extends HomeState {
+  final String failure;
+
+  StoreOfferDetailsErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+
+class AddOfferToCartLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class AddOfferToCartSuccessState extends HomeState {
+  final AddOfferToCartEntity addOfferToCartEntity;
+
+
+  AddOfferToCartSuccessState({required this.addOfferToCartEntity});
+
+  @override
+  List<Object?> get props => [addOfferToCartEntity];
+}
+
+class AddOfferToCartErrorState extends HomeState {
+  final String failure;
+
+  AddOfferToCartErrorState({required this.failure});
   @override
   List<Object?> get props => [failure];
 }

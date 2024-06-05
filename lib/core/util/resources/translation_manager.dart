@@ -209,6 +209,9 @@ class TranslationModel {
   late String relatedProductsFromSameStores;
   late String addToCart;
   late String shop;
+  late String seeAll;
+  late String total;
+  late String select;
 
   TranslationModel.fromJson(Map<String, dynamic> json) {
     yesOnly = json['yesOnly'];
@@ -420,5 +423,8 @@ class TranslationModel {
     relatedProductsFromSameStores= json['relatedProductsFromSameStores'];
     addToCart= json['addToCart'];
     shop= json['shop'];
+    seeAll= json['seeAll'];
+    total= json['total'];
+    select= json['select'];
   }
 }

@@ -3,6 +3,7 @@ import 'package:exponile_customer/features/home/data/models/add_favourite_model.
 import '../../../../../core/network/remote/api_endpoints.dart';
 import '../../../../../core/network/remote/dio_helper.dart';
 import '../../../../../core/util/resources/constants_manager.dart';
+import '../models/add_offer_to_cart_model.dart';
 import '../models/add_to_cart_model.dart';
 import '../models/app_info_model.dart';
 import '../models/main_search_product_model.dart';
@@ -10,6 +11,8 @@ import '../models/main_search_shop_model.dart';
 import '../models/product_data_model.dart';
 import '../models/product_details_model.dart';
 import '../models/shop_data_model.dart';
+import '../models/store_offer_details_model.dart';
+import '../models/store_offers_model.dart';
 
 abstract class HomeBaseRemoteDataSource {
   Future<AppInfoModel> appInfo();
@@ -41,6 +44,17 @@ abstract class HomeBaseRemoteDataSource {
     required List? subCategory,
     required String? from,
     required String? to,
+  });
+  Future<StoreOffersModel> storeOffers({
+    required int? storeID,
+  });
+  Future<StoreOfferDetailsModel> storeOfferDetails({
+    required int? offerID,
+  });
+  Future<AddOfferToCartModel> addOfferToCart({
+    required List? offerProducts,
+    required int? qty,
+    required String? offerSlug,
   });
 }
 
@@ -189,8 +203,8 @@ class HomeRemoteDataSourceImpl
       query: {
         "lang": isRTL==true ? 'ar' : 'en',
         "id": shopID,
-        "category": category,
-        "subcategory": subCategory,
+        "category[]": category,
+        "subcategory[]": subCategory,
         "from": from,
         "to": to,
       },
@@ -198,6 +212,59 @@ class HomeRemoteDataSourceImpl
     return ShopDataModel.fromJson(f.data);
   }
 
+  @override
+  Future<StoreOffersModel> storeOffers(
+      {
+        required int? storeID,
+      }) async {
 
+    final Response f = await dioHelper.get(
+      url: storeOffersURL,
+      token: token,
+      query: {
+        "lang": isRTL==true ? 'ar' : 'en',
+        "id": storeID,
+      },
+    );
+    return StoreOffersModel.fromJson(f.data);
+  }
+
+  @override
+  Future<StoreOfferDetailsModel> storeOfferDetails(
+      {
+        required int? offerID,
+      }) async {
+
+    final Response f = await dioHelper.get(
+      url: storeOfferDetailsURL,
+      token: token,
+      query: {
+        "lang": isRTL==true ? 'ar' : 'en',
+        "id": offerID,
+      },
+    );
+    return StoreOfferDetailsModel.fromJson(f.data);
+  }
+
+  @override
+  Future<AddOfferToCartModel> addOfferToCart(
+      {
+        required List? offerProducts,
+        required int? qty,
+        required String? offerSlug,
+      }) async {
+
+    final Response f = await dioHelper.post(
+      url: addOfferToCartURL,
+      token: token,
+      data: {
+        "lang": isRTL==true ? 'ar' : 'en',
+        "offer_products": offerProducts,
+        "qty": qty,
+        "offer_slug": offerSlug,
+      },
+    );
+    return AddOfferToCartModel.fromJson(f.data);
+  }
 }
 

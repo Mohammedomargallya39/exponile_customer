@@ -208,6 +208,8 @@
   "relatedProductsFromOtherStores": "منتجات ذات صله من متاجر أخرى",
   "relatedProductsFromSameStores": "منتجات ذات صله من نفس المتاجر",
   "addToCart": "أضف إلي العربة",
-  "shop": "المتجر"
-
+  "shop": "المتجر",
+  "seeAll": "مشاهدة الكل",
+  "total": "المجموع",
+  "select": "إختر"
 }

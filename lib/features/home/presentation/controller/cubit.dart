@@ -1,22 +1,27 @@
 import 'package:exponile_customer/core/util/resources/assets.gen.dart';
 import 'package:exponile_customer/features/home/presentation/controller/state.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/util/resources/constants_manager.dart';
-import '../../domain/entities/add_favourite_entity.dart';
 import '../../domain/entities/main_search_product_entity.dart';
 import '../../domain/entities/main_search_shop_entity.dart';
 import '../../domain/entities/product_data_entity.dart';
 import '../../domain/entities/product_details_entity.dart';
 import '../../domain/entities/shop_data_entity.dart';
+import '../../domain/entities/store_offer_details_entity.dart';
+import '../../domain/entities/store_offers_entity.dart';
 import '../../domain/usecase/add_favourite_usecase.dart';
+import '../../domain/usecase/add_offer_to_cart_usecase.dart';
 import '../../domain/usecase/add_to_cart_usecase.dart';
 import '../../domain/usecase/main_search_product_usecase.dart';
 import '../../domain/usecase/main_search_shop_usecase.dart';
 import '../../domain/usecase/product_data_usecase.dart';
 import '../../domain/usecase/product_details_usecase.dart';
 import '../../domain/usecase/shop_data_usecase.dart';
+import '../../domain/usecase/store_offer_details_usecase.dart';
+import '../../domain/usecase/store_offers_usecase.dart';
 
 class HomeCubit extends Cubit<HomeState> {
    final MainSearchProductUseCase _mainSearchProductUseCase;
@@ -25,7 +30,10 @@ class HomeCubit extends Cubit<HomeState> {
    final ProductDataUseCase _productDataUseCase;
    final AddFavouriteUseCase _addFavouriteUseCase;
    final AddToCartUseCase _addToCartUseCase;
+   final AddOfferToCartUseCase _addOfferToCartUseCase;
    final ShopDataUseCase _shopDataUseCase;
+   final StoreOffersUseCase _storeOffersUseCase;
+   final StoreOfferDetailsUseCase _storeOfferDetailsUseCase;
   HomeCubit(
       {
     required MainSearchProductUseCase mainSearchProductUseCase,
@@ -34,7 +42,10 @@ class HomeCubit extends Cubit<HomeState> {
     required ProductDataUseCase productDataUseCase,
     required AddFavouriteUseCase addFavouriteUseCase,
     required AddToCartUseCase addToCartUseCase,
+    required AddOfferToCartUseCase addOfferToCartUseCase,
     required ShopDataUseCase shopDataUseCase,
+    required StoreOffersUseCase storeOffersUseCase,
+    required StoreOfferDetailsUseCase storeOfferDetailsUseCase,
   }
   ) :
        _mainSearchProductUseCase = mainSearchProductUseCase,
@@ -43,7 +54,10 @@ class HomeCubit extends Cubit<HomeState> {
        _productDataUseCase = productDataUseCase,
        _addFavouriteUseCase = addFavouriteUseCase,
        _addToCartUseCase = addToCartUseCase,
+       _addOfferToCartUseCase = addOfferToCartUseCase,
        _shopDataUseCase = shopDataUseCase,
+       _storeOffersUseCase = storeOffersUseCase,
+       _storeOfferDetailsUseCase = storeOfferDetailsUseCase,
 
 
       super(Empty());
@@ -139,6 +153,7 @@ class HomeCubit extends Cubit<HomeState> {
    Map<int, int> productIdsMap = {};
    int selectedIndex = 0;
    int selectedImages = 0;
+   int currentIndex = 0;
    String initFeature='';
    Map<int,List<String>> images = {};
    Map<String, List<String>> featuresMap = {};
@@ -160,6 +175,7 @@ class HomeCubit extends Cubit<HomeState> {
    }) async {
      emit(ProductDetailsLoadingState());
      productDetailsEntity = null;
+     productDataEntity = null;
      final result = await _productDetailsUseCase(
          ProductDetailsParams(
            productID: productID,
@@ -380,6 +396,7 @@ class HomeCubit extends Cubit<HomeState> {
      required String? to,
    }) async {
      emit(ShopDataLoadingState());
+     shopDataEntity = null;
      final result = await _shopDataUseCase(
          ShopDataParams(
            shopID: shopID,
@@ -395,16 +412,119 @@ class HomeCubit extends Cubit<HomeState> {
        ));
      }, (data) {
        shopDataEntity = data;
+       isChangedFavouriteIcon = shopDataEntity!.data!.store
+           .favorites.isNotEmpty
+           ? true
+           : false;
+       for(int i = 0; i < data.data!.categories.length; i++) {
+         filterShopCategories[data.data!.categories[i].id!] = data.data!.categories[i].slug!;
+       }
        emit(ShopDataSuccessState(
            shopDataEntity: data
        ));
      });
    }
 
-   TextEditingController filterShopStartDate = TextEditingController();
-   TextEditingController filterShopEndDate = TextEditingController();
    List categories = [];
    List subCategories = [];
+
+   bool isChangedFavouriteIcon = false;
+   void changedFavouriteIcon (){
+     emit(InitState());
+     isChangedFavouriteIcon = !isChangedFavouriteIcon;
+     emit(ChangeState());
+   }
+
+   String? selectedFilterShopCategoryName;
+   int? selectedFilterShopCategoryID;
+   TextEditingController startFilterShopDateController = TextEditingController();
+   TextEditingController endFilterShopDateController = TextEditingController();
+   Map<int, String> filterShopCategories = {};
+
+   void changeShopCategoriesValue({
+     required String? filterShopCategoryName,
+     required int? filterShopCategoryID,
+   }){
+     emit(InitState());
+     selectedFilterShopCategoryName = filterShopCategoryName;
+     selectedFilterShopCategoryID = filterShopCategoryID;
+     emit(ChangeState());
+   }
+
+
+   StoreOffersEntity? storeOffersEntity;
+   void storeOffers({
+     required int? storeID,
+   }) async {
+     emit(StoreOffersLoadingState());
+     storeOffersEntity = null;
+     final result = await _storeOffersUseCase(
+         StoreOffersParams(
+           storeID: storeID,
+         )
+     );
+     result.fold((failure) {
+       emit(StoreOffersErrorState(
+           failure: mapFailureToMessage(failure)
+       ));
+     }, (data) {
+       storeOffersEntity = data;
+       emit(StoreOffersSuccessState(
+           storeOffersEntity: data
+       ));
+     });
+   }
+
+
+   StoreOfferDetailsEntity? storeOfferDetailsEntity;
+   void storeOfferDetails({
+     required int? offerID,
+   }) async {
+     storeOfferDetailsEntity = null;
+     emit(StoreOfferDetailsLoadingState());
+     final result = await _storeOfferDetailsUseCase(
+         StoreOfferDetailsParams(
+           offerID: offerID,
+         )
+     );
+     result.fold((failure) {
+       emit(StoreOfferDetailsErrorState(
+           failure: mapFailureToMessage(failure)
+       ));
+     }, (data) {
+       storeOfferDetailsEntity = data;
+       emit(StoreOfferDetailsSuccessState(
+           storeOfferDetailsEntity: data
+       ));
+     });
+   }
+
+   void addOfferToCart({
+     required List offerProducts,
+     required int qty,
+     required String offerSlug,
+   }) async {
+     emit(AddOfferToCartLoadingState());
+     final result = await _addOfferToCartUseCase(
+         AddOfferToCartParams(
+           offerSlug: offerSlug,
+           offerProducts: offerProducts,
+           qty: qty,
+         )
+     );
+     result.fold((failure) {
+       emit(AddOfferToCartErrorState(
+           failure: mapFailureToMessage(failure)
+       ));
+     }, (data) {
+       emit(AddOfferToCartSuccessState(
+           addOfferToCartEntity: data
+       ));
+     });
+   }
+
+
+
 
 
 }

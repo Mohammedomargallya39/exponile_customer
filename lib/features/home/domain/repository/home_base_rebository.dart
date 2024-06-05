@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../entities/add_favourite_entity.dart';
+import '../entities/add_offer_to_cart_entity.dart';
 import '../entities/add_to_cart_entity.dart';
 import '../entities/app_info_entity.dart';
 import '../entities/main_search_product_entity.dart';
@@ -8,6 +9,8 @@ import '../entities/main_search_shop_entity.dart';
 import '../entities/product_data_entity.dart';
 import '../entities/product_details_entity.dart';
 import '../entities/shop_data_entity.dart';
+import '../entities/store_offer_details_entity.dart';
+import '../entities/store_offers_entity.dart';
 
 abstract class HomeBaseRepository {
   Future<Either<Failure, AppInfoEntity>> appInfo();
@@ -34,11 +37,25 @@ abstract class HomeBaseRepository {
     required String? featureSlug,
   });
 
+  Future<Either<Failure, AddOfferToCartEntity>> addOfferToCart({
+    required List? offerProducts,
+    required int? qty,
+    required String? offerSlug,
+  });
+
   Future<Either<Failure, ShopDataEntity>> shopData({
     required int? shopID,
     required List? category,
     required List? subCategory,
     required String? from,
     required String? to,
+  });
+
+  Future<Either<Failure, StoreOffersEntity>> storeOffers({
+    required int? storeID,
+  });
+
+  Future<Either<Failure, StoreOfferDetailsEntity>> storeOfferDetails({
+    required int? offerID,
   });
 }

@@ -9,8 +9,12 @@ import 'package:exponile_customer/features/home/presentation/controller/state.da
 import 'package:exponile_customer/features/home/presentation/screens/product_screen/product_card.dart';
 import 'package:exponile_customer/features/home/presentation/screens/product_screen/show_product_details.dart';
 import 'package:exponile_customer/features/home/presentation/screens/shop_screen/shop_view_card.dart';
+import 'package:exponile_customer/features/home/presentation/screens/shop_screen/offers/store_offer_screen.dart';
+import 'package:exponile_customer/features/home/presentation/screens/shop_screen/review/store_reviews_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'filter_shops.dart';
 
 class ShopScreen extends StatefulWidget {
   const ShopScreen({super.key,required this.shopID});
@@ -25,12 +29,15 @@ class _ShopScreenState extends State<ShopScreen> {
   @override
   void initState() {
     HomeCubit homeCubit = HomeCubit.get(context);
+    homeCubit.startFilterShopDateController.text = '';
+    homeCubit.endFilterShopDateController.text = '';
+
     homeCubit.shopData(
         shopID: widget.shopID,
         category: homeCubit.categories,
         subCategory: homeCubit.subCategories,
-        from: homeCubit.filterShopStartDate.text,
-        to: homeCubit.filterShopEndDate.text,
+        from: homeCubit.startFilterShopDateController.text,
+        to: homeCubit.endFilterShopDateController.text,
     );
     super.initState();
   }
@@ -55,50 +62,49 @@ class _ShopScreenState extends State<ShopScreen> {
                 StoreViewCard(
                   storeImagePath: homeCubit.shopDataEntity!.data!.store.bannerPath!,
                   storeName: homeCubit.shopDataEntity!.data!.store.shopName ?? '',
-                  storeCategories: homeCubit.shopDataEntity!.data!.categories[0].slug!,
+                  storeCategories: homeCubit.shopDataEntity!.data!.store.categories[0].name,
                   storeRate: homeCubit.shopDataEntity!.data!.store.rate ?? '',
                   onStoreReviewsTap: () async {
-                    // bool connected = await checkInternet(context);
-                    // if (connected) {
-                    //   Navigator.push(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //           builder: (context) =>
-                    //               StoreReviewsScreen(
-                    //                 reviews: homeCubit.shopDataEntity!.data!.store.ratings,
-                    //                 categories: homeCubit.shopDataEntity!.data!.store.categories,
-                    //                 logoPath: homeCubit.shopDataEntity!.data!.store.bannerPath!,
-                    //                 storeName: homeCubit.shopDataEntity!.data!.store.shopName!,
-                    //                 rate: homeCubit.shopDataEntity!.data!.store.rate!,
-                    //               )));
-                    // }
+                    navigateTo(context, StoreReviewsScreen(
+                      reviews: homeCubit.shopDataEntity!.data!.store.ratings,
+                      categories: homeCubit.shopDataEntity!.data!.store.categories,
+                      logoPath: homeCubit.shopDataEntity!.data!.store.bannerPath!,
+                      storeName: homeCubit.shopDataEntity!.data!.store.shopName!,
+                      rate: homeCubit.shopDataEntity!.data!.store.rate!,
+                      isFavourite: homeCubit.shopDataEntity!.data!.store
+                          .favorites.isNotEmpty
+                          ? true
+                          : false,
+                      shopID: widget.shopID,
+                    )
+                    );
                   },
                   onStoreOffersTap: () async {
-                    // bool connected = await checkInternet(context);
-                    // if (connected) {
-                    //   Navigator.push(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //           builder: (context) =>
-                    //               StoreOffersScreen(
-                    //                 storeId: homeCubit.shopDataEntity!.data!.store.id,
-                    //                 category: homeCubit.shopDataEntity!.data!.store.categories[0].slug!,
-                    //               )
-                    //       ));
-                    // }
+                    navigateTo(
+                        context,
+                      StoreOffersScreen(
+                      storeId: homeCubit.shopDataEntity!.data!.store.id,
+                      category: homeCubit.shopDataEntity!.data!.store.categories[0].slug!,
+                    ));
                   },
                   isFavorite: homeCubit.shopDataEntity!.data!.store
                       .favorites.isNotEmpty
                       ? true
                       : false,
-                  onStoreFavoriteTap: () async {
+                  onStoreFavoriteTap: () {
                     homeCubit.addFavourite(
                       itemType: 'store',
                       itemID: widget.shopID,
                     );
+                    homeCubit.changedFavouriteIcon();
                   },
                   onStoreProductFilterTap: () {
-
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return FilterOfferDialog(shopId: widget.shopID,);
+                      },
+                    );
                   },
                 ),
                 verticalSpace(1.h),

@@ -208,5 +208,8 @@
   "relatedProductsFromOtherStores": "Related Products From Other Stores",
   "relatedProductsFromSameStores": "Related Products From Same Store",
   "addToCart": "Add To Cart",
-  "shop": "Shop"
+  "shop": "Shop",
+  "seeAll": "See All",
+  "total": "Total",
+  "select": "Select"
 }
