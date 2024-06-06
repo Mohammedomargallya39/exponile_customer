@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:exponile_customer/core/util/resources/extensions_manager.dart';
+import 'package:exponile_customer/core/util/widgets/default_button.dart';
 import 'package:exponile_customer/core/util/widgets/my_icon_button.dart';
 import 'package:exponile_customer/features/home/presentation/screens/product_screen/product_card.dart';
+import 'package:exponile_customer/features/home/presentation/screens/shop_screen/offers/product_offer_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -18,8 +20,9 @@ import '../../controller/cubit.dart';
 import '../../controller/state.dart';
 
 class ShowProductDetails extends StatefulWidget {
-  const ShowProductDetails({super.key,required this.productID,});
+  const ShowProductDetails({super.key,required this.productID, this.isBuyGetOffer});
   final int productID;
+  final bool? isBuyGetOffer;
 
   @override
   State<ShowProductDetails> createState() => _ShowProductDetailsState();
@@ -275,13 +278,34 @@ class _ShowProductDetailsState extends State<ShowProductDetails> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Expanded(
-                                  child: Center(
-                                    child: DefaultText(
-                                      title: '${homeCubit.productDetailsEntity!.data!.featuresDetails![homeCubit.featureIndex].price!} ${appBloc.translationModel!.currency}',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12.rSp,
-                                      style: Style.small,
-                                    ),
+                                  child: Row(
+                                    children: [
+                                      if(homeCubit.productDataEntity!.data!.product.offers.isNotEmpty && homeCubit.productDataEntity!.data!.product.offers[0].type == 1)
+                                        Expanded(
+                                          child: Center(
+                                            child: DefaultText(
+                                              title: '${((100-homeCubit.productDataEntity!.data!.product.offers[0].value!)/100) * double.parse(homeCubit.productDetailsEntity!.data!.featuresDetails![homeCubit.featureIndex].price!)} ${appBloc.translationModel!.currency}',
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12.rSp,
+                                              style: Style.small,
+                                              color: ColorsManager.mainColor,
+                                            ),
+                                          ),
+                                        ),
+                                      Expanded(
+                                        child: Center(
+                                          child: DefaultText(
+                                            title: '${homeCubit.productDetailsEntity!.data!.featuresDetails![homeCubit.featureIndex].price!} ${appBloc.translationModel!.currency}',
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12.rSp,
+                                            style: Style.small,
+                                            decoration:
+                                            homeCubit.productDataEntity!.data!.product.offers.isNotEmpty && homeCubit.productDataEntity!.data!.product.offers[0].type == 1 ?
+                                            TextDecoration.lineThrough : TextDecoration.none,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 Container(
@@ -382,12 +406,14 @@ class _ShowProductDetailsState extends State<ShowProductDetails> {
                                                     color: ColorsManager.black,
                                                     fontWeight: FontWeight.w500,fontSize: 10.rSp
                                                 ):
-                                                DefaultText(
-                                                    style: Style.small,
-                                                    title: homeCubit.featuresMap.keys.toList()[index],
-                                                    color: ColorsManager.black,
-                                                    fontWeight: FontWeight.w700,
-                                                    fontSize: 10.rSp
+                                                Center(
+                                                  child: DefaultText(
+                                                      style: Style.small,
+                                                      title: homeCubit.featuresMap.keys.toList()[index],
+                                                      color: ColorsManager.black,
+                                                      fontWeight: FontWeight.w700,
+                                                      fontSize: 10.rSp
+                                                  ),
                                                 )
                                               ),
                                             );
@@ -606,6 +632,7 @@ class _ShowProductDetailsState extends State<ShowProductDetails> {
                         ],
                       ),
                     ),
+                    if(widget.isBuyGetOffer == null)
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 2.w),
                       child: Row(
@@ -697,6 +724,35 @@ class _ShowProductDetailsState extends State<ShowProductDetails> {
                             ),
                           ),
                         ],
+                      ),
+                    ),
+                    if(widget.isBuyGetOffer != null)
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10.w),
+                      child: DefaultButton(
+                          text: appBloc.translationModel!.addToCart,
+                          onPressed: (){
+                            homeCubit.addProduct(
+                                feature: homeCubit.productDetailsEntity!.data!.featuresDetails![homeCubit.featureIndex].id!,
+                                image: homeCubit.images[homeCubit.selectedImages]![0],
+                                oldPrice: double.parse(homeCubit.productDetailsEntity!.data!.featuresDetails![homeCubit.featureIndex].price!),
+                                price: double.parse(homeCubit.productDetailsEntity!.data!.featuresDetails![homeCubit.featureIndex].price!),
+                                productSlug: homeCubit.productDataEntity!.data!.product.slug!,
+                            );
+                            // homeCubit.productsOfferList.add(
+                            //
+                            //     ProductFeatureModel(
+                            //         productSlug: homeCubit.productDataEntity!.data!.product.slug!,
+                            //         feature: homeCubit.productDetailsEntity!.data!.featuresDetails![homeCubit.featureIndex].id!,
+                            //         image: homeCubit.images[homeCubit.selectedImages]![0],
+                            //         price: double.parse(homeCubit.productDetailsEntity!.data!.featuresDetails![homeCubit.featureIndex].price!),
+                            //         oldPrice: double.parse(homeCubit.productDetailsEntity!.data!.featuresDetails![homeCubit.featureIndex].price!),
+                            //         isGet: ''
+                            //     ),
+                            // );
+                            homeCubit.toggleRoleSelection();
+                            Navigator.pop(context);
+                          },
                       ),
                     ),
 
@@ -811,7 +867,7 @@ class _ShowProductDetailsState extends State<ShowProductDetails> {
                                 return Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 5.rSp, vertical: 5.rSp),
                                   child: ProductCard(
-                                    imagePath: homeCubit.productDataEntity!.data!.relatedProductSameShop[index].images[0].imagePath ?? '',
+                                    imagePath: homeCubit.productDataEntity!.data!.relatedProductSameShop[index].images,
                                     imagesCount: homeCubit.productDataEntity!.data!.relatedProductSameShop[index].images.length,
                                     category: homeCubit.productDataEntity!.data!.relatedProductSameShop[index].getCategory.name ?? '',
                                     name: homeCubit.productDataEntity!.data!.relatedProductSameShop[index].name ?? '',
@@ -835,6 +891,8 @@ class _ShowProductDetailsState extends State<ShowProductDetails> {
                                           itemType: 'product'
                                       );
                                     },
+                                    offer: homeCubit.productDataEntity!.data!.relatedProductSameShop[index].offers.isNotEmpty && homeCubit.productDataEntity!.data!.relatedProductSameShop[index].offers[0].type == 1 ? '-${homeCubit.productDataEntity!.data!.relatedProductSameShop[index].offers[0].value} %':null,
+                                    offerType: homeCubit.productDataEntity!.data!.relatedProductSameShop[index].offers.isNotEmpty ? homeCubit.productDataEntity!.data!.relatedProductSameShop[index].offers[0].type :null,
 
                                   ),
                                 );
@@ -869,7 +927,7 @@ class _ShowProductDetailsState extends State<ShowProductDetails> {
                                 return Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 5.rSp, vertical: 5.rSp),
                                   child: ProductCard(
-                                    imagePath: homeCubit.productDataEntity!.data!.relatedProductDiffShop[index].images[0].imagePath ?? '',
+                                    imagePath: homeCubit.productDataEntity!.data!.relatedProductDiffShop[index].images,
                                     imagesCount: homeCubit.productDataEntity!.data!.relatedProductDiffShop[index].images.length,
                                     category: homeCubit.productDataEntity!.data!.relatedProductDiffShop[index].getCategory.name ?? '',
                                     name: homeCubit.productDataEntity!.data!.relatedProductDiffShop[index].name ?? '',
@@ -892,6 +950,8 @@ class _ShowProductDetailsState extends State<ShowProductDetails> {
                                           itemType: 'product'
                                       );
                                     },
+                                    offer: homeCubit.productDataEntity!.data!.relatedProductDiffShop[index].offers.isNotEmpty && homeCubit.productDataEntity!.data!.relatedProductDiffShop[index].offers[0].type == 1 ? '-${homeCubit.productDataEntity!.data!.relatedProductDiffShop[index].offers[0].value} %':null,
+                                    offerType: homeCubit.productDataEntity!.data!.relatedProductDiffShop[index].offers.isNotEmpty ? homeCubit.productDataEntity!.data!.relatedProductDiffShop[index].offers[0].type :null,
                                   ),
                                 );
                               }),

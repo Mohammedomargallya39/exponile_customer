@@ -211,5 +211,7 @@
   "shop": "Shop",
   "seeAll": "See All",
   "total": "Total",
-  "select": "Select"
+  "select": "Select",
+  "completeOffer": "Please Complete Offer Products",
+  "offerCompleted": "Offer Products Completed"
 }

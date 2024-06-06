@@ -6,7 +6,9 @@ import 'package:exponile_customer/core/util/resources/extensions_manager.dart';
 import 'package:exponile_customer/core/util/widgets/my_icon_button.dart';
 import 'package:exponile_customer/features/home/presentation/controller/cubit.dart';
 import 'package:exponile_customer/features/home/presentation/controller/state.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import '../../../../../../core/util/widgets/default_text.dart';
@@ -43,61 +45,68 @@ class OfferStoreDetailsCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 2.w),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 2.w),
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  height: 15.h,
-                                  width: 30.w,
-                                  child: CachedNetworkImage(
-                                    imageUrl: storeLogo ,
-                                    imageBuilder: (context, imageProvider) => Container(
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                            image: imageProvider, fit: BoxFit.contain),
-                                      ),
-                                    ),
-                                    errorWidget: (context, url, error) => Container(
-                                        height: 15.h,
-                                        width: 30.w,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(20.rSp),
-                                              topRight: Radius.circular(20.rSp)),
-                                        ),
-                                        child: svgImage(path: Assets.images.svg.noImage)
-                                    ),
-                                    placeholder: (context, url) => Container(
-                                      color: Colors.black.withOpacity(0.5),
-                                    ),
-                                    fit: BoxFit.contain,
+                    Expanded(
+                      child: Container(
+                        height: 20.h,
+                        margin: EdgeInsets.all(5.rSp),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15.rSp),
+                          image: DecorationImage(
+                            image: CachedNetworkImageProvider(offerPath),
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 2.w),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 10.h,
+                              width: 25.w,
+                              child: CachedNetworkImage(
+                                imageUrl: storeLogo ,
+                                imageBuilder: (context, imageProvider) => Container(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: imageProvider, fit: BoxFit.contain),
                                   ),
                                 ),
-                                horizontalSpace(2.w),
+                                errorWidget: (context, url, error) => Container(
+                                    height: 15.h,
+                                    width: 30.w,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(20.rSp),
+                                          topRight: Radius.circular(20.rSp)),
+                                    ),
+                                    child: svgImage(path: Assets.images.svg.noImage)
+                                ),
+                                placeholder: (context, url) => Container(
+                                  color: Colors.black.withOpacity(0.5),
+                                ),
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+
+                            Row(
+                              children: [
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    verticalSpace(1.h),
                                     DefaultText(
                                       title: storeName,
                                       style: Style.medium,
-                                      fontSize: 16.rSp,
-                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14.rSp,
+                                      fontWeight: FontWeight.w700,
                                       color: ColorsManager.mainColor,
                                     ),
-                                    DefaultText(
-                                      title: storeCategories,
-                                      style: Style.medium,
-                                      fontSize: 16.rSp,
-                                      fontWeight: FontWeight.bold,
-                                      color: ColorsManager.mainColor,
-                                    ),
+                                    verticalSpace(1.h),
                                     RatingBar.builder(
                                       initialRating: double.parse(storeRate),
                                       minRating: 0,
@@ -118,30 +127,41 @@ class OfferStoreDetailsCard extends StatelessWidget {
                                 ),
                               ],
                             ),
-                          ),
-
-                        ],
+                      
+                          ],
+                        ),
                       ),
                     ),
                     horizontalSpace(2.w),
-                    Expanded(
-                      child: Container(
-                        height: MediaQuery.of(context).size.height / 4.5,
-                        //width: MediaQuery.of(context).size.width / 1.4,
-                        margin: EdgeInsets.all(5.rSp),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15.rSp),
-                          image: DecorationImage(
-                            image: CachedNetworkImageProvider(offerPath),
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                      ),
-                    )
                   ],
                 ),
                 Positioned(
-                  top: 5,
+                  right: 0,
+                  child: Container(
+                    width: 22.w,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 1.rSp,
+                          color: ColorsManager.mainColor,
+                        ),
+                        color: ColorsManager.success.withOpacity(0.2),
+                        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10.rSp))
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.all(10.rSp),
+                      child: DefaultText(
+                        title: storeCategories,
+                        style: Style.small,
+                        fontWeight: FontWeight.w700,
+                        maxLines: 1,
+                        fontSize: 8.rSp,
+                        align: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 5,
                   right: 5,
                   child: DefaultIconButton(
                       icon: Icon(

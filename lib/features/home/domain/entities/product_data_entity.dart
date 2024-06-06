@@ -135,7 +135,7 @@ class Product {
   int? reorderQuantity;
   GetCategory getCategory;
   GetShop getShop;
-  List<Image> images;
+  List<ProductsImages> images;
   List<Feature1>? features;
   List<Offer> offers;
   List<Rating>? ratings;
@@ -178,7 +178,7 @@ class Product {
     reorderQuantity: json["reorder_quantity"] ?? 0,
     getCategory: GetCategory.fromJson(json["get_category"]),
     getShop: GetShop.fromJson(json["get_shop"]),
-    images: List<Image>.from(json["images"].map((x) => Image.fromJson(x))),
+    images: List<ProductsImages>.from(json["images"].map((x) => ProductsImages.fromJson(x))),
     features: json["features"] == null
         ? null
         : List<Feature1>.from(
@@ -374,7 +374,7 @@ class RelatedProduct {
   String? slug;
   String? rate;
   GetCategory getCategory;
-  List<Image> images;
+  List<ProductsImages> images;
   List<Feature1>? features;
   List<Offer> offers;
   List<dynamic>? ratings;
@@ -406,7 +406,7 @@ class RelatedProduct {
     rate: json["rate"] ?? '',
     favoritesCount: json["favorites_count"] ?? 0,
     getCategory: GetCategory.fromJson(json["get_category"]),
-    images: List<Image>.from(json["images"].map((x) => Image.fromJson(x))),
+    images: List<ProductsImages>.from(json["images"].map((x) => ProductsImages.fromJson(x))),
     features: json["features"] == null
         ? null
         : List<Feature1>.from(
@@ -702,8 +702,8 @@ class GetShop {
 //     };
 }
 
-class Image {
-  Image({
+class ProductsImages {
+  ProductsImages({
     required this.id,
     required this.deletedAt,
     required this.product,
@@ -723,7 +723,7 @@ class Image {
   dynamic subFeature;
   String? imagePath;
 
-  factory Image.fromJson(Map<String, dynamic> json) => Image(
+  factory ProductsImages.fromJson(Map<String, dynamic> json) => ProductsImages(
     id: json["id"] ?? 0,
     deletedAt: json["deleted_at"] ?? '',
     product: json["product"] ?? 0,

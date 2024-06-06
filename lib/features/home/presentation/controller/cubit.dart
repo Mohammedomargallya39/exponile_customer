@@ -22,6 +22,7 @@ import '../../domain/usecase/product_details_usecase.dart';
 import '../../domain/usecase/shop_data_usecase.dart';
 import '../../domain/usecase/store_offer_details_usecase.dart';
 import '../../domain/usecase/store_offers_usecase.dart';
+import '../screens/shop_screen/offers/product_offer_model.dart';
 
 class HomeCubit extends Cubit<HomeState> {
    final MainSearchProductUseCase _mainSearchProductUseCase;
@@ -524,7 +525,27 @@ class HomeCubit extends Cubit<HomeState> {
    }
 
 
+   List<Map<String,dynamic>> productsOfferList = [];
 
-
+   void addProduct({
+     required String productSlug,
+     required int feature,
+     required String image,
+     required double price,
+     required double oldPrice,
+   })
+ {
+     emit(InitState());
+     productsOfferList.add({
+       'product_slug': productSlug,
+       'feature': feature,
+       'image': image,
+       'price': price,
+       'old_price': oldPrice,
+       'isGet': "",
+     });
+     productsOfferList.sort((a, b) => b['price'].compareTo(a['price']));
+     emit(ChangeState());
+   }
 
 }

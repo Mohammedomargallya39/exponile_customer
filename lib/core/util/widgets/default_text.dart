@@ -1,3 +1,5 @@
+import 'package:exponile_customer/core/util/resources/colors_manager.dart';
+import 'package:exponile_customer/core/util/resources/extensions_manager.dart';
 import 'package:flutter/material.dart';
 
 import '../resources/constants_manager.dart';
@@ -13,6 +15,7 @@ class DefaultText extends StatelessWidget {
     this.fontWeight,
     this.fontSize,
     this.maxLines,
+    this.decoration,
 
   });
   final String title;
@@ -24,6 +27,7 @@ class DefaultText extends StatelessWidget {
   final FontWeight? fontWeight;
   final double? fontSize;
   final int? maxLines;
+  final TextDecoration? decoration;
 
 
   @override
@@ -37,42 +41,27 @@ class DefaultText extends StatelessWidget {
         fontFamily: fontFamily,
         letterSpacing: letterSpacing,
         fontWeight: fontWeight ?? Theme.of(context).textTheme.displayMedium!.fontWeight,
-        fontSize: fontSize
+        fontSize: fontSize,
+        decoration: decoration ?? TextDecoration.none,
+        decorationColor: ColorsManager.error,
+        decorationThickness: 2.rSp
       ),);
   }
 
   TextStyle getStyle(BuildContext context) {
     switch (style) {
       case Style.extraSmall:
-        return Theme
-            .of(context)
-            .textTheme
-            .bodySmall!;
+        return Theme.of(context).textTheme.bodySmall!;
       case Style.small:
-        return Theme
-            .of(context)
-            .textTheme
-            .displaySmall!;
+        return Theme.of(context).textTheme.displaySmall!;
       case Style.medium:
-        return Theme
-            .of(context)
-            .textTheme
-            .displayMedium!;
+        return Theme.of(context).textTheme.displayMedium!;
       case Style.large:
-        return Theme
-            .of(context)
-            .textTheme
-            .displayLarge!;
+        return Theme.of(context).textTheme.displayLarge!;
       case Style.headMedium:
-        return Theme
-            .of(context)
-            .textTheme
-            .headlineMedium!;
+        return Theme.of(context).textTheme.headlineMedium!;
       case Style.headLarge:
-        return Theme
-            .of(context)
-            .textTheme
-            .headlineLarge!;
+        return Theme.of(context).textTheme.headlineLarge!;
     }
   }
 }

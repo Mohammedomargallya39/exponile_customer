@@ -137,7 +137,7 @@ class _ShopScreenState extends State<ShopScreen> {
                           name: homeCubit.shopDataEntity!.data!.products[index].name ?? '',
                           newPrice: '${homeCubit.shopDataEntity!.data!.products[index].basicPrice}',
                           rate: homeCubit.shopDataEntity!.data!.products[index].rate!,
-                          imagePath: homeCubit.shopDataEntity!.data!.products[index].images[0].imagePath!,
+                          imagePath: homeCubit.shopDataEntity!.data!.products[index].images,
                           isFavourite: homeCubit.shopDataEntity!.data!.products[index].favorites.isNotEmpty
                               ? true
                               : false,
@@ -154,6 +154,8 @@ class _ShopScreenState extends State<ShopScreen> {
                           },
                           imagesCount: homeCubit.shopDataEntity!.data!.products[index].images.length,
                           ratingCount: homeCubit.shopDataEntity!.data!.products[index].ratings.length,
+                          offer: homeCubit.shopDataEntity!.data!.products[index].offers!.isNotEmpty && homeCubit.shopDataEntity!.data!.products[index].offers![0].type == 1 ? '-${homeCubit.shopDataEntity!.data!.products[index].offers![0].value} %':null,
+                          offerType: homeCubit.shopDataEntity!.data!.products[index].offers!.isNotEmpty? homeCubit.shopDataEntity!.data!.products[index].offers![0].type : null,
                         ),
                       );
                     },

@@ -212,6 +212,8 @@ class TranslationModel {
   late String seeAll;
   late String total;
   late String select;
+  late String completeOffer;
+  late String offerCompleted;
 
   TranslationModel.fromJson(Map<String, dynamic> json) {
     yesOnly = json['yesOnly'];
@@ -426,5 +428,7 @@ class TranslationModel {
     seeAll= json['seeAll'];
     total= json['total'];
     select= json['select'];
+    completeOffer= json['completeOffer'];
+    offerCompleted= json['offerCompleted'];
   }
 }
