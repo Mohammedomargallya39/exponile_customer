@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:exponile_customer/core/util/resources/extensions_manager.dart';
 import 'package:exponile_customer/core/util/widgets/main_appbar.dart';
 import 'package:exponile_customer/core/util/widgets/my_icon_button.dart';

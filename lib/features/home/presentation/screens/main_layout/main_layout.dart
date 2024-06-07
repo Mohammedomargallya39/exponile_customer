@@ -13,10 +13,8 @@ import 'package:exponile_customer/features/home/presentation/controller/cubit.da
 import 'package:exponile_customer/features/home/presentation/controller/state.dart';
 import 'package:exponile_customer/features/home/presentation/screens/product_screen/show_product_details.dart';
 import 'package:exponile_customer/features/home/presentation/screens/shop_screen/shop_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -39,7 +37,6 @@ class _MainLayoutState extends State<MainLayout> {
     HomeCubit homeCubit = HomeCubit.get(context);
     homeCubit.filterMainSearch['product']= appBloc.translationModel!.products;
     homeCubit.filterMainSearch['store']= appBloc.translationModel!.stores;
-
     super.initState();
   }
 
@@ -94,7 +91,7 @@ class _MainLayoutState extends State<MainLayout> {
                               flex: 3,
                               child: DefaultTextField(
                                 controller: homeCubit.mainSearchController,
-                                hint: 'Search',
+                                hint: appBloc.translationModel!.search,
                                 maxLines: 1,
                                 svgImg:homeCubit.selectedMainSearchType == null || homeCubit.selectedMainSearchType == 'product'?
                                 Assets.images.svg.product:Assets.images.svg.shop,
@@ -513,7 +510,9 @@ class _MainLayoutState extends State<MainLayout> {
                                     },
                                   ),
                                 ),
-                              homeCubit.customer.elementAt(homeCubit.currentNavIndex),
+                              Expanded(
+                                  child: homeCubit.customer.elementAt(homeCubit.currentNavIndex)
+                              ),
                             ],
                           )
                       ),

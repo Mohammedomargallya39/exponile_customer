@@ -1,17 +1,21 @@
 import 'package:dartz/dartz.dart';
 import '../../../../../core/error/exceptions.dart';
 import '../../../../../core/error/failures.dart';
+import '../../domain/entities/about_exponile_entity.dart';
 import '../../domain/entities/add_favourite_entity.dart';
 import '../../domain/entities/add_offer_to_cart_entity.dart';
 import '../../domain/entities/add_to_cart_entity.dart';
 import '../../domain/entities/app_info_entity.dart';
+import '../../domain/entities/delete_account_entity.dart';
 import '../../domain/entities/main_search_product_entity.dart';
 import '../../domain/entities/main_search_shop_entity.dart';
 import '../../domain/entities/product_data_entity.dart';
 import '../../domain/entities/product_details_entity.dart';
+import '../../domain/entities/reset_password_entity.dart';
 import '../../domain/entities/shop_data_entity.dart';
 import '../../domain/entities/store_offer_details_entity.dart';
 import '../../domain/entities/store_offers_entity.dart';
+import '../../domain/entities/submit_complain_entity.dart';
 import '../../domain/repository/home_base_rebository.dart';
 import '../data_source/home_remote_data_source.dart';
 
@@ -26,6 +30,10 @@ typedef CallShopData = Future<ShopDataEntity> Function();
 typedef CallStoreOffers = Future<StoreOffersEntity> Function();
 typedef CallStoreOfferDetails = Future<StoreOfferDetailsEntity> Function();
 typedef CallOfferAddToCart = Future<AddOfferToCartEntity> Function();
+typedef CallDeleteAccount = Future<DeleteAccountEntity> Function();
+typedef CallResetPasswordS = Future<ResetPasswordSEntity> Function();
+typedef CallAboutExponile = Future<AboutExponileEntity> Function();
+typedef CallSubmitComplain = Future<SubmitComplainEntity> Function();
 
 
 class HomeRepoImplementation extends HomeBaseRepository {
@@ -368,6 +376,123 @@ class HomeRepoImplementation extends HomeBaseRepository {
   }
 
 
+
+  Future<Either<Failure, DeleteAccountEntity>> fetchDeleteAccount(
+      CallDeleteAccount mainMethod,
+      ) async {
+    try {
+      final deleteAccount = await mainMethod();
+      return Right(deleteAccount);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, DeleteAccountEntity>> deleteAccount({
+    required String password
+  }) async {
+    return await fetchDeleteAccount(()
+    {
+      return remoteDataSource.deleteAccount(
+          password: password
+      );
+    });
+  }
+
+
+  Future<Either<Failure, ResetPasswordSEntity>> fetchResetPasswordS(
+      CallResetPasswordS mainMethod,
+      ) async {
+    try {
+      final resetPasswordS = await mainMethod();
+      return Right(resetPasswordS);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ResetPasswordSEntity>> resetPasswordS({
+    required String oldPassword,
+    required String newPassword,
+    required String confirmNewPassword
+  }) async {
+    return await fetchResetPasswordS(()
+    {
+      return remoteDataSource.resetPasswordS(
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+        confirmNewPassword: confirmNewPassword,
+      );
+    });
+  }
+
+
+  Future<Either<Failure, AboutExponileEntity>> fetchAboutExponile(
+      CallAboutExponile mainMethod,
+      ) async {
+    try {
+      final aboutExponile = await mainMethod();
+      return Right(aboutExponile);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, AboutExponileEntity>> aboutExponile() async {
+    return await fetchAboutExponile(()
+    {
+      return remoteDataSource.aboutExponile();
+    });
+  }
+
+
+  Future<Either<Failure, SubmitComplainEntity>> fetchSubmitComplain(
+      CallSubmitComplain mainMethod,
+      ) async {
+    try {
+      final submitComplain = await mainMethod();
+      return Right(submitComplain);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, SubmitComplainEntity>> submitComplain({
+    required String name,
+    required String email,
+    required String phone,
+    required String complain,
+  }) async {
+    return await fetchSubmitComplain(()
+    {
+      return remoteDataSource.submitComplain(
+        name: name,
+        email: email,
+        phone: phone,
+        complain: complain,
+      );
+    });
+  }
 
 }
 

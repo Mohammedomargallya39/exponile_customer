@@ -82,7 +82,8 @@ class DefaultTextField extends StatelessWidget {
                   // fit: BoxFit.scaleDown,
                 ),
               ),
-              horizontalSpace(3.w),
+              if(svgImg != null)
+                horizontalSpace(3.w),
               Expanded(
                 child: TextFormField(
                   maxLength: maxLength,

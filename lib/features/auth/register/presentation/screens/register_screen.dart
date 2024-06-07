@@ -64,7 +64,6 @@ class RegisterScreen extends StatelessWidget {
                       toast: TOAST.success,
                       text: state.registerEntity.message);
                 }
-
                 if (state is RegisterSuccessState && state.registerEntity.success == 0) {
                   Navigator.pop(context);
                   designToastDialog(
@@ -72,7 +71,6 @@ class RegisterScreen extends StatelessWidget {
                       toast: TOAST.error,
                       text: state.registerEntity.message);
                 }
-
                 if (state is RegisterErrorState) {
                   Navigator.pop(context);
                   designToastDialog(

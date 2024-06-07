@@ -214,6 +214,18 @@ class TranslationModel {
   late String select;
   late String completeOffer;
   late String offerCompleted;
+  late String addresses;
+  late String notifications;
+  late String about;
+  late String notAvailable;
+  late String becomeMerchant;
+  late String aboutExponile;
+  late String contactUs;
+  late String name;
+  late String complain;
+  late String submit;
+
+
 
   TranslationModel.fromJson(Map<String, dynamic> json) {
     yesOnly = json['yesOnly'];
@@ -430,5 +442,15 @@ class TranslationModel {
     select= json['select'];
     completeOffer= json['completeOffer'];
     offerCompleted= json['offerCompleted'];
+    addresses= json['addresses'];
+    notifications= json['notifications'];
+    about= json['about'];
+    notAvailable= json['notAvailable'];
+    becomeMerchant= json['becomeMerchant'];
+    aboutExponile= json['aboutExponile'];
+    contactUs= json['contactUs'];
+    name= json['name'];
+    complain= json['complain'];
+    submit= json['submit'];
   }
 }

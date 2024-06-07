@@ -93,6 +93,9 @@ class $AssetsImagesSvgGen {
   /// File path: assets/images/svg/person.svg
   String get person => 'assets/images/svg/person.svg';
 
+  /// File path: assets/images/svg/complain.svg
+  String get complain => 'assets/images/svg/complain.svg';
+
   /// File path: assets/images/svg/arrow_back.svg
   String get arrow_back => 'assets/images/svg/arrow_back.svg';
 
@@ -122,6 +125,9 @@ class $AssetsImagesSvgGen {
 
   /// File path: assets/images/svg/product.svg
   String get product => 'assets/images/svg/product.svg';
+
+  /// File path: assets/images/svg/hello.svg
+  String get hello => 'assets/images/svg/hello.svg';
 
   /// File path: assets/images/svg/size.svg
   String get size => 'assets/images/svg/size.svg';

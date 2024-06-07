@@ -213,5 +213,15 @@
   "total": "Total",
   "select": "Select",
   "completeOffer": "Please Complete Offer Products",
-  "offerCompleted": "Offer Products Completed"
+  "offerCompleted": "Offer Products Completed",
+  "addresses": "Addresses",
+  "notifications": "Notifications",
+  "about": "About Exponile",
+  "notAvailable": "Will be Available soon",
+  "becomeMerchant": "Become Merchant",
+  "aboutExponile": "We are the first Egyptian corporation that aims to create an online Mall that does not only consist of all the SMEs running their businesses but the small  businesses that only depend on the offline sales too. We offer both retailers and stores the opportunity to set up their online shop without any setup fees.",
+  "contactUs": "Contact Us",
+  "name": "Name",
+  "complain": "Complain",
+  "submit": "Submit"
 }

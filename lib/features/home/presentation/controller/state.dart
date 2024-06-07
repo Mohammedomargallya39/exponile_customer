@@ -1,15 +1,19 @@
 import 'package:equatable/equatable.dart';
 
+import '../../domain/entities/about_exponile_entity.dart';
 import '../../domain/entities/add_favourite_entity.dart';
 import '../../domain/entities/add_offer_to_cart_entity.dart';
 import '../../domain/entities/add_to_cart_entity.dart';
+import '../../domain/entities/delete_account_entity.dart';
 import '../../domain/entities/main_search_product_entity.dart';
 import '../../domain/entities/main_search_shop_entity.dart';
 import '../../domain/entities/product_data_entity.dart';
 import '../../domain/entities/product_details_entity.dart';
+import '../../domain/entities/reset_password_entity.dart';
 import '../../domain/entities/shop_data_entity.dart';
 import '../../domain/entities/store_offer_details_entity.dart';
 import '../../domain/entities/store_offers_entity.dart';
+import '../../domain/entities/submit_complain_entity.dart';
 
 abstract class HomeState extends Equatable{}
 
@@ -289,6 +293,102 @@ class AddOfferToCartErrorState extends HomeState {
   final String failure;
 
   AddOfferToCartErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+class DeleteAccountLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class DeleteAccountSuccessState extends HomeState {
+  final DeleteAccountEntity deleteAccountEntity;
+
+
+  DeleteAccountSuccessState({required this.deleteAccountEntity});
+
+  @override
+  List<Object?> get props => [deleteAccountEntity];
+}
+
+class DeleteAccountErrorState extends HomeState {
+  final String failure;
+
+  DeleteAccountErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+
+class ResetPasswordLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class ResetPasswordSuccessState extends HomeState {
+  final ResetPasswordSEntity resetPasswordEntity;
+
+
+  ResetPasswordSuccessState({required this.resetPasswordEntity});
+
+  @override
+  List<Object?> get props => [resetPasswordEntity];
+}
+
+class ResetPasswordErrorState extends HomeState {
+  final String failure;
+
+  ResetPasswordErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+class AboutExponileLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class AboutExponileSuccessState extends HomeState {
+  final AboutExponileEntity aboutExponileEntity;
+
+
+  AboutExponileSuccessState({required this.aboutExponileEntity});
+
+  @override
+  List<Object?> get props => [aboutExponileEntity];
+}
+
+class AboutExponileErrorState extends HomeState {
+  final String failure;
+
+  AboutExponileErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+class SubmitComplainLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class SubmitComplainSuccessState extends HomeState {
+  final SubmitComplainEntity submitComplainEntity;
+
+
+  SubmitComplainSuccessState({required this.submitComplainEntity});
+
+  @override
+  List<Object?> get props => [submitComplainEntity];
+}
+
+class SubmitComplainErrorState extends HomeState {
+  final String failure;
+
+  SubmitComplainErrorState({required this.failure});
   @override
   List<Object?> get props => [failure];
 }

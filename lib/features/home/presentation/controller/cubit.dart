@@ -1,4 +1,7 @@
+import 'package:exponile_customer/core/usecase/use_case.dart';
 import 'package:exponile_customer/core/util/resources/assets.gen.dart';
+import 'package:exponile_customer/features/home/domain/entities/about_exponile_entity.dart';
+import 'package:exponile_customer/features/home/domain/usecase/about_exponile_usecase.dart';
 import 'package:exponile_customer/features/home/presentation/controller/state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,14 +18,17 @@ import '../../domain/entities/store_offers_entity.dart';
 import '../../domain/usecase/add_favourite_usecase.dart';
 import '../../domain/usecase/add_offer_to_cart_usecase.dart';
 import '../../domain/usecase/add_to_cart_usecase.dart';
+import '../../domain/usecase/delete_account_usecase.dart';
 import '../../domain/usecase/main_search_product_usecase.dart';
 import '../../domain/usecase/main_search_shop_usecase.dart';
 import '../../domain/usecase/product_data_usecase.dart';
 import '../../domain/usecase/product_details_usecase.dart';
+import '../../domain/usecase/reset_password_usecase.dart';
 import '../../domain/usecase/shop_data_usecase.dart';
 import '../../domain/usecase/store_offer_details_usecase.dart';
 import '../../domain/usecase/store_offers_usecase.dart';
-import '../screens/shop_screen/offers/product_offer_model.dart';
+import '../../domain/usecase/submit_complain_usecase.dart';
+import '../screens/settings/setting_screen.dart';
 
 class HomeCubit extends Cubit<HomeState> {
    final MainSearchProductUseCase _mainSearchProductUseCase;
@@ -35,6 +41,10 @@ class HomeCubit extends Cubit<HomeState> {
    final ShopDataUseCase _shopDataUseCase;
    final StoreOffersUseCase _storeOffersUseCase;
    final StoreOfferDetailsUseCase _storeOfferDetailsUseCase;
+   final DeleteAccountUseCase _deleteAccountUseCase;
+   final ResetPasswordSUseCase _resetPasswordSUseCase;
+   final AboutExponileUseCase _aboutExponileUseCase;
+   final SubmitComplainUseCase _submitComplainUseCase;
   HomeCubit(
       {
     required MainSearchProductUseCase mainSearchProductUseCase,
@@ -47,6 +57,10 @@ class HomeCubit extends Cubit<HomeState> {
     required ShopDataUseCase shopDataUseCase,
     required StoreOffersUseCase storeOffersUseCase,
     required StoreOfferDetailsUseCase storeOfferDetailsUseCase,
+    required DeleteAccountUseCase deleteAccountUseCase,
+    required ResetPasswordSUseCase resetPasswordSUseCase,
+    required AboutExponileUseCase aboutExponileUseCase,
+    required SubmitComplainUseCase submitComplainUseCase,
   }
   ) :
        _mainSearchProductUseCase = mainSearchProductUseCase,
@@ -59,6 +73,10 @@ class HomeCubit extends Cubit<HomeState> {
        _shopDataUseCase = shopDataUseCase,
        _storeOffersUseCase = storeOffersUseCase,
        _storeOfferDetailsUseCase = storeOfferDetailsUseCase,
+       _deleteAccountUseCase = deleteAccountUseCase,
+       _resetPasswordSUseCase = resetPasswordSUseCase,
+       _aboutExponileUseCase = aboutExponileUseCase,
+       _submitComplainUseCase = submitComplainUseCase,
 
 
       super(Empty());
@@ -79,7 +97,7 @@ class HomeCubit extends Cubit<HomeState> {
     Container(),
     Container(),
     Container(),
-    Container(),
+    const SettingsScreen(),
   ];
 
   TextEditingController mainSearchController = TextEditingController();
@@ -546,6 +564,108 @@ class HomeCubit extends Cubit<HomeState> {
      });
      productsOfferList.sort((a, b) => b['price'].compareTo(a['price']));
      emit(ChangeState());
+   }
+
+   void deleteAccount({
+     required String password
+   }) async {
+     emit(DeleteAccountLoadingState());
+     final result = await _deleteAccountUseCase(
+         DeleteAccountParams(
+             password: password
+         )
+     );
+     result.fold((failure) {
+       emit(DeleteAccountErrorState(
+           failure: mapFailureToMessage(failure)
+       ));
+     }, (data) {
+       emit(DeleteAccountSuccessState(
+           deleteAccountEntity: data
+       ));
+     });
+   }
+
+
+   void resetPassword({
+     required String oldPassword,
+     required String newPassword,
+     required String confirmNewPassword
+   }) async {
+     emit(ResetPasswordLoadingState());
+     final result = await _resetPasswordSUseCase(
+         ResetPasswordSParams(
+           confirmNewPassword : confirmNewPassword,
+           newPassword : newPassword,
+           oldPassword : oldPassword,
+         )
+     );
+     result.fold((failure) {
+       emit(ResetPasswordErrorState(
+           failure: mapFailureToMessage(failure)
+       ));
+     }, (data) {
+       emit(ResetPasswordSuccessState(
+           resetPasswordEntity: data
+       ));
+     });
+   }
+
+   final TextEditingController passwordController = TextEditingController();
+   final TextEditingController oldPasswordController = TextEditingController();
+   final TextEditingController newPasswordController = TextEditingController();
+   final TextEditingController confirmNewPasswordController = TextEditingController();
+
+
+   AboutExponileEntity? aboutExponileEntity;
+   void aboutExponile() async {
+     emit(AboutExponileLoadingState());
+     final result = await _aboutExponileUseCase(
+         NoParams()
+     );
+     result.fold((failure) {
+       emit(AboutExponileErrorState(
+           failure: mapFailureToMessage(failure)
+       ));
+     }, (data) {
+       aboutExponileEntity = data;
+       emit(AboutExponileSuccessState(
+           aboutExponileEntity: data
+       ));
+     });
+   }
+
+   final TextEditingController contactUsNameController = TextEditingController();
+   final TextEditingController contactUsEmailController = TextEditingController();
+   final TextEditingController contactUsPhoneController = TextEditingController();
+   final TextEditingController contactUsMessageController = TextEditingController();
+   final GlobalKey<FormState> contactUsFormKey = GlobalKey<FormState>();
+
+
+   void submitComplain({
+     required String name,
+     required String email,
+     required String phone,
+     required String complain,
+   }) async {
+     emit(SubmitComplainLoadingState());
+     final result = await _submitComplainUseCase(
+         SubmitComplainParams(
+           name : name,
+           email : email,
+           phone : phone,
+           complain : complain,
+         )
+     );
+     result.fold((failure) {
+       emit(SubmitComplainErrorState(
+           failure: mapFailureToMessage(failure)
+       ));
+     }, (data) {
+       emit(SubmitComplainSuccessState(
+           submitComplainEntity: data
+       ));
+     });
    }
 
 }

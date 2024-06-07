@@ -3,16 +3,20 @@ import 'package:exponile_customer/features/home/data/models/add_favourite_model.
 import '../../../../../core/network/remote/api_endpoints.dart';
 import '../../../../../core/network/remote/dio_helper.dart';
 import '../../../../../core/util/resources/constants_manager.dart';
+import '../models/about_exponile_model.dart';
 import '../models/add_offer_to_cart_model.dart';
 import '../models/add_to_cart_model.dart';
 import '../models/app_info_model.dart';
+import '../models/delete_account_model.dart';
 import '../models/main_search_product_model.dart';
 import '../models/main_search_shop_model.dart';
 import '../models/product_data_model.dart';
 import '../models/product_details_model.dart';
+import '../models/reset_password_model.dart';
 import '../models/shop_data_model.dart';
 import '../models/store_offer_details_model.dart';
 import '../models/store_offers_model.dart';
+import '../models/submit_complain_model.dart';
 
 abstract class HomeBaseRemoteDataSource {
   Future<AppInfoModel> appInfo();
@@ -55,6 +59,21 @@ abstract class HomeBaseRemoteDataSource {
     required List? offerProducts,
     required int? qty,
     required String? offerSlug,
+  });
+  Future<DeleteAccountModel> deleteAccount({
+    required String password,
+  });
+  Future<ResetPasswordSModel> resetPasswordS({
+    required String oldPassword,
+    required String newPassword,
+    required String confirmNewPassword,
+  });
+  Future<AboutExponileModel> aboutExponile();
+  Future<SubmitComplainModel> submitComplain({
+    required String name,
+    required String email,
+    required String phone,
+    required String complain,
   });
 }
 
@@ -266,5 +285,76 @@ class HomeRemoteDataSourceImpl
     );
     return AddOfferToCartModel.fromJson(f.data);
   }
+
+  @override
+  Future<DeleteAccountModel> deleteAccount({
+    required String password,
+  }) async {
+    final Response f = await dioHelper.post(
+        url: deleteAccountURL,
+        token: token,
+        data: {
+          "lang": isRTL==true ? 'ar' : 'en',
+          "password": password,
+        }
+    );
+    return DeleteAccountModel.fromJson(f.data);
+  }
+
+
+  @override
+  Future<ResetPasswordSModel> resetPasswordS({
+    required String oldPassword,
+    required String newPassword,
+    required String confirmNewPassword,
+  }) async {
+    final Response f = await dioHelper.post(
+        url: resetPasswordURL,
+        token: token,
+        data: {
+          "lang": isRTL==true ? 'ar' : 'en',
+          "old_password": oldPassword,
+          "password": newPassword,
+          "password_confirmation": confirmNewPassword,
+        }
+    );
+    return ResetPasswordSModel.fromJson(f.data);
+  }
+
+
+  @override
+  Future<AboutExponileModel> aboutExponile() async {
+    final Response f = await dioHelper.get(
+        url: aboutExponileURL,
+        token: token,
+        query: {
+          "lang": isRTL==true ? 'ar' : 'en',
+        }
+    );
+    return AboutExponileModel.fromJson(f.data);
+  }
+
+  @override
+  Future<SubmitComplainModel> submitComplain({
+    required String name,
+    required String email,
+    required String phone,
+    required String complain,
+  }) async {
+    final Response f = await dioHelper.post(
+        url: submitComplainURL,
+        token: token,
+        data: {
+          "lang": isRTL==true ? 'ar' : 'en',
+          "name": name,
+          "email": email,
+          "phone": phone,
+          "message": complain,
+        }
+    );
+    return SubmitComplainModel.fromJson(f.data);
+  }
+
+
 }
 
