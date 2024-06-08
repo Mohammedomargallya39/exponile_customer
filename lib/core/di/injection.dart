@@ -23,10 +23,14 @@ import '../../features/home/data/data_source/home_remote_data_source.dart';
 import '../../features/home/data/repository/home_repository.dart';
 import '../../features/home/domain/repository/home_base_rebository.dart';
 import '../../features/home/domain/usecase/about_exponile_usecase.dart';
+import '../../features/home/domain/usecase/account_data_usecase.dart';
 import '../../features/home/domain/usecase/add_favourite_usecase.dart';
 import '../../features/home/domain/usecase/add_offer_to_cart_usecase.dart';
 import '../../features/home/domain/usecase/add_to_cart_usecase.dart';
 import '../../features/home/domain/usecase/delete_account_usecase.dart';
+import '../../features/home/domain/usecase/delete_address_usecase.dart';
+import '../../features/home/domain/usecase/favourite_products_usecase.dart';
+import '../../features/home/domain/usecase/favourite_stores_usecase.dart';
 import '../../features/home/domain/usecase/main_search_product_usecase.dart';
 import '../../features/home/domain/usecase/main_search_shop_usecase.dart';
 import '../../features/home/domain/usecase/product_data_usecase.dart';
@@ -78,6 +82,10 @@ Future<void> init() async {
           resetPasswordSUseCase: sl(),
           aboutExponileUseCase: sl(),
           submitComplainUseCase: sl(),
+          favouriteStoresUseCase: sl(),
+          favouriteProductsUseCase: sl(),
+          accountDataUseCase: sl(),
+          deleteAddressUseCase: sl(),
     ),
   );
 
@@ -126,6 +134,10 @@ Future<void> init() async {
   sl.registerLazySingleton(() => ResetPasswordSUseCase(sl()));
   sl.registerLazySingleton(() => AboutExponileUseCase(sl()));
   sl.registerLazySingleton(() => SubmitComplainUseCase(sl()));
+  sl.registerLazySingleton(() => FavouriteStoresUseCase(sl()));
+  sl.registerLazySingleton(() => FavouriteProductsUseCase(sl()));
+  sl.registerLazySingleton(() => AccountDataUseCase(sl()));
+  sl.registerLazySingleton(() => DeleteAddressUseCase(sl()));
 
   sl.registerLazySingleton<LogInBaseRemoteDataSource>(
         () => LogInRemoteDataSourceImpl(dioHelper: sl()),

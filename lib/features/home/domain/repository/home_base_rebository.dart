@@ -1,11 +1,15 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../entities/about_exponile_entity.dart';
+import '../entities/account_data_entity.dart';
 import '../entities/add_favourite_entity.dart';
 import '../entities/add_offer_to_cart_entity.dart';
 import '../entities/add_to_cart_entity.dart';
 import '../entities/app_info_entity.dart';
 import '../entities/delete_account_entity.dart';
+import '../entities/delete_address_entity.dart';
+import '../entities/favourite_products_entity.dart';
+import '../entities/favourite_stores_entity.dart';
 import '../entities/main_search_product_entity.dart';
 import '../entities/main_search_shop_entity.dart';
 import '../entities/product_data_entity.dart';
@@ -82,4 +86,17 @@ abstract class HomeBaseRepository {
     required String complain,
   });
 
+  Future<Either<Failure, FavouriteStoresEntity>> favouriteStores({
+    required String? itemType,
+  });
+
+  Future<Either<Failure, FavouriteProductsEntity>> favouriteProducts({
+    required String? itemType,
+  });
+
+  Future<Either<Failure, AccountDataEntity>> accountData();
+
+  Future<Either<Failure, DeleteAddressEntity>> deleteAddress({
+    required int? addressID,
+  });
 }

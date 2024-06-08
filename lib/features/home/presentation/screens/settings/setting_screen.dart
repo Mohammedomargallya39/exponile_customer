@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:exponile_customer/core/util/resources/extensions_manager.dart';
 import 'package:exponile_customer/features/home/presentation/screens/settings/about_screen.dart';
+import 'package:exponile_customer/features/home/presentation/screens/settings/addresses_screen.dart';
+import 'package:exponile_customer/features/home/presentation/screens/settings/favourites_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -240,11 +242,42 @@ class SettingsScreen extends StatelessWidget {
                           ),
 
 
+                          ///account Favourites
+                          verticalSpace(3.h),
+                          InkWell(
+                            onTap: (){
+                              navigateTo(context, const FavouritesScreen());
+                            },
+                            highlightColor: Colors.transparent,
+                            splashColor: Colors.transparent,
+                            child: Row(
+                              children: [
+                                DefaultText(
+                                  title: appBloc.translationModel!.favourites,
+                                  style: Style.small,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 12.rSp,
+                                  letterSpacing: 1.rSp,
+                                  maxLines: 1,
+                                ),
+                                const Spacer(),
+                                const Icon(Icons.favorite_border,color: ColorsManager.mainColor),
+                              ],
+                            ),
+                          ),
+                          verticalSpace(3.h),
+                          Divider(
+                            height: 1.rSp,
+                            thickness: 1.rSp,
+                            color: ColorsManager.black.withOpacity(0.2),
+                          ),
+
+
                           ///account address
                           verticalSpace(3.h),
                           InkWell(
                             onTap: (){
-
+                                navigateTo(context, const AddressesScreen());
                             },
                             highlightColor: Colors.transparent,
                             splashColor: Colors.transparent,

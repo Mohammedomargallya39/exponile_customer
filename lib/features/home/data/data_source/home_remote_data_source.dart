@@ -4,10 +4,14 @@ import '../../../../../core/network/remote/api_endpoints.dart';
 import '../../../../../core/network/remote/dio_helper.dart';
 import '../../../../../core/util/resources/constants_manager.dart';
 import '../models/about_exponile_model.dart';
+import '../models/account_data_model.dart';
 import '../models/add_offer_to_cart_model.dart';
 import '../models/add_to_cart_model.dart';
 import '../models/app_info_model.dart';
 import '../models/delete_account_model.dart';
+import '../models/delete_address_model.dart';
+import '../models/favourite_products_model.dart';
+import '../models/favourite_stores_model.dart';
 import '../models/main_search_product_model.dart';
 import '../models/main_search_shop_model.dart';
 import '../models/product_data_model.dart';
@@ -75,6 +79,16 @@ abstract class HomeBaseRemoteDataSource {
     required String phone,
     required String complain,
   });
+  Future<FavouriteStoresModel> favouriteStores({
+    required String? itemType,
+  });
+  Future<FavouriteProductsModel> favouriteProducts({
+    required String? itemType,
+  });
+  Future<AccountDataModel> accountData();
+  Future<DeleteAddressModel> deleteAddress({
+    required int? addressID,
+});
 }
 
 class HomeRemoteDataSourceImpl
@@ -353,6 +367,72 @@ class HomeRemoteDataSourceImpl
         }
     );
     return SubmitComplainModel.fromJson(f.data);
+  }
+
+
+  @override
+  Future<FavouriteStoresModel> favouriteStores(
+      {
+        required String? itemType,
+      }) async {
+
+    final Response f = await dioHelper.post(
+      url: favouritesURL,
+      token: token,
+      query: {
+        "lang": isRTL==true ? 'ar' : 'en',
+        "type": itemType,
+      },
+    );
+    return FavouriteStoresModel.fromJson(f.data);
+  }
+
+
+  @override
+  Future<FavouriteProductsModel> favouriteProducts(
+      {
+        required String? itemType,
+      }) async {
+
+    final Response f = await dioHelper.post(
+      url: favouritesURL,
+      token: token,
+      query: {
+        "lang": isRTL==true ? 'ar' : 'en',
+        "type": itemType,
+      },
+    );
+    return FavouriteProductsModel.fromJson(f.data);
+  }
+
+  @override
+  Future<AccountDataModel> accountData() async {
+
+    final Response f = await dioHelper.get(
+      url: accountDataURL,
+      token: token,
+      query: {
+        "lang": isRTL==true ? 'ar' : 'en',
+      },
+    );
+    return AccountDataModel.fromJson(f.data);
+  }
+
+
+  @override
+  Future<DeleteAddressModel> deleteAddress({
+    required int? addressID,
+}) async {
+
+    final Response f = await dioHelper.post(
+      url: deleteAddressURL,
+      token: token,
+      data: {
+        "lang": isRTL==true ? 'ar' : 'en',
+        "id": addressID,
+      },
+    );
+    return DeleteAddressModel.fromJson(f.data);
   }
 
 

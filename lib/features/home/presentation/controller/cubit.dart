@@ -8,6 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/util/resources/constants_manager.dart';
+import '../../domain/entities/account_data_entity.dart';
+import '../../domain/entities/favourite_products_entity.dart';
+import '../../domain/entities/favourite_stores_entity.dart';
 import '../../domain/entities/main_search_product_entity.dart';
 import '../../domain/entities/main_search_shop_entity.dart';
 import '../../domain/entities/product_data_entity.dart';
@@ -15,10 +18,14 @@ import '../../domain/entities/product_details_entity.dart';
 import '../../domain/entities/shop_data_entity.dart';
 import '../../domain/entities/store_offer_details_entity.dart';
 import '../../domain/entities/store_offers_entity.dart';
+import '../../domain/usecase/account_data_usecase.dart';
 import '../../domain/usecase/add_favourite_usecase.dart';
 import '../../domain/usecase/add_offer_to_cart_usecase.dart';
 import '../../domain/usecase/add_to_cart_usecase.dart';
 import '../../domain/usecase/delete_account_usecase.dart';
+import '../../domain/usecase/delete_address_usecase.dart';
+import '../../domain/usecase/favourite_products_usecase.dart';
+import '../../domain/usecase/favourite_stores_usecase.dart';
 import '../../domain/usecase/main_search_product_usecase.dart';
 import '../../domain/usecase/main_search_shop_usecase.dart';
 import '../../domain/usecase/product_data_usecase.dart';
@@ -45,6 +52,10 @@ class HomeCubit extends Cubit<HomeState> {
    final ResetPasswordSUseCase _resetPasswordSUseCase;
    final AboutExponileUseCase _aboutExponileUseCase;
    final SubmitComplainUseCase _submitComplainUseCase;
+   final FavouriteStoresUseCase _favouriteStoresUseCase;
+   final FavouriteProductsUseCase _favouriteProductsUseCase;
+   final AccountDataUseCase _accountDataUseCase;
+   final DeleteAddressUseCase _deleteAddressUseCase;
   HomeCubit(
       {
     required MainSearchProductUseCase mainSearchProductUseCase,
@@ -61,6 +72,10 @@ class HomeCubit extends Cubit<HomeState> {
     required ResetPasswordSUseCase resetPasswordSUseCase,
     required AboutExponileUseCase aboutExponileUseCase,
     required SubmitComplainUseCase submitComplainUseCase,
+    required FavouriteStoresUseCase favouriteStoresUseCase,
+    required FavouriteProductsUseCase favouriteProductsUseCase,
+    required AccountDataUseCase accountDataUseCase,
+    required DeleteAddressUseCase deleteAddressUseCase,
   }
   ) :
        _mainSearchProductUseCase = mainSearchProductUseCase,
@@ -77,6 +92,10 @@ class HomeCubit extends Cubit<HomeState> {
        _resetPasswordSUseCase = resetPasswordSUseCase,
        _aboutExponileUseCase = aboutExponileUseCase,
        _submitComplainUseCase = submitComplainUseCase,
+       _favouriteStoresUseCase = favouriteStoresUseCase,
+       _favouriteProductsUseCase = favouriteProductsUseCase,
+       _accountDataUseCase = accountDataUseCase,
+       _deleteAddressUseCase = deleteAddressUseCase,
 
 
       super(Empty());
@@ -664,6 +683,92 @@ class HomeCubit extends Cubit<HomeState> {
      }, (data) {
        emit(SubmitComplainSuccessState(
            submitComplainEntity: data
+       ));
+     });
+   }
+
+
+   FavouriteStoresEntity? favouriteStoresEntity;
+   void favouriteStores({
+     required String itemType,
+   }) async {
+     emit(FavouriteStoresLoadingState());
+     final result = await _favouriteStoresUseCase(
+         FavouriteStoresParams(
+           itemType : itemType,
+         )
+     );
+     result.fold((failure) {
+       emit(FavouriteStoresErrorState(
+           failure: mapFailureToMessage(failure)
+       ));
+     }, (data) {
+       favouriteStoresEntity = data;
+       emit(FavouriteStoresSuccessState(
+           favouriteStoresEntity: data
+       ));
+     });
+   }
+
+
+   FavouriteProductsEntity? favouriteProductsEntity;
+   void favouriteProducts({
+     required String itemType,
+   }) async {
+     emit(FavouriteProductsLoadingState());
+     final result = await _favouriteProductsUseCase(
+         FavouriteProductsParams(
+           itemType : itemType,
+         )
+     );
+     result.fold((failure) {
+       emit(FavouriteProductsErrorState(
+           failure: mapFailureToMessage(failure)
+       ));
+     }, (data) {
+       favouriteProductsEntity = data;
+       emit(FavouriteProductsSuccessState(
+           favouriteProductsEntity: data
+       ));
+     });
+   }
+
+
+   AccountDataEntity? accountDataEntity;
+   void accountData() async {
+     emit(AccountDataLoadingState());
+     final result = await _accountDataUseCase(
+         NoParams(),
+     );
+     result.fold((failure) {
+       emit(AccountDataErrorState(
+           failure: mapFailureToMessage(failure)
+       ));
+     }, (data) {
+       accountDataEntity = data;
+       emit(AccountDataSuccessState(
+           accountDataEntity: data
+       ));
+     });
+   }
+
+
+   void deleteAddress({
+     required int? addressID,
+   }) async {
+     emit(DeleteAddressLoadingState());
+     final result = await _deleteAddressUseCase(
+         DeleteAddressParams(
+           addressID : addressID,
+         )
+     );
+     result.fold((failure) {
+       emit(DeleteAddressErrorState(
+           failure: mapFailureToMessage(failure)
+       ));
+     }, (data) {
+       emit(DeleteAddressSuccessState(
+           deleteAddressEntity: data
        ));
      });
    }

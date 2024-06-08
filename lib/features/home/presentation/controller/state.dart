@@ -1,10 +1,14 @@
 import 'package:equatable/equatable.dart';
 
 import '../../domain/entities/about_exponile_entity.dart';
+import '../../domain/entities/account_data_entity.dart';
 import '../../domain/entities/add_favourite_entity.dart';
 import '../../domain/entities/add_offer_to_cart_entity.dart';
 import '../../domain/entities/add_to_cart_entity.dart';
 import '../../domain/entities/delete_account_entity.dart';
+import '../../domain/entities/delete_address_entity.dart';
+import '../../domain/entities/favourite_products_entity.dart';
+import '../../domain/entities/favourite_stores_entity.dart';
 import '../../domain/entities/main_search_product_entity.dart';
 import '../../domain/entities/main_search_shop_entity.dart';
 import '../../domain/entities/product_data_entity.dart';
@@ -389,6 +393,103 @@ class SubmitComplainErrorState extends HomeState {
   final String failure;
 
   SubmitComplainErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+class FavouriteStoresLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class FavouriteStoresSuccessState extends HomeState {
+  final FavouriteStoresEntity favouriteStoresEntity;
+
+
+   FavouriteStoresSuccessState({required this.favouriteStoresEntity});
+
+  @override
+  List<Object?> get props => [favouriteStoresEntity];
+}
+
+class FavouriteStoresErrorState extends HomeState {
+  final String failure;
+
+  FavouriteStoresErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+class FavouriteProductsLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class FavouriteProductsSuccessState extends HomeState {
+  final FavouriteProductsEntity favouriteProductsEntity;
+
+
+  FavouriteProductsSuccessState({required this.favouriteProductsEntity});
+
+  @override
+  List<Object?> get props => [favouriteProductsEntity];
+}
+
+class FavouriteProductsErrorState extends HomeState {
+  final String failure;
+
+  FavouriteProductsErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+
+class AccountDataLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class AccountDataSuccessState extends HomeState {
+  final AccountDataEntity accountDataEntity;
+
+
+  AccountDataSuccessState({required this.accountDataEntity});
+
+  @override
+  List<Object?> get props => [accountDataEntity];
+}
+
+class AccountDataErrorState extends HomeState {
+  final String failure;
+
+  AccountDataErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+class DeleteAddressLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class DeleteAddressSuccessState extends HomeState {
+  final DeleteAddressEntity deleteAddressEntity;
+
+
+  DeleteAddressSuccessState({required this.deleteAddressEntity});
+
+  @override
+  List<Object?> get props => [deleteAddressEntity];
+}
+
+class DeleteAddressErrorState extends HomeState {
+  final String failure;
+
+  DeleteAddressErrorState({required this.failure});
   @override
   List<Object?> get props => [failure];
 }

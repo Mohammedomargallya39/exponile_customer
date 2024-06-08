@@ -2,11 +2,15 @@ import 'package:dartz/dartz.dart';
 import '../../../../../core/error/exceptions.dart';
 import '../../../../../core/error/failures.dart';
 import '../../domain/entities/about_exponile_entity.dart';
+import '../../domain/entities/account_data_entity.dart';
 import '../../domain/entities/add_favourite_entity.dart';
 import '../../domain/entities/add_offer_to_cart_entity.dart';
 import '../../domain/entities/add_to_cart_entity.dart';
 import '../../domain/entities/app_info_entity.dart';
 import '../../domain/entities/delete_account_entity.dart';
+import '../../domain/entities/delete_address_entity.dart';
+import '../../domain/entities/favourite_products_entity.dart';
+import '../../domain/entities/favourite_stores_entity.dart';
 import '../../domain/entities/main_search_product_entity.dart';
 import '../../domain/entities/main_search_shop_entity.dart';
 import '../../domain/entities/product_data_entity.dart';
@@ -34,6 +38,10 @@ typedef CallDeleteAccount = Future<DeleteAccountEntity> Function();
 typedef CallResetPasswordS = Future<ResetPasswordSEntity> Function();
 typedef CallAboutExponile = Future<AboutExponileEntity> Function();
 typedef CallSubmitComplain = Future<SubmitComplainEntity> Function();
+typedef CallFavouriteStores = Future<FavouriteStoresEntity> Function();
+typedef CallFavouriteProducts = Future<FavouriteProductsEntity> Function();
+typedef CallAccountData = Future<AccountDataEntity> Function();
+typedef CallDeleteAddress = Future<DeleteAddressEntity> Function();
 
 
 class HomeRepoImplementation extends HomeBaseRepository {
@@ -493,6 +501,117 @@ class HomeRepoImplementation extends HomeBaseRepository {
       );
     });
   }
+
+  Future<Either<Failure, FavouriteStoresEntity>> fetchFavouriteStores(
+      CallFavouriteStores mainMethod,
+      ) async {
+    try {
+      final favouriteStores = await mainMethod();
+      return Right(favouriteStores);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, FavouriteStoresEntity>> favouriteStores(
+      {
+        required String? itemType,
+      }) async {
+    return await fetchFavouriteStores(()
+    {
+      return remoteDataSource.favouriteStores(
+        itemType : itemType,
+      );
+    });
+  }
+
+
+  Future<Either<Failure, FavouriteProductsEntity>> fetchFavouriteProducts(
+      CallFavouriteProducts mainMethod,
+      ) async {
+    try {
+      final favouriteProducts = await mainMethod();
+      return Right(favouriteProducts);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, FavouriteProductsEntity>> favouriteProducts(
+      {
+        required String? itemType,
+      }) async {
+    return await fetchFavouriteProducts(()
+    {
+      return remoteDataSource.favouriteProducts(
+        itemType : itemType,
+      );
+    });
+  }
+
+
+  Future<Either<Failure, AccountDataEntity>> fetchAccountData(
+      CallAccountData mainMethod,
+      ) async {
+    try {
+      final accountData = await mainMethod();
+      return Right(accountData);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, AccountDataEntity>> accountData() async {
+    return await fetchAccountData(()
+    {
+      return remoteDataSource.accountData();
+    });
+  }
+
+
+  Future<Either<Failure, DeleteAddressEntity>> fetchDeleteAddress(
+      CallDeleteAddress mainMethod,
+      ) async {
+    try {
+      final deleteAddress = await mainMethod();
+      return Right(deleteAddress);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, DeleteAddressEntity>> deleteAddress({
+    required int? addressID,
+}) async {
+    return await fetchDeleteAddress(()
+    {
+      return remoteDataSource.deleteAddress(
+        addressID : addressID,
+      );
+    });
+  }
+
+
 
 }
 

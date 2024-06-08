@@ -99,7 +99,7 @@ class MyApp extends StatelessWidget {
           create: (BuildContext context) => sl<RegisterCubit>()
         ),
         BlocProvider(
-          create: (BuildContext context) => sl<HomeCubit>(),
+          create: (BuildContext context) => sl<HomeCubit>()..accountData(),
         ),
       ],
       child: BlocBuilder<AppBloc, AppState>(

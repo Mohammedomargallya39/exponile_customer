@@ -22,3 +22,6 @@ const storeOfferDetailsURL = 'website/offers/show';
 const resetPasswordURL = 'website/my-account/change-password';
 const aboutExponileURL = 'website/contact-us/create';
 const submitComplainURL = 'website/contact-us/store';
+const favouritesURL = 'website/favorites';
+const accountDataURL = 'website/my-account';
+const deleteAddressURL = 'website/my-addresses/destroy';
