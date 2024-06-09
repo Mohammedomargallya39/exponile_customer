@@ -1,6 +1,5 @@
 import 'package:exponile_customer/core/util/resources/extensions_manager.dart';
 import 'package:flutter/material.dart';
-
 import '../resources/colors_manager.dart';
 import '../resources/constants_manager.dart';
 

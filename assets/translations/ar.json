@@ -224,6 +224,9 @@
   "name": "الإسم",
   "complain": "الشكوي",
   "submit": "تقديم",
-  "favourites": "المفضلات"
-
+  "favourites": "المفضلات",
+  "addAddress": "أضف عنوانا",
+  "landmark": "علامة",
+  "homeLocation": "عنوان المنزل",
+  "jobLocation": "عنوان العمل"
 }

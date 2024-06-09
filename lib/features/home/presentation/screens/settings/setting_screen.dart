@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:exponile_customer/core/util/resources/extensions_manager.dart';
 import 'package:exponile_customer/features/home/presentation/screens/settings/about_screen.dart';
 import 'package:exponile_customer/features/home/presentation/screens/settings/addresses_screen.dart';

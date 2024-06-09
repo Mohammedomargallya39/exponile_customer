@@ -10,7 +10,6 @@ import 'package:exponile_customer/features/home/presentation/controller/state.da
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-
 import '../../controller/cubit.dart';
 
 class StoreViewCard extends StatelessWidget {

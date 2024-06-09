@@ -9,23 +9,33 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/util/resources/constants_manager.dart';
 import '../../domain/entities/account_data_entity.dart';
+import '../../domain/entities/add_address_entity.dart';
+import '../../domain/entities/areas_entity.dart';
+import '../../domain/entities/cities_entity.dart';
 import '../../domain/entities/favourite_products_entity.dart';
 import '../../domain/entities/favourite_stores_entity.dart';
+import '../../domain/entities/get_location_entity.dart';
 import '../../domain/entities/main_search_product_entity.dart';
 import '../../domain/entities/main_search_shop_entity.dart';
 import '../../domain/entities/product_data_entity.dart';
 import '../../domain/entities/product_details_entity.dart';
 import '../../domain/entities/shop_data_entity.dart';
+import '../../domain/entities/shop_location_entity.dart';
 import '../../domain/entities/store_offer_details_entity.dart';
 import '../../domain/entities/store_offers_entity.dart';
 import '../../domain/usecase/account_data_usecase.dart';
 import '../../domain/usecase/add_favourite_usecase.dart';
+import '../../domain/usecase/add_location_details_usecase.dart';
 import '../../domain/usecase/add_offer_to_cart_usecase.dart';
 import '../../domain/usecase/add_to_cart_usecase.dart';
+import '../../domain/usecase/areas_usecase.dart';
+import '../../domain/usecase/cities_usecase.dart';
 import '../../domain/usecase/delete_account_usecase.dart';
 import '../../domain/usecase/delete_address_usecase.dart';
 import '../../domain/usecase/favourite_products_usecase.dart';
 import '../../domain/usecase/favourite_stores_usecase.dart';
+import '../../domain/usecase/get_location_usecase.dart';
+import '../../domain/usecase/location_usecase.dart';
 import '../../domain/usecase/main_search_product_usecase.dart';
 import '../../domain/usecase/main_search_shop_usecase.dart';
 import '../../domain/usecase/product_data_usecase.dart';
@@ -35,6 +45,7 @@ import '../../domain/usecase/shop_data_usecase.dart';
 import '../../domain/usecase/store_offer_details_usecase.dart';
 import '../../domain/usecase/store_offers_usecase.dart';
 import '../../domain/usecase/submit_complain_usecase.dart';
+import '../screens/home/home_screen.dart';
 import '../screens/settings/setting_screen.dart';
 
 class HomeCubit extends Cubit<HomeState> {
@@ -56,6 +67,12 @@ class HomeCubit extends Cubit<HomeState> {
    final FavouriteProductsUseCase _favouriteProductsUseCase;
    final AccountDataUseCase _accountDataUseCase;
    final DeleteAddressUseCase _deleteAddressUseCase;
+   final CitiesUseCase _citiesUseCase;
+   final AreasUseCase _areasUseCase;
+   final LocationUseCase _locationUseCase;
+   final GetLocationUseCase _getLocationUseCase;
+   final AddLocationUseCase _addLocationUseCase;
+
   HomeCubit(
       {
     required MainSearchProductUseCase mainSearchProductUseCase,
@@ -76,6 +93,11 @@ class HomeCubit extends Cubit<HomeState> {
     required FavouriteProductsUseCase favouriteProductsUseCase,
     required AccountDataUseCase accountDataUseCase,
     required DeleteAddressUseCase deleteAddressUseCase,
+    required CitiesUseCase citiesUseCase,
+    required AreasUseCase areasUseCase,
+    required LocationUseCase locationUseCase,
+    required GetLocationUseCase getLocationUseCase,
+    required AddLocationUseCase addLocationUseCase,
   }
   ) :
        _mainSearchProductUseCase = mainSearchProductUseCase,
@@ -96,6 +118,11 @@ class HomeCubit extends Cubit<HomeState> {
        _favouriteProductsUseCase = favouriteProductsUseCase,
        _accountDataUseCase = accountDataUseCase,
        _deleteAddressUseCase = deleteAddressUseCase,
+       _citiesUseCase = citiesUseCase,
+       _areasUseCase = areasUseCase,
+       _locationUseCase = locationUseCase,
+       _getLocationUseCase = getLocationUseCase,
+       _addLocationUseCase = addLocationUseCase,
 
 
       super(Empty());
@@ -111,7 +138,7 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   List<Widget> customer = [
-    Container(),
+    const HomeScreen(),
     Container(),
     Container(),
     Container(),
@@ -772,5 +799,224 @@ class HomeCubit extends Cubit<HomeState> {
        ));
      });
    }
+
+
+
+   LocationEntity? locationEntity;
+   void location({
+     required String? address,
+   }) async {
+     emit(LocationLoadingState());
+     final result = await _locationUseCase(
+         LocationParams(
+           address: address!,
+         )
+     );
+     result.fold((failure) {
+       emit(LocationErrorState(
+           failure: mapFailureToMessage(failure)
+       ));
+     }, (data) async {
+       locationEntity = data;
+       emit(LocationSuccessState(
+           locationEntity: data
+       ));
+     });
+   }
+
+
+   CitiesEntity? citiesEntity;
+   List<CitiesData> filteredCities = [];
+
+   void getCities() async {
+     emit(CitiesLoadingState());
+
+     final result = await _citiesUseCase(NoParams());
+
+     result.fold((failure) {
+       emit(CitiesErrorState(
+           failure: mapFailureToMessage(failure)
+       ));
+     }, (data) {
+       citiesEntity = data;
+       filteredCities= data.data!;
+       emit(CitiesSuccessState(
+           citiesEntity: data
+       )
+       );
+     });
+   }
+
+   AreasEntity? areasEntity;
+   List<AreasData> filteredAreas = [];
+
+   void getAreas(
+       {
+         required int cityID,
+       }) async {
+     emit(AreasLoadingState());
+
+     final result = await _areasUseCase(
+         AreasParams(
+             cityId: cityID
+         )
+     );
+
+     result.fold((failure) {
+       emit(AreasErrorState(
+           failure: mapFailureToMessage(failure)
+       ));
+     }, (data) {
+       areasEntity = data;
+       filteredAreas = data.data!;
+       emit(AreasSuccessState(
+         areasEntity: data
+       ));
+     });
+   }
+
+
+
+   String? selectedCityName;
+   int? selectedCityID;
+
+   void changeCityValue({
+     required String cityName,
+     required int cityID,
+   }){
+     emit(InitState());
+     selectedCityName = cityName;
+     selectedCityID = cityID;
+     emit(ChangeState());
+   }
+
+   void filterCities(String value){
+     emit(ChangeState());
+
+     if (value.isNotEmpty) {
+       // Filter the categories based on the search value
+       filteredCities = citiesEntity!.data!.where((city) =>
+           city.name!.toLowerCase().contains(value.toLowerCase())).toList();
+     } else {
+       // If the search value is empty, revert to full data
+       filteredCities = citiesEntity!.data!;
+     }
+     emit(FilterState());
+   }
+
+
+
+   String? selectedAreaName;
+   dynamic selectedAreaID;
+
+   void changeAreaValue({
+     required String areaName,
+     required dynamic areaID,
+   }){
+     emit(InitState());
+     selectedAreaName = areaName;
+     selectedAreaID = areaID;
+     emit(ChangeState());
+   }
+
+   void filterAreas(String value){
+     emit(ChangeState());
+
+     if (value.isNotEmpty) {
+       // Filter the categories based on the search value
+       filteredAreas = areasEntity!.data!.where((area) =>
+           area.name!.toLowerCase().contains(value.toLowerCase())).toList();
+     } else {
+       // If the search value is empty, revert to full data
+       filteredAreas = areasEntity!.data!;
+     }
+     emit(FilterState());
+   }
+
+
+   GetLocationEntity? getLocationEntity;
+   void getLocation({
+     required double? lat,
+     required double? long,
+   }) async {
+     emit(GetLocationLoadingState());
+     final result = await _getLocationUseCase(
+         GetLocationParams(
+           lat: lat!,
+           long: long!,
+         )
+     );
+     result.fold((failure) {
+       emit(GetLocationErrorState(
+           failure: mapFailureToMessage(failure)
+       ));
+     }, (data) async {
+       getLocationEntity = data;
+       emit(GetLocationSuccessState(
+           getLocationEntity: data
+       ));
+     });
+   }
+
+   bool isHome = false;
+   bool isWork = false;
+
+   void changeLocationPlace(
+       {
+         required bool isHomeValue,
+         required bool isWorkValue,
+       }
+       ){
+     emit(InitState());
+     isHome = isHomeValue;
+     isWork = isWorkValue;
+     emit(ChangeState());
+   }
+
+
+   AddLocationEntity? addLocationEntity;
+   void addLocation({
+     required int? area,
+     required int? governorate,
+     required String? late,
+     required String? long,
+     required String? streetName,
+     required String? buildingName,
+     required String? landmark,
+     required int? floorNo,
+     required int? aptNo,
+     required String? type,
+   }) async {
+     emit(AddLocationLoadingState());
+     final result = await _addLocationUseCase(
+         AddLocationParams(
+           area: area,
+           governorate: governorate,
+           late: late,
+           long: long,
+           streetName: streetName,
+           buildingName: buildingName,
+           landmark: landmark,
+           floorNo: floorNo,
+           aptNo: aptNo,
+           type: type,
+         )
+     );
+     result.fold((failure) {
+       emit(AddLocationErrorState(
+           failure: mapFailureToMessage(failure)
+       ));
+     }, (data) async {
+       addLocationEntity = data;
+       emit(AddLocationSuccessState(
+           addLocationEntity: data
+       ));
+     });
+   }
+
+
+
+
+
 
 }

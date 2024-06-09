@@ -25,3 +25,7 @@ const submitComplainURL = 'website/contact-us/store';
 const favouritesURL = 'website/favorites';
 const accountDataURL = 'website/my-account';
 const deleteAddressURL = 'website/my-addresses/destroy';
+const getLocationURL = 'website/locations/reverse';
+const String locationURL = 'merchant/branches/get-geo-data';
+const String addLocationURL = 'website/my-addresses/store';
+

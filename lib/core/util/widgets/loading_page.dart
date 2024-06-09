@@ -1,7 +1,6 @@
 import 'package:exponile_customer/core/util/resources/extensions_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-
 import '../resources/assets.gen.dart';
 
 class LoadingPage extends StatelessWidget {

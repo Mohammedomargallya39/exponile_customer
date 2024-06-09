@@ -1,4 +1,5 @@
 import 'package:exponile_customer/core/util/cubit/cubit.dart';
+import 'package:exponile_customer/core/util/resources/assets.gen.dart';
 import 'package:exponile_customer/core/util/resources/colors_manager.dart';
 import 'package:exponile_customer/core/util/resources/constants_manager.dart';
 import 'package:exponile_customer/core/util/resources/extensions_manager.dart';
@@ -7,9 +8,9 @@ import 'package:exponile_customer/core/util/widgets/main_appbar.dart';
 import 'package:exponile_customer/core/util/widgets/my_icon_button.dart';
 import 'package:exponile_customer/features/home/presentation/controller/cubit.dart';
 import 'package:exponile_customer/features/home/presentation/controller/state.dart';
+import 'package:exponile_customer/features/home/presentation/screens/settings/add_new_address_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../../../core/util/widgets/progress.dart';
 
 class AddressesScreen extends StatelessWidget {
@@ -61,7 +62,17 @@ class AddressesScreen extends StatelessWidget {
                     isBack: true,
                     isLang: false
                 ),
-                body: ListView.builder(
+                floatingActionButton: DefaultIconButton(
+                    icon: const Icon(
+                      Icons.add_circle_outline,
+                      color: ColorsManager.mainColor,
+                    ),
+                    onPressed: (){
+                      navigateTo(context, const AddNewAddressScreen());
+                    }
+                ),
+                body: homeCubit.accountDataEntity != null ?
+                ListView.builder(
                   physics: const BouncingScrollPhysics(),
                   itemCount: homeCubit.accountDataEntity!.data.addresses!.length,
                   itemBuilder: (context, index) {
@@ -178,6 +189,11 @@ class AddressesScreen extends StatelessWidget {
                       ),
                     );
                   },
+                ):
+                Center(
+                    child: svgImage(
+                        path: Assets.images.svg.noImage
+                    )
                 ),
               );
             },

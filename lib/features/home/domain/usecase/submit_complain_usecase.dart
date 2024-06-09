@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import '../../../../../core/error/failures.dart';
 import '../../../../../core/usecase/use_case.dart';
-import '../entities/reset_password_entity.dart';
 import '../entities/submit_complain_entity.dart';
 import '../repository/home_base_rebository.dart';
 

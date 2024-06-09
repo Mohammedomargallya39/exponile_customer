@@ -8,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../../core/util/cubit/cubit.dart';
 import '../../../../../core/util/cubit/state.dart';
-import '../../../../../core/util/resources/appString.dart';
 import '../../../../../core/util/resources/assets.gen.dart';
 import '../../../../../core/util/resources/colors_manager.dart';
 import '../../../../../core/util/resources/constants_manager.dart';
@@ -474,7 +473,7 @@ class RegisterScreen extends StatelessWidget {
                                               ),
                                               verticalSpace(2.h,),
                                               DefaultButton(
-                                                text: AppString.register,
+                                                text: appBloc.translationModel!.register,
                                                 onPressed: ()
                                                 {
                                                   if(formKey.currentState!.validate()){

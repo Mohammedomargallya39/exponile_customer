@@ -13,7 +13,6 @@ import 'package:exponile_customer/features/home/presentation/screens/shop_screen
 import 'package:exponile_customer/features/home/presentation/screens/shop_screen/review/store_reviews_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'filter_shops.dart';
 
 class ShopScreen extends StatefulWidget {

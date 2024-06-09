@@ -2,20 +2,25 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../entities/about_exponile_entity.dart';
 import '../entities/account_data_entity.dart';
+import '../entities/add_address_entity.dart';
 import '../entities/add_favourite_entity.dart';
 import '../entities/add_offer_to_cart_entity.dart';
 import '../entities/add_to_cart_entity.dart';
 import '../entities/app_info_entity.dart';
+import '../entities/areas_entity.dart';
+import '../entities/cities_entity.dart';
 import '../entities/delete_account_entity.dart';
 import '../entities/delete_address_entity.dart';
 import '../entities/favourite_products_entity.dart';
 import '../entities/favourite_stores_entity.dart';
+import '../entities/get_location_entity.dart';
 import '../entities/main_search_product_entity.dart';
 import '../entities/main_search_shop_entity.dart';
 import '../entities/product_data_entity.dart';
 import '../entities/product_details_entity.dart';
 import '../entities/reset_password_entity.dart';
 import '../entities/shop_data_entity.dart';
+import '../entities/shop_location_entity.dart';
 import '../entities/store_offer_details_entity.dart';
 import '../entities/store_offers_entity.dart';
 import '../entities/submit_complain_entity.dart';
@@ -98,5 +103,29 @@ abstract class HomeBaseRepository {
 
   Future<Either<Failure, DeleteAddressEntity>> deleteAddress({
     required int? addressID,
+  });
+  Future<Either<Failure, CitiesEntity>> cities();
+
+  Future<Either<Failure, AreasEntity>> areas({
+    required int cityID,
+  });
+  Future<Either<Failure, LocationEntity>> location({
+    required String address,
+  });
+  Future<Either<Failure, GetLocationEntity>> getLocation({
+    required double? lat,
+    required double? long,
+  });
+  Future<Either<Failure, AddLocationEntity>> addLocation({
+    required int? area,
+    required int? governorate,
+    required String? late,
+    required String? long,
+    required String? streetName,
+    required String? buildingName,
+    required String? landmark,
+    required int? floorNo,
+    required int? aptNo,
+    required String? type,
   });
 }

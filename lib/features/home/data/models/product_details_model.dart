@@ -1,4 +1,3 @@
-
 import '../../domain/entities/product_details_entity.dart';
 
 class ProductDetailsModel extends ProductDetailsEntity {

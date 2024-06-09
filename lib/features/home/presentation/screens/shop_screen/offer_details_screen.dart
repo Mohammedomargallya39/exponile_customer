@@ -4,7 +4,6 @@ import "package:exponile_customer/core/util/cubit/cubit.dart";
 import "package:exponile_customer/core/util/loading_files/offer_loading.dart";
 import "package:exponile_customer/core/util/resources/colors_manager.dart";
 import "package:exponile_customer/core/util/resources/extensions_manager.dart";
-import "package:exponile_customer/core/util/widgets/default_button.dart";
 import "package:exponile_customer/core/util/widgets/default_text.dart";
 import "package:exponile_customer/core/util/widgets/main_appbar.dart";
 import "package:exponile_customer/core/util/widgets/my_icon_button.dart";

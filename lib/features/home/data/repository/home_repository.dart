@@ -3,20 +3,25 @@ import '../../../../../core/error/exceptions.dart';
 import '../../../../../core/error/failures.dart';
 import '../../domain/entities/about_exponile_entity.dart';
 import '../../domain/entities/account_data_entity.dart';
+import '../../domain/entities/add_address_entity.dart';
 import '../../domain/entities/add_favourite_entity.dart';
 import '../../domain/entities/add_offer_to_cart_entity.dart';
 import '../../domain/entities/add_to_cart_entity.dart';
 import '../../domain/entities/app_info_entity.dart';
+import '../../domain/entities/areas_entity.dart';
+import '../../domain/entities/cities_entity.dart';
 import '../../domain/entities/delete_account_entity.dart';
 import '../../domain/entities/delete_address_entity.dart';
 import '../../domain/entities/favourite_products_entity.dart';
 import '../../domain/entities/favourite_stores_entity.dart';
+import '../../domain/entities/get_location_entity.dart';
 import '../../domain/entities/main_search_product_entity.dart';
 import '../../domain/entities/main_search_shop_entity.dart';
 import '../../domain/entities/product_data_entity.dart';
 import '../../domain/entities/product_details_entity.dart';
 import '../../domain/entities/reset_password_entity.dart';
 import '../../domain/entities/shop_data_entity.dart';
+import '../../domain/entities/shop_location_entity.dart';
 import '../../domain/entities/store_offer_details_entity.dart';
 import '../../domain/entities/store_offers_entity.dart';
 import '../../domain/entities/submit_complain_entity.dart';
@@ -42,6 +47,11 @@ typedef CallFavouriteStores = Future<FavouriteStoresEntity> Function();
 typedef CallFavouriteProducts = Future<FavouriteProductsEntity> Function();
 typedef CallAccountData = Future<AccountDataEntity> Function();
 typedef CallDeleteAddress = Future<DeleteAddressEntity> Function();
+typedef CallCities = Future<CitiesEntity> Function();
+typedef CallAreas = Future<AreasEntity> Function();
+typedef CallLocation= Future<LocationEntity> Function();
+typedef CallGetLocation= Future<GetLocationEntity> Function();
+typedef CallAddLocation= Future<AddLocationEntity> Function();
 
 
 class HomeRepoImplementation extends HomeBaseRepository {
@@ -607,6 +617,163 @@ class HomeRepoImplementation extends HomeBaseRepository {
     {
       return remoteDataSource.deleteAddress(
         addressID : addressID,
+      );
+    });
+  }
+
+
+  Future<Either<Failure, CitiesEntity>> fetchCities(
+      CallCities mainMethod,
+      ) async {
+    try {
+      final citiesData = await mainMethod();
+      return Right(citiesData);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, CitiesEntity>> cities() async {
+    return await fetchCities(()
+    {
+      return remoteDataSource.cities();
+    });
+  }
+
+
+
+  Future<Either<Failure, AreasEntity>> fetchAreas(
+      CallAreas mainMethod,
+      ) async {
+    try {
+      final areasData = await mainMethod();
+      return Right(areasData);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, AreasEntity>> areas(
+      {
+        required int cityID,
+      }) async {
+    return await fetchAreas(()
+    {
+      return remoteDataSource.areas(
+        cityID: cityID,
+      );
+    });
+  }
+
+
+  Future<Either<Failure, LocationEntity>> fetchLocation(
+      CallLocation mainMethod,
+      ) async {
+    try {
+      final location = await mainMethod();
+      return Right(location);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, LocationEntity>> location(
+      {
+        required String? address,
+      }) async {
+    return await fetchLocation(()
+    {
+      return remoteDataSource.location(
+        address : address,
+      );
+    });
+  }
+
+
+  Future<Either<Failure, GetLocationEntity>> fetchGetLocation(
+      CallGetLocation mainMethod,
+      ) async {
+    try {
+      final getLocation = await mainMethod();
+      return Right(getLocation);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, GetLocationEntity>> getLocation(
+      {
+        required double? lat,
+        required double? long,
+      }) async {
+    return await fetchGetLocation(()
+    {
+      return remoteDataSource.getLocation(
+        lat : lat,
+        long : long,
+      );
+    });
+  }
+
+
+  Future<Either<Failure, AddLocationEntity>> fetchAddLocation(
+      CallAddLocation mainMethod,
+      ) async {
+    try {
+      final addLocation = await mainMethod();
+      return Right(addLocation);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, AddLocationEntity>> addLocation(
+      {
+        required int? area,
+        required int? governorate,
+        required String? late,
+        required String? long,
+        required String? streetName,
+        required String? buildingName,
+        required String? landmark,
+        required int? floorNo,
+        required int? aptNo,
+        required String? type,
+      }) async {
+    return await fetchAddLocation(()
+    {
+      return remoteDataSource.addLocation(
+        area : area,
+        governorate : governorate,
+        late : late,
+        long : long,
+        streetName : streetName,
+        buildingName : buildingName,
+        landmark : landmark,
+        floorNo : floorNo,
+        aptNo : aptNo,
+        type : type,
       );
     });
   }

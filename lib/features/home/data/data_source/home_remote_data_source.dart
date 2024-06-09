@@ -5,19 +5,24 @@ import '../../../../../core/network/remote/dio_helper.dart';
 import '../../../../../core/util/resources/constants_manager.dart';
 import '../models/about_exponile_model.dart';
 import '../models/account_data_model.dart';
+import '../models/add_location_model.dart';
 import '../models/add_offer_to_cart_model.dart';
 import '../models/add_to_cart_model.dart';
 import '../models/app_info_model.dart';
+import '../models/areasModel.dart';
+import '../models/cities_model.dart';
 import '../models/delete_account_model.dart';
 import '../models/delete_address_model.dart';
 import '../models/favourite_products_model.dart';
 import '../models/favourite_stores_model.dart';
+import '../models/get_location_model.dart';
 import '../models/main_search_product_model.dart';
 import '../models/main_search_shop_model.dart';
 import '../models/product_data_model.dart';
 import '../models/product_details_model.dart';
 import '../models/reset_password_model.dart';
 import '../models/shop_data_model.dart';
+import '../models/shop_location_model.dart';
 import '../models/store_offer_details_model.dart';
 import '../models/store_offers_model.dart';
 import '../models/submit_complain_model.dart';
@@ -89,6 +94,30 @@ abstract class HomeBaseRemoteDataSource {
   Future<DeleteAddressModel> deleteAddress({
     required int? addressID,
 });
+  Future<CitiesModel> cities();
+  Future<AreasModel> areas({
+    required int cityID,
+  });
+  Future<LocationModel> location({
+    required String? address,
+  });
+  Future<GetLocationModel> getLocation({
+    required double? lat,
+    required double? long,
+  });
+  Future<AddLocationModel> addLocation({
+    required int? area,
+    required int? governorate,
+    required String? late,
+    required String? long,
+    required String? streetName,
+    required String? buildingName,
+    required String? landmark,
+    required int? floorNo,
+    required int? aptNo,
+    required String? type,
+  });
+
 }
 
 class HomeRemoteDataSourceImpl
@@ -433,6 +462,105 @@ class HomeRemoteDataSourceImpl
       },
     );
     return DeleteAddressModel.fromJson(f.data);
+  }
+
+
+  @override
+  Future<CitiesModel> cities() async {
+    final Response f = await dioHelper.get(
+      url: citiesURL,
+      query: {
+        'lang': isRTL == true ? 'ar' : 'en',
+      },
+    );
+    return CitiesModel.fromJson(f.data);
+  }
+
+
+  @override
+  Future<AreasModel> areas({
+    required int cityID,
+  }) async {
+    final Response f = await dioHelper.get(
+        url: areasURL,
+        query: {
+          'lang': isRTL == true ? 'ar' : 'en',
+          'city': cityID,
+        }
+    );
+    return AreasModel.fromJson(f.data);
+  }
+
+  @override
+  Future<LocationModel> location(
+      {
+        required String? address,
+      }) async {
+
+    final Response f = await dioHelper.get(
+      url: locationURL,
+      token: token,
+      query: {
+        "lang": isRTL==true ? 'ar' : 'en',
+        "address": address,
+      },
+    );
+    return LocationModel.fromJson(f.data);
+  }
+
+
+  @override
+  Future<GetLocationModel> getLocation(
+      {
+        required double? lat,
+        required double? long,
+      }) async {
+    final Response f = await dioHelper.get(
+      url: getLocationURL,
+      token: token,
+      query: {
+        "lang": isRTL==true ? 'ar' : 'en',
+        "lat": lat,
+        "lng": long,
+      },
+    );
+    return GetLocationModel.fromJson(f.data);
+  }
+
+
+  @override
+  Future<AddLocationModel> addLocation(
+      {
+        required int? area,
+        required int? governorate,
+        required String? late,
+        required String? long,
+        required String? streetName,
+        required String? buildingName,
+        required String? landmark,
+        required int? floorNo,
+        required int? aptNo,
+        required String? type,
+      }) async {
+    final Response f = await dioHelper.post(
+      url: addLocationURL,
+      token: token,
+      data: {
+        "lang": isRTL==true ? 'ar' : 'en',
+        "area": area,
+        "governorate": governorate,
+        "lat": late,
+        "long": long,
+        "street_name": streetName,
+        "building_name": buildingName,
+        "landmark": landmark,
+        "floor_no": floorNo,
+        "apt_no": aptNo,
+        "type": type,
+        "mobile": null,
+      },
+    );
+    return AddLocationModel.fromJson(f.data);
   }
 
 

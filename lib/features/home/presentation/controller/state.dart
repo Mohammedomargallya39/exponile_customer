@@ -1,20 +1,24 @@
 import 'package:equatable/equatable.dart';
-
 import '../../domain/entities/about_exponile_entity.dart';
 import '../../domain/entities/account_data_entity.dart';
+import '../../domain/entities/add_address_entity.dart';
 import '../../domain/entities/add_favourite_entity.dart';
 import '../../domain/entities/add_offer_to_cart_entity.dart';
 import '../../domain/entities/add_to_cart_entity.dart';
+import '../../domain/entities/areas_entity.dart';
+import '../../domain/entities/cities_entity.dart';
 import '../../domain/entities/delete_account_entity.dart';
 import '../../domain/entities/delete_address_entity.dart';
 import '../../domain/entities/favourite_products_entity.dart';
 import '../../domain/entities/favourite_stores_entity.dart';
+import '../../domain/entities/get_location_entity.dart';
 import '../../domain/entities/main_search_product_entity.dart';
 import '../../domain/entities/main_search_shop_entity.dart';
 import '../../domain/entities/product_data_entity.dart';
 import '../../domain/entities/product_details_entity.dart';
 import '../../domain/entities/reset_password_entity.dart';
 import '../../domain/entities/shop_data_entity.dart';
+import '../../domain/entities/shop_location_entity.dart';
 import '../../domain/entities/store_offer_details_entity.dart';
 import '../../domain/entities/store_offers_entity.dart';
 import '../../domain/entities/submit_complain_entity.dart';
@@ -490,6 +494,128 @@ class DeleteAddressErrorState extends HomeState {
   final String failure;
 
   DeleteAddressErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+class LocationLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class LocationSuccessState extends HomeState {
+  final LocationEntity locationEntity;
+
+
+  LocationSuccessState({required this.locationEntity});
+
+  @override
+  List<Object?> get props => [locationEntity];
+}
+
+class LocationErrorState extends HomeState {
+  final String failure;
+
+  LocationErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+
+class CitiesLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class CitiesSuccessState extends HomeState {
+  final CitiesEntity citiesEntity;
+
+
+  CitiesSuccessState({required this.citiesEntity});
+
+  @override
+  List<Object?> get props => [citiesEntity];
+}
+
+class CitiesErrorState extends HomeState {
+  final String failure;
+
+  CitiesErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+
+class AreasLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class AreasSuccessState extends HomeState {
+  final AreasEntity areasEntity;
+
+
+  AreasSuccessState({required this.areasEntity});
+
+  @override
+  List<Object?> get props => [areasEntity];
+}
+
+class AreasErrorState extends HomeState {
+  final String failure;
+
+  AreasErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+class GetLocationLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class GetLocationSuccessState extends HomeState {
+  final GetLocationEntity getLocationEntity;
+
+
+  GetLocationSuccessState({required this.getLocationEntity});
+
+  @override
+  List<Object?> get props => [getLocationEntity];
+}
+
+class GetLocationErrorState extends HomeState {
+  final String failure;
+
+  GetLocationErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+class AddLocationLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class AddLocationSuccessState extends HomeState {
+  final AddLocationEntity addLocationEntity;
+
+
+  AddLocationSuccessState({required this.addLocationEntity});
+
+  @override
+  List<Object?> get props => [addLocationEntity];
+}
+
+class AddLocationErrorState extends HomeState {
+  final String failure;
+
+  AddLocationErrorState({required this.failure});
   @override
   List<Object?> get props => [failure];
 }

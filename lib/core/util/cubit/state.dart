@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-
 import '../../../features/home/domain/entities/app_info_entity.dart';
 
 abstract class AppState extends Equatable{}

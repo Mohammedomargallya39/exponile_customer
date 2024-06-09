@@ -2,9 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import '../../../../../core/error/failures.dart';
 import '../../../../../core/usecase/use_case.dart';
-import '../entities/add_favourite_entity.dart';
 import '../entities/add_to_cart_entity.dart';
-import '../entities/product_details_entity.dart';
 import '../repository/home_base_rebository.dart';
 
 class AddToCartUseCase implements UseCase<AddToCartEntity, AddToCartParams> {

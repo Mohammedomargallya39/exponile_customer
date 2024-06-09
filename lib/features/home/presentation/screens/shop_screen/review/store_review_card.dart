@@ -5,7 +5,6 @@ import 'package:exponile_customer/core/util/resources/constants_manager.dart';
 import 'package:exponile_customer/core/util/resources/extensions_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-
 import '../../../../../../core/util/widgets/default_text.dart';
 
 class StoreReviewCard extends StatelessWidget {

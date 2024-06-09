@@ -225,6 +225,10 @@ class TranslationModel {
   late String complain;
   late String submit;
   late String favourites;
+  late String addAddress;
+  late String landmark;
+  late String homeLocation;
+  late String jobLocation;
 
 
 
@@ -454,5 +458,9 @@ class TranslationModel {
     complain= json['complain'];
     submit= json['submit'];
     favourites= json['favourites'];
+    addAddress= json['addAddress'];
+    landmark= json['landmark'];
+    homeLocation= json['homeLocation'];
+    jobLocation= json['jobLocation'];
   }
 }

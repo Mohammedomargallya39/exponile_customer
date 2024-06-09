@@ -1,4 +1,3 @@
-
 import '../../domain/entities/account_data_entity.dart';
 
 class AccountDataModel extends AccountDataEntity {

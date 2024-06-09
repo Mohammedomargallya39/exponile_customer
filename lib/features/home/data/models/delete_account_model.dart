@@ -1,4 +1,3 @@
-
 import '../../domain/entities/delete_account_entity.dart';
 
 class DeleteAccountModel extends DeleteAccountEntity {

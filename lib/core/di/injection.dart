@@ -25,12 +25,17 @@ import '../../features/home/domain/repository/home_base_rebository.dart';
 import '../../features/home/domain/usecase/about_exponile_usecase.dart';
 import '../../features/home/domain/usecase/account_data_usecase.dart';
 import '../../features/home/domain/usecase/add_favourite_usecase.dart';
+import '../../features/home/domain/usecase/add_location_details_usecase.dart';
 import '../../features/home/domain/usecase/add_offer_to_cart_usecase.dart';
 import '../../features/home/domain/usecase/add_to_cart_usecase.dart';
+import '../../features/home/domain/usecase/areas_usecase.dart';
+import '../../features/home/domain/usecase/cities_usecase.dart';
 import '../../features/home/domain/usecase/delete_account_usecase.dart';
 import '../../features/home/domain/usecase/delete_address_usecase.dart';
 import '../../features/home/domain/usecase/favourite_products_usecase.dart';
 import '../../features/home/domain/usecase/favourite_stores_usecase.dart';
+import '../../features/home/domain/usecase/get_location_usecase.dart';
+import '../../features/home/domain/usecase/location_usecase.dart';
 import '../../features/home/domain/usecase/main_search_product_usecase.dart';
 import '../../features/home/domain/usecase/main_search_shop_usecase.dart';
 import '../../features/home/domain/usecase/product_data_usecase.dart';
@@ -86,6 +91,11 @@ Future<void> init() async {
           favouriteProductsUseCase: sl(),
           accountDataUseCase: sl(),
           deleteAddressUseCase: sl(),
+          citiesUseCase: sl(),
+          areasUseCase: sl(),
+          locationUseCase: sl(),
+          getLocationUseCase: sl(),
+          addLocationUseCase: sl(),
     ),
   );
 
@@ -138,6 +148,11 @@ Future<void> init() async {
   sl.registerLazySingleton(() => FavouriteProductsUseCase(sl()));
   sl.registerLazySingleton(() => AccountDataUseCase(sl()));
   sl.registerLazySingleton(() => DeleteAddressUseCase(sl()));
+  sl.registerLazySingleton(() => CitiesUseCase(sl()));
+  sl.registerLazySingleton(() => AreasUseCase(sl()));
+  sl.registerLazySingleton(() => LocationUseCase(sl()));
+  sl.registerLazySingleton(() => GetLocationUseCase(sl()));
+  sl.registerLazySingleton(() => AddLocationUseCase(sl()));
 
   sl.registerLazySingleton<LogInBaseRemoteDataSource>(
         () => LogInRemoteDataSourceImpl(dioHelper: sl()),

@@ -102,8 +102,17 @@ class $AssetsImagesSvgGen {
   /// File path: assets/images/svg/location.svg
   String get location => 'assets/images/svg/location.svg';
 
+  /// File path: assets/images/svg/job.svg
+  String get job => 'assets/images/svg/job.svg';
+
+  /// File path: assets/images/svg/home.svg
+  String get home => 'assets/images/svg/home.svg';
+
   /// File path: assets/images/svg/street.svg
   String get street => 'assets/images/svg/street.svg';
+
+  /// File path: assets/images/svg/landmark.svg
+  String get landmark => 'assets/images/svg/landmark.svg';
 
   /// File path: assets/images/svg/building.svg
   String get building => 'assets/images/svg/building.svg';

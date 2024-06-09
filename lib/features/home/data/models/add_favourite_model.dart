@@ -1,4 +1,3 @@
-
 import '../../domain/entities/add_favourite_entity.dart';
 
 class AddFavouriteModel extends AddFavouriteEntity {

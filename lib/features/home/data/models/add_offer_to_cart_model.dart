@@ -1,4 +1,3 @@
-
 import '../../domain/entities/add_offer_to_cart_entity.dart';
 
 class AddOfferToCartModel extends AddOfferToCartEntity {

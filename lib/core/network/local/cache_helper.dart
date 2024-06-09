@@ -1,7 +1,5 @@
 import 'dart:convert' hide utf8;
-
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '/core/error/exceptions.dart';
 
 abstract class CacheHelper {

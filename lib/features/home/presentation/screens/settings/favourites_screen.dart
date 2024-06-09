@@ -1,21 +1,13 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:exponile_customer/core/util/cubit/cubit.dart';
 import 'package:exponile_customer/core/util/loading_files/all_product_loading.dart';
 import 'package:exponile_customer/core/util/resources/colors_manager.dart';
 import 'package:exponile_customer/core/util/resources/extensions_manager.dart';
 import 'package:exponile_customer/core/util/widgets/main_appbar.dart';
-import 'package:exponile_customer/core/util/widgets/my_icon_button.dart';
 import 'package:exponile_customer/features/home/presentation/controller/cubit.dart';
 import 'package:exponile_customer/features/home/presentation/controller/state.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-
-import '../../../../../core/util/resources/assets.gen.dart';
 import '../../../../../core/util/resources/constants_manager.dart';
-import '../../../../../core/util/widgets/default_text.dart';
 import '../../../../../core/util/widgets/progress.dart';
 import '../product_screen/product_card.dart';
 import '../product_screen/show_product_details.dart';

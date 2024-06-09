@@ -1,4 +1,3 @@
-
 import '../../domain/entities/app_info_entity.dart';
 
 class AppInfoModel extends AppInfoEntity {

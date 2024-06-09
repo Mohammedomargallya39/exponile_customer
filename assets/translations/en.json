@@ -224,5 +224,9 @@
   "name": "Name",
   "complain": "Complain",
   "submit": "Submit",
-  "favourites": "Favourites"
+  "favourites": "Favourites",
+  "addAddress": "Add Address",
+  "landmark": "landmark",
+  "homeLocation": "Home Location",
+  "jobLocation": "Job Location"
 }

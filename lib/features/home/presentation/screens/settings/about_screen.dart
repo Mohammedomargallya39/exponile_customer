@@ -7,12 +7,8 @@ import 'package:exponile_customer/core/util/widgets/default_text_field.dart';
 import 'package:exponile_customer/core/util/widgets/main_appbar.dart';
 import 'package:exponile_customer/features/home/presentation/controller/cubit.dart';
 import 'package:exponile_customer/features/home/presentation/controller/state.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
 import '../../../../../core/util/resources/colors_manager.dart';
 import '../../../../../core/util/widgets/default_text.dart';
 import '../../../../../core/util/widgets/hideKeyboard.dart';
