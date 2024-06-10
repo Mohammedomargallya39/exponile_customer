@@ -1,6 +1,7 @@
 import 'package:exponile_customer/features/auth/forget_password/domain/usecase/forget_password_usecase.dart';
 import 'package:exponile_customer/features/auth/forget_password/presentation/controller/forget_password_cubit.dart';
 import 'package:exponile_customer/features/home/domain/usecase/app_info_usecase.dart';
+import 'package:exponile_customer/features/home/domain/usecase/best_sellers_stores_usecase.dart';
 import 'package:exponile_customer/features/home/presentation/controller/cubit.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,15 +30,20 @@ import '../../features/home/domain/usecase/add_location_details_usecase.dart';
 import '../../features/home/domain/usecase/add_offer_to_cart_usecase.dart';
 import '../../features/home/domain/usecase/add_to_cart_usecase.dart';
 import '../../features/home/domain/usecase/areas_usecase.dart';
+import '../../features/home/domain/usecase/categories_usecase.dart';
 import '../../features/home/domain/usecase/cities_usecase.dart';
 import '../../features/home/domain/usecase/delete_account_usecase.dart';
 import '../../features/home/domain/usecase/delete_address_usecase.dart';
+import '../../features/home/domain/usecase/discover_new_stores_usecase.dart';
 import '../../features/home/domain/usecase/favourite_products_usecase.dart';
 import '../../features/home/domain/usecase/favourite_stores_usecase.dart';
 import '../../features/home/domain/usecase/get_location_usecase.dart';
+import '../../features/home/domain/usecase/home_favourite_stores_usecase.dart';
+import '../../features/home/domain/usecase/landing_usecase.dart';
 import '../../features/home/domain/usecase/location_usecase.dart';
 import '../../features/home/domain/usecase/main_search_product_usecase.dart';
 import '../../features/home/domain/usecase/main_search_shop_usecase.dart';
+import '../../features/home/domain/usecase/most_offers_usecase.dart';
 import '../../features/home/domain/usecase/product_data_usecase.dart';
 import '../../features/home/domain/usecase/product_details_usecase.dart';
 import '../../features/home/domain/usecase/reset_password_usecase.dart';
@@ -96,6 +102,12 @@ Future<void> init() async {
           locationUseCase: sl(),
           getLocationUseCase: sl(),
           addLocationUseCase: sl(),
+          landingUseCase: sl(),
+          categoriesUseCase: sl(),
+          mostOffersUseCase: sl(),
+          homeFavouriteStoresUseCase: sl(),
+          discoverNewStoresUseCase: sl(),
+          bestSellersStoresUseCase: sl(),
     ),
   );
 
@@ -153,6 +165,12 @@ Future<void> init() async {
   sl.registerLazySingleton(() => LocationUseCase(sl()));
   sl.registerLazySingleton(() => GetLocationUseCase(sl()));
   sl.registerLazySingleton(() => AddLocationUseCase(sl()));
+  sl.registerLazySingleton(() => LandingUseCase(sl()));
+  sl.registerLazySingleton(() => CategoriesUseCase(sl()));
+  sl.registerLazySingleton(() => MostOffersUseCase(sl()));
+  sl.registerLazySingleton(() => HomeFavouriteStoresUseCase(sl()));
+  sl.registerLazySingleton(() => DiscoverNewStoresUseCase(sl()));
+  sl.registerLazySingleton(() => BestSellersStoresUseCase(sl()));
 
   sl.registerLazySingleton<LogInBaseRemoteDataSource>(
         () => LogInRemoteDataSourceImpl(dioHelper: sl()),

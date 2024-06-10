@@ -9,14 +9,20 @@ import '../../domain/entities/add_offer_to_cart_entity.dart';
 import '../../domain/entities/add_to_cart_entity.dart';
 import '../../domain/entities/app_info_entity.dart';
 import '../../domain/entities/areas_entity.dart';
+import '../../domain/entities/best_sellers_store_entity.dart';
+import '../../domain/entities/categories_entity.dart';
 import '../../domain/entities/cities_entity.dart';
 import '../../domain/entities/delete_account_entity.dart';
 import '../../domain/entities/delete_address_entity.dart';
+import '../../domain/entities/discover_new_store_entity.dart';
 import '../../domain/entities/favourite_products_entity.dart';
 import '../../domain/entities/favourite_stores_entity.dart';
 import '../../domain/entities/get_location_entity.dart';
+import '../../domain/entities/home_favourite_store_entity.dart';
+import '../../domain/entities/landing_entity.dart';
 import '../../domain/entities/main_search_product_entity.dart';
 import '../../domain/entities/main_search_shop_entity.dart';
+import '../../domain/entities/most_deals_entity.dart';
 import '../../domain/entities/product_data_entity.dart';
 import '../../domain/entities/product_details_entity.dart';
 import '../../domain/entities/reset_password_entity.dart';
@@ -52,6 +58,12 @@ typedef CallAreas = Future<AreasEntity> Function();
 typedef CallLocation= Future<LocationEntity> Function();
 typedef CallGetLocation= Future<GetLocationEntity> Function();
 typedef CallAddLocation= Future<AddLocationEntity> Function();
+typedef CallLanding= Future<LandingEntity> Function();
+typedef CallCategories= Future<CategoriesEntity> Function();
+typedef CallMostOffers= Future<MostOffersEntity> Function();
+typedef CallHomeFavouriteStores= Future<HomeFavouriteStoresEntity> Function();
+typedef CallDiscoverNewStores= Future<DiscoverNewStoresEntity> Function();
+typedef CallBestSellersStores= Future<BestSellersStoresEntity> Function();
 
 
 class HomeRepoImplementation extends HomeBaseRepository {
@@ -777,6 +789,183 @@ class HomeRepoImplementation extends HomeBaseRepository {
       );
     });
   }
+
+
+  Future<Either<Failure, LandingEntity>> fetchLanding(
+      CallLanding mainMethod,
+      ) async {
+    try {
+      final landing = await mainMethod();
+      return Right(landing);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, LandingEntity>> landing() async {
+    return await fetchLanding(()
+    {
+      return remoteDataSource.landing();
+    });
+  }
+
+
+  Future<Either<Failure, CategoriesEntity>> fetchCategories(
+      CallCategories mainMethod,
+      ) async {
+    try {
+      final categories = await mainMethod();
+      return Right(categories);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, CategoriesEntity>> categories() async {
+    return await fetchCategories(()
+    {
+      return remoteDataSource.categories();
+    });
+  }
+
+
+  Future<Either<Failure, MostOffersEntity>> fetchMostOffers(
+      CallMostOffers mainMethod,
+      ) async {
+    try {
+      final mostOffers = await mainMethod();
+      return Right(mostOffers);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, MostOffersEntity>> mostOffers() async {
+    return await fetchMostOffers(()
+    {
+      return remoteDataSource.mostOffers();
+    });
+  }
+
+
+  Future<Either<Failure, HomeFavouriteStoresEntity>> fetchHomeFavouriteStores(
+      CallHomeFavouriteStores mainMethod,
+      ) async {
+    try {
+      final homeFavouriteStores = await mainMethod();
+      return Right(homeFavouriteStores);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, HomeFavouriteStoresEntity>> homeFavouriteStores({
+    required int? pageNumber,
+    required String? storeCategory,
+    required String? offerType,
+    required String? sortedBy,
+}) async {
+    return await fetchHomeFavouriteStores(()
+    {
+      return remoteDataSource.homeFavouriteStores(
+        pageNumber: pageNumber,
+        storeCategory: storeCategory,
+        offerType: offerType,
+        sortedBy: sortedBy,
+      );
+    });
+  }
+
+
+  Future<Either<Failure, DiscoverNewStoresEntity>> fetchDiscoverNewStores(
+      CallDiscoverNewStores mainMethod,
+      ) async {
+    try {
+      final discoverNewStores = await mainMethod();
+      return Right(discoverNewStores);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, DiscoverNewStoresEntity>> discoverNewStores({
+    required int? pageNumber,
+    required String? storeCategory,
+    required String? offerType,
+    required String? sortedBy,
+}) async {
+    return await fetchDiscoverNewStores(()
+    {
+      return remoteDataSource.discoverNewStores(
+        pageNumber: pageNumber,
+        storeCategory: storeCategory,
+        offerType: offerType,
+        sortedBy: sortedBy,
+      );
+    });
+  }
+
+
+
+  Future<Either<Failure, BestSellersStoresEntity>> fetchBestSellersStores(
+      CallBestSellersStores mainMethod,
+      ) async {
+    try {
+      final bestSellers = await mainMethod();
+      return Right(bestSellers);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, BestSellersStoresEntity>> bestSellersStores({
+    required int? pageNumber,
+    required String? storeCategory,
+    required String? offerType,
+    required String? sortedBy,
+  }) async {
+    return await fetchBestSellersStores(()
+    {
+      return remoteDataSource.bestSellersStores(
+        pageNumber: pageNumber,
+        storeCategory: storeCategory,
+        offerType: offerType,
+        sortedBy: sortedBy,
+      );
+    });
+  }
+
+
 
 
 

@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:exponile_customer/features/home/domain/entities/categories_entity.dart';
 import '../../../../core/error/failures.dart';
 import '../entities/about_exponile_entity.dart';
 import '../entities/account_data_entity.dart';
@@ -8,14 +9,19 @@ import '../entities/add_offer_to_cart_entity.dart';
 import '../entities/add_to_cart_entity.dart';
 import '../entities/app_info_entity.dart';
 import '../entities/areas_entity.dart';
+import '../entities/best_sellers_store_entity.dart';
 import '../entities/cities_entity.dart';
 import '../entities/delete_account_entity.dart';
 import '../entities/delete_address_entity.dart';
+import '../entities/discover_new_store_entity.dart';
 import '../entities/favourite_products_entity.dart';
 import '../entities/favourite_stores_entity.dart';
 import '../entities/get_location_entity.dart';
+import '../entities/home_favourite_store_entity.dart';
+import '../entities/landing_entity.dart';
 import '../entities/main_search_product_entity.dart';
 import '../entities/main_search_shop_entity.dart';
+import '../entities/most_deals_entity.dart';
 import '../entities/product_data_entity.dart';
 import '../entities/product_details_entity.dart';
 import '../entities/reset_password_entity.dart';
@@ -128,4 +134,26 @@ abstract class HomeBaseRepository {
     required int? aptNo,
     required String? type,
   });
+  Future<Either<Failure, LandingEntity>> landing();
+  Future<Either<Failure, CategoriesEntity>> categories();
+  Future<Either<Failure, MostOffersEntity>> mostOffers();
+  Future<Either<Failure, HomeFavouriteStoresEntity>> homeFavouriteStores({
+    required int? pageNumber,
+    required String? storeCategory,
+    required String? offerType,
+    required String? sortedBy,
+});
+  Future<Either<Failure, DiscoverNewStoresEntity>> discoverNewStores({
+    required int? pageNumber,
+    required String? storeCategory,
+    required String? offerType,
+    required String? sortedBy,
+});
+  Future<Either<Failure, BestSellersStoresEntity>> bestSellersStores({
+    required int? pageNumber,
+    required String? storeCategory,
+    required String? offerType,
+    required String? sortedBy,
+});
+
 }

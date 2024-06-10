@@ -33,7 +33,7 @@ class _ShopScreenState extends State<ShopScreen> {
 
     homeCubit.shopData(
         shopID: widget.shopID,
-        category: homeCubit.categories,
+        category: homeCubit.categoriesList,
         subCategory: homeCubit.subCategories,
         from: homeCubit.startFilterShopDateController.text,
         to: homeCubit.endFilterShopDateController.text,

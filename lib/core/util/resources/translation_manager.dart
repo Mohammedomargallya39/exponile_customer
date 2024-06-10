@@ -229,6 +229,13 @@ class TranslationModel {
   late String landmark;
   late String homeLocation;
   late String jobLocation;
+  late String main;
+  late String bestSeller;
+  late String newArrivals;
+  late String hotDeals;
+  late String storesCategories;
+  late String totalOffers;
+  late String discover;
 
 
 
@@ -462,5 +469,12 @@ class TranslationModel {
     landmark= json['landmark'];
     homeLocation= json['homeLocation'];
     jobLocation= json['jobLocation'];
+    main= json['main'];
+    bestSeller= json['bestSeller'];
+    newArrivals= json['newArrivals'];
+    hotDeals= json['hotDeals'];
+    storesCategories= json['storesCategories'];
+    totalOffers= json['totalOffers'];
+    discover= json['discover'];
   }
 }

@@ -10,14 +10,20 @@ import '../models/add_offer_to_cart_model.dart';
 import '../models/add_to_cart_model.dart';
 import '../models/app_info_model.dart';
 import '../models/areasModel.dart';
+import '../models/best_sellers_stores_model.dart';
+import '../models/categories_model.dart';
 import '../models/cities_model.dart';
 import '../models/delete_account_model.dart';
 import '../models/delete_address_model.dart';
+import '../models/discover_new_stores_model.dart';
 import '../models/favourite_products_model.dart';
 import '../models/favourite_stores_model.dart';
 import '../models/get_location_model.dart';
+import '../models/home_favourite_stores_model.dart';
+import '../models/landing_model.dart';
 import '../models/main_search_product_model.dart';
 import '../models/main_search_shop_model.dart';
+import '../models/most_offers_model.dart';
 import '../models/product_data_model.dart';
 import '../models/product_details_model.dart';
 import '../models/reset_password_model.dart';
@@ -116,6 +122,27 @@ abstract class HomeBaseRemoteDataSource {
     required int? floorNo,
     required int? aptNo,
     required String? type,
+  });
+  Future<LandingModel> landing();
+  Future<CategoriesModel> categories();
+  Future<MostOffersModel> mostOffers();
+  Future<HomeFavouriteStoresModel> homeFavouriteStores({
+    required int? pageNumber,
+    required String? storeCategory,
+    required String? offerType,
+    required String? sortedBy,
+  });
+  Future<DiscoverNewStoresModel> discoverNewStores({
+    required int? pageNumber,
+    required String? storeCategory,
+    required String? offerType,
+    required String? sortedBy,
+  });
+  Future<BestSellersStoresModel> bestSellersStores({
+    required int? pageNumber,
+    required String? storeCategory,
+    required String? offerType,
+    required String? sortedBy,
   });
 
 }
@@ -562,6 +589,135 @@ class HomeRemoteDataSourceImpl
     );
     return AddLocationModel.fromJson(f.data);
   }
+
+  @override
+  Future<LandingModel> landing() async {
+    final Response f = await dioHelper.get(
+      url: landingURL,
+      query: {
+        'lang': isRTL == true ? 'ar' : 'en',
+      },
+    );
+    return LandingModel.fromJson(f.data);
+  }
+
+  @override
+  Future<CategoriesModel> categories() async {
+    final Response f = await dioHelper.get(
+      url: categoriesURL,
+      query: {
+        'lang': isRTL == true ? 'ar' : 'en',
+      },
+    );
+    return CategoriesModel.fromJson(f.data);
+  }
+
+
+  @override
+  Future<MostOffersModel> mostOffers() async {
+    final Response f = await dioHelper.get(
+      url: mostOffersUrl,
+      query: {
+        'lang': isRTL == true ? 'ar' : 'en',
+        'limit': 4,
+      },
+    );
+    return MostOffersModel.fromJson(f.data);
+  }
+
+
+  @override
+  Future<HomeFavouriteStoresModel> homeFavouriteStores({
+    required int? pageNumber,
+    required String? storeCategory,
+    required String? offerType,
+    required String? sortedBy,
+}) async {
+    Map<String,dynamic> query= {
+      'lang': isRTL == true ? 'ar' : 'en',
+      'page': pageNumber,
+    };
+    if(storeCategory != null){
+      query['store_category[0]'] = storeCategory;
+    }
+
+    if(storeCategory != null){
+      query['offer[0]'] = offerType;
+    }
+
+    if(sortedBy != null){
+      query['sort_by[0]'] = sortedBy;
+    }
+
+    final Response f = await dioHelper.get(
+      url: homeFavouriteStoresUrl,
+      query: query,
+    );
+    return HomeFavouriteStoresModel.fromJson(f.data);
+  }
+
+
+  @override
+  Future<DiscoverNewStoresModel> discoverNewStores({
+    required int? pageNumber,
+    required String? storeCategory,
+    required String? offerType,
+    required String? sortedBy,
+  }) async {
+    Map<String,dynamic> query= {
+      'lang': isRTL == true ? 'ar' : 'en',
+      'page': pageNumber,
+    };
+    if(storeCategory != null){
+      query['store_category[0]'] = storeCategory;
+    }
+
+    if(storeCategory != null){
+      query['offer[0]'] = offerType;
+    }
+
+    if(sortedBy != null){
+      query['sort_by[0]'] = sortedBy;
+    }
+
+    final Response f = await dioHelper.get(
+      url: discoverNewStoresUrl,
+      query: query,
+    );
+    return DiscoverNewStoresModel.fromJson(f.data);
+  }
+
+  @override
+  Future<BestSellersStoresModel> bestSellersStores({
+    required int? pageNumber,
+    required String? storeCategory,
+    required String? offerType,
+    required String? sortedBy,
+  }) async {
+    Map<String,dynamic> query= {
+      'lang': isRTL == true ? 'ar' : 'en',
+      'page': pageNumber,
+    };
+    if(storeCategory != null){
+      query['store_category[0]'] = storeCategory;
+    }
+
+    if(storeCategory != null){
+      query['offer[0]'] = offerType;
+    }
+
+    if(sortedBy != null){
+      query['sort_by[0]'] = sortedBy;
+    }
+
+    final Response f = await dioHelper.get(
+      url: bestSellerStoresUrl,
+      query: query,
+    );
+    return BestSellersStoresModel.fromJson(f.data);
+  }
+
+
 
 
 }

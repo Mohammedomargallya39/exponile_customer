@@ -228,5 +228,12 @@
   "addAddress": "Add Address",
   "landmark": "landmark",
   "homeLocation": "Home Location",
-  "jobLocation": "Job Location"
+  "jobLocation": "Job Location",
+  "main": "Main",
+  "bestSeller": "Best Seller",
+  "newArrivals": "New Arrivals",
+  "hotDeals": "Hot Deals",
+  "storesCategories": "Stores Categories",
+  "totalOffers": "Total Offers",
+  "discover": "Discover New Stores"
 }

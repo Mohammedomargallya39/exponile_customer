@@ -228,5 +228,14 @@
   "addAddress": "أضف عنوانا",
   "landmark": "علامة",
   "homeLocation": "عنوان المنزل",
-  "jobLocation": "عنوان العمل"
+  "jobLocation": "عنوان العمل",
+  "main": "الرئيسية",
+  "bestSeller": "الأكثر مبيعا",
+  "newArrivals": "وصل حديثا",
+  "hotDeals": "العروض الساخنة",
+  "storesCategories": "فئات المتاجر",
+  "totalOffers": "مجموع العروض",
+  "discover": "إكتشاف متاجر جديدة"
+
+
 }
