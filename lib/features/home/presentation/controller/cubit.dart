@@ -78,6 +78,7 @@ import '../screens/home/widgets/favourite_list.dart';
 import '../screens/home/widgets/hot_deals_list.dart';
 import '../screens/home/widgets/offers_list.dart';
 import '../screens/home/widgets/top_categories_list.dart';
+import '../screens/home/widgets/recently_list.dart';
 import '../screens/settings/setting_screen.dart';
 
 class HomeCubit extends Cubit<HomeState> {
@@ -1393,6 +1394,7 @@ class HomeCubit extends Cubit<HomeState> {
      const BestSellersList(),
      const BestSellingProductsList(),
      const TopCategoriesList(),
+     const RecentlyList(),
    ];
 
 
