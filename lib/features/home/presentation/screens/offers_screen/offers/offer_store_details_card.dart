@@ -20,7 +20,8 @@ class OfferStoreDetailsCard extends StatelessWidget {
       required this.storeRate,
       required this.offerPath,
       required this.isFavorite,
-      required this.storeAddToFav});
+      required this.storeAddToFav,
+      });
   final String storeLogo;
   final String storeName;
   final String storeCategories;

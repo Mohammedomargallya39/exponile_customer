@@ -232,10 +232,12 @@
   "main": "الرئيسية",
   "bestSeller": "الأكثر مبيعا",
   "newArrivals": "وصل حديثا",
-  "hotDeals": "العروض الساخنة",
+  "hotDeals": "أفضل العروض",
   "storesCategories": "فئات المتاجر",
   "totalOffers": "مجموع العروض",
-  "discover": "إكتشاف متاجر جديدة"
-
+  "discover": "إكتشاف متاجر جديدة",
+  "newArrival": "وصل حديثا",
+  "bestSelling": "المنتجات الأكثر مبيعا",
+  "recentlyViewed": "شوهدت مؤخرا"
 
 }

@@ -10,6 +10,7 @@ import '../entities/add_to_cart_entity.dart';
 import '../entities/app_info_entity.dart';
 import '../entities/areas_entity.dart';
 import '../entities/best_sellers_store_entity.dart';
+import '../entities/best_selling_products_entity.dart';
 import '../entities/cities_entity.dart';
 import '../entities/delete_account_entity.dart';
 import '../entities/delete_address_entity.dart';
@@ -18,18 +19,22 @@ import '../entities/favourite_products_entity.dart';
 import '../entities/favourite_stores_entity.dart';
 import '../entities/get_location_entity.dart';
 import '../entities/home_favourite_store_entity.dart';
+import '../entities/hot_deals_entity.dart';
 import '../entities/landing_entity.dart';
 import '../entities/main_search_product_entity.dart';
 import '../entities/main_search_shop_entity.dart';
 import '../entities/most_deals_entity.dart';
+import '../entities/new_arrivals_entity.dart';
 import '../entities/product_data_entity.dart';
 import '../entities/product_details_entity.dart';
+import '../entities/recently_viewed_entity.dart';
 import '../entities/reset_password_entity.dart';
 import '../entities/shop_data_entity.dart';
 import '../entities/shop_location_entity.dart';
 import '../entities/store_offer_details_entity.dart';
 import '../entities/store_offers_entity.dart';
 import '../entities/submit_complain_entity.dart';
+import '../entities/top_categories_entity.dart';
 
 abstract class HomeBaseRepository {
   Future<Either<Failure, AppInfoEntity>> appInfo();
@@ -155,5 +160,17 @@ abstract class HomeBaseRepository {
     required String? offerType,
     required String? sortedBy,
 });
-
+  Future<Either<Failure, NewArrivalsEntity>> newArrivals({
+    required int? pageNumber,
+    required List<String>? productCategories,
+    required List<String>? storeCategories,
+});
+  Future<Either<Failure, HotDealsEntity>> hotDeals({
+    required int? pageNumber,
+    required List<String>? productCategories,
+    required List<String>? storeCategories,
+});
+  Future<Either<Failure, List<BestSellingProductsEntity>>> bestSellingProducts();
+  Future<Either<Failure, TopCategoriesEntity>> topCategories();
+  Future<Either<Failure, List<RecentlyViewedEntity>>> recentlyViewed();
 }

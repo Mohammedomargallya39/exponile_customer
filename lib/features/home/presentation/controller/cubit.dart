@@ -1,11 +1,14 @@
 import 'package:exponile_customer/core/usecase/use_case.dart';
 import 'package:exponile_customer/core/util/resources/assets.gen.dart';
 import 'package:exponile_customer/features/home/domain/entities/about_exponile_entity.dart';
+import 'package:exponile_customer/features/home/domain/entities/best_selling_products_entity.dart';
 import 'package:exponile_customer/features/home/domain/entities/categories_entity.dart';
 import 'package:exponile_customer/features/home/domain/usecase/about_exponile_usecase.dart';
 import 'package:exponile_customer/features/home/domain/usecase/best_sellers_stores_usecase.dart';
 import 'package:exponile_customer/features/home/domain/usecase/home_favourite_stores_usecase.dart';
 import 'package:exponile_customer/features/home/domain/usecase/most_offers_usecase.dart';
+import 'package:exponile_customer/features/home/domain/usecase/new_arrivals_usecase.dart';
+import 'package:exponile_customer/features/home/domain/usecase/recently_viewed_usecase.dart';
 import 'package:exponile_customer/features/home/presentation/controller/state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,22 +25,27 @@ import '../../domain/entities/favourite_products_entity.dart';
 import '../../domain/entities/favourite_stores_entity.dart';
 import '../../domain/entities/get_location_entity.dart';
 import '../../domain/entities/home_favourite_store_entity.dart';
+import '../../domain/entities/hot_deals_entity.dart';
 import '../../domain/entities/landing_entity.dart';
 import '../../domain/entities/main_search_product_entity.dart';
 import '../../domain/entities/main_search_shop_entity.dart';
 import '../../domain/entities/most_deals_entity.dart';
+import '../../domain/entities/new_arrivals_entity.dart';
 import '../../domain/entities/product_data_entity.dart';
 import '../../domain/entities/product_details_entity.dart';
+import '../../domain/entities/recently_viewed_entity.dart';
 import '../../domain/entities/shop_data_entity.dart';
 import '../../domain/entities/shop_location_entity.dart';
 import '../../domain/entities/store_offer_details_entity.dart';
 import '../../domain/entities/store_offers_entity.dart';
+import '../../domain/entities/top_categories_entity.dart';
 import '../../domain/usecase/account_data_usecase.dart';
 import '../../domain/usecase/add_favourite_usecase.dart';
 import '../../domain/usecase/add_location_details_usecase.dart';
 import '../../domain/usecase/add_offer_to_cart_usecase.dart';
 import '../../domain/usecase/add_to_cart_usecase.dart';
 import '../../domain/usecase/areas_usecase.dart';
+import '../../domain/usecase/best_selling_products_usecase.dart';
 import '../../domain/usecase/categories_usecase.dart';
 import '../../domain/usecase/cities_usecase.dart';
 import '../../domain/usecase/delete_account_usecase.dart';
@@ -46,6 +54,7 @@ import '../../domain/usecase/discover_new_stores_usecase.dart';
 import '../../domain/usecase/favourite_products_usecase.dart';
 import '../../domain/usecase/favourite_stores_usecase.dart';
 import '../../domain/usecase/get_location_usecase.dart';
+import '../../domain/usecase/hot_deals_usecase.dart';
 import '../../domain/usecase/landing_usecase.dart';
 import '../../domain/usecase/location_usecase.dart';
 import '../../domain/usecase/main_search_product_usecase.dart';
@@ -57,7 +66,18 @@ import '../../domain/usecase/shop_data_usecase.dart';
 import '../../domain/usecase/store_offer_details_usecase.dart';
 import '../../domain/usecase/store_offers_usecase.dart';
 import '../../domain/usecase/submit_complain_usecase.dart';
+import '../../domain/usecase/top_categories_usecase.dart';
 import '../screens/home/home_screen.dart';
+import '../screens/home/widgets/arrival_list.dart';
+import '../screens/home/widgets/banars.dart';
+import '../screens/home/widgets/best_sellers_list.dart';
+import '../screens/home/widgets/best_selling_list.dart';
+import '../screens/home/widgets/categories_slider.dart';
+import '../screens/home/widgets/discover_list.dart';
+import '../screens/home/widgets/favourite_list.dart';
+import '../screens/home/widgets/hot_deals_list.dart';
+import '../screens/home/widgets/offers_list.dart';
+import '../screens/home/widgets/top_categories_list.dart';
 import '../screens/settings/setting_screen.dart';
 
 class HomeCubit extends Cubit<HomeState> {
@@ -90,6 +110,11 @@ class HomeCubit extends Cubit<HomeState> {
    final HomeFavouriteStoresUseCase _homeFavouriteStoresUseCase;
    final DiscoverNewStoresUseCase _discoverNewStoresUseCase;
    final BestSellersStoresUseCase _bestSellersStoresUseCase;
+   final NewArrivalsUseCase _newArrivalsUseCase;
+   final HotDealsUseCase _hotDealsUseCase;
+   final BestSellingProductsUseCase _bestSellingProductsUseCase;
+   final TopCategoriesUseCase _topCategoriesUseCase;
+   final RecentlyViewedUseCase _recentlyViewedUseCase;
 
   HomeCubit(
       {
@@ -122,6 +147,11 @@ class HomeCubit extends Cubit<HomeState> {
     required HomeFavouriteStoresUseCase homeFavouriteStoresUseCase,
     required DiscoverNewStoresUseCase discoverNewStoresUseCase,
     required BestSellersStoresUseCase bestSellersStoresUseCase,
+    required NewArrivalsUseCase newArrivalsUseCase,
+    required HotDealsUseCase hotDealsUseCase,
+    required BestSellingProductsUseCase bestSellingProductsUseCase,
+    required TopCategoriesUseCase topCategoriesUseCase,
+    required RecentlyViewedUseCase recentlyViewedUseCase,
   }
   ) :
        _mainSearchProductUseCase = mainSearchProductUseCase,
@@ -153,6 +183,11 @@ class HomeCubit extends Cubit<HomeState> {
        _homeFavouriteStoresUseCase = homeFavouriteStoresUseCase,
        _discoverNewStoresUseCase = discoverNewStoresUseCase,
        _bestSellersStoresUseCase = bestSellersStoresUseCase,
+       _newArrivalsUseCase = newArrivalsUseCase,
+       _hotDealsUseCase = hotDealsUseCase,
+       _bestSellingProductsUseCase = bestSellingProductsUseCase,
+       _topCategoriesUseCase = topCategoriesUseCase,
+       _recentlyViewedUseCase = recentlyViewedUseCase,
 
 
       super(Empty());
@@ -1195,6 +1230,170 @@ class HomeCubit extends Cubit<HomeState> {
        );
      });
    }
+
+
+
+   NewArrivalsEntity? newArrivalsEntity;
+   void newArrivals({
+     required List<String>? productCategories,
+     required List<String>? storeCategories,
+   }) async {
+     emit(NewArrivalsLoadingState());
+
+     final result = await _newArrivalsUseCase(
+         NewArrivalsParams(
+             pageNumber: pageNumber,
+             productCategories: productCategories,
+             storeCategories: storeCategories,
+         )
+     );
+
+     result.fold((failure) {
+       emit(NewArrivalsErrorState(
+           failure: mapFailureToMessage(failure)
+       ));
+     }, (data) {
+       newArrivalsEntity = data;
+       emit(NewArrivalsSuccessState(
+           newArrivalsEntity: data
+       )
+       );
+     });
+   }
+
+
+   HotDealsEntity? hotDealsEntity;
+   void hotDeals({
+     required List<String>? productCategories,
+     required List<String>? storeCategories,
+   }) async {
+     emit(HotDealsLoadingState());
+
+     final result = await _hotDealsUseCase(
+         HotDealsParams(
+           pageNumber: pageNumber,
+           productCategories: productCategories,
+           storeCategories: storeCategories,
+         )
+     );
+
+     result.fold((failure) {
+       emit(HotDealsErrorState(
+           failure: mapFailureToMessage(failure)
+       ));
+     }, (data) {
+       hotDealsEntity = data;
+       emit(HotDealsSuccessState(
+           hotDealsEntity: data
+       )
+       );
+     });
+   }
+
+
+
+   List<BestSellingProductsEntity>? bestSellingProductsEntity;
+   void bestSellingProducts() async {
+     emit(HotDealsLoadingState());
+
+     final result = await _bestSellingProductsUseCase(
+         NoParams()
+     );
+
+     result.fold((failure) {
+       emit(BestSellingProductsErrorState(
+           failure: mapFailureToMessage(failure)
+       ));
+     }, (data) {
+       bestSellingProductsEntity = data;
+       emit(BestSellingProductsSuccessState(
+           bestSellingProductsEntity: data
+       )
+       );
+     });
+   }
+
+
+   int bestSellingCurrentIndex = 0;
+   void changeBestCurrentIndex({required int value})
+   {
+     emit(InitState());
+     bestSellingCurrentIndex = value;
+     emit(ChangeState());
+   }
+
+
+   TopCategoriesEntity? topCategoriesEntity;
+   void topCategories() async {
+     emit(TopCategoriesLoadingState());
+
+     final result = await _topCategoriesUseCase(
+         NoParams()
+     );
+
+     result.fold((failure) {
+       emit(TopCategoriesErrorState(
+           failure: mapFailureToMessage(failure)
+       ));
+     }, (data) {
+       topCategoriesEntity = data;
+       if (topCategoriesEntity!.data.length > 4) {
+         topCategoriesEntity!.data = topCategoriesEntity!.data.sublist(0, 4);
+       }
+       emit(TopCategoriesSuccessState(
+           topCategoriesEntity: data
+       )
+       );
+     });
+   }
+
+
+
+   int topCategoriesCurrentIndex = 0;
+   void changeTopCurrentIndex({required int value})
+   {
+     emit(InitState());
+     topCategoriesCurrentIndex = value;
+     emit(ChangeState());
+   }
+
+
+   List<RecentlyViewedEntity>? recentlyViewedEntity;
+   void recentlyViewed() async {
+     emit(RecentlyViewedLoadingState());
+
+     final result = await _recentlyViewedUseCase(
+         NoParams()
+     );
+
+     result.fold((failure) {
+       emit(RecentlyViewedErrorState(
+           failure: mapFailureToMessage(failure)
+       ));
+     }, (data) {
+       recentlyViewedEntity = data;
+       emit(RecentlyViewedSuccessState(
+           recentlyViewedEntity: data
+       )
+       );
+     });
+   }
+
+   int totalTopCategories = 4;
+
+
+   List<Widget> homeWidgets = [
+     const Banners(),
+     const CategorySlider(),
+     const NewArrivalsList(),
+     const HotDealsList(),
+     const OffersList(),
+     const FavouriteList(),
+     const DiscoverList(),
+     const BestSellersList(),
+     const BestSellingProductsList(),
+     const TopCategoriesList(),
+   ];
 
 
 }

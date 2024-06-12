@@ -33,4 +33,9 @@ const String mostOffersUrl = '/stores-with-most-offers';
 const String homeFavouriteStoresUrl = 'website/stores/favoriteStores';
 const String discoverNewStoresUrl = 'website/stores/discoverStores';
 const String bestSellerStoresUrl = '/website/stores/bestSellingStores';
+const String newArrivalsUrl = 'website/new-arrivals';
+const String hotDealsUrl = 'website/hot-deals';
+const String bestSellingProductsUrl = 'best-selling-products';
+const String topCategoriesUrl = 'get-top-categories-shop';
+const String recentlyViewedURL = 'recently-viewed';
 

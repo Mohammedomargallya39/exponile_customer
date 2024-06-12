@@ -1,0 +1,66 @@
+
+import '../../domain/entities/recently_viewed_entity.dart';
+
+class RecentlyViewedModel extends RecentlyViewedEntity {
+  const RecentlyViewedModel({
+    required super.basicHeight,
+    required super.basicWeight,
+    required super.category,
+    required super.createdAt,
+    required super.deletedAt,
+    required super.description,
+    required super.favorites,
+    required super.feature,
+    required super.finalPrice,
+    required super.firstImage,
+    required super.firstUpdate,
+    required super.getCategory,
+    required super.id,
+    required super.imageFeature,
+    required super.images,
+    required super.launchingDate,
+    required super.name,
+    required super.originalPrice,
+    required super.publishingDate,
+    required super.rate,
+    required super.ratings,
+    required super.shop,
+    required super.shopWarehouseId,
+    required super.slug,
+    required super.status,
+    required super.subCategory,
+    required super.updatedAt,
+  });
+
+  factory RecentlyViewedModel.fromJson(Map<String, dynamic> json) {
+    return RecentlyViewedModel(
+      id: json["id"],
+      deletedAt: json["deleted_at"],
+      shop: json["shop"],
+      category: json["category"],
+      subCategory: json["subCategory"],
+      name: json["name"],
+      description: json["description"],
+      feature: json["feature"],
+      status: json["status"],
+      launchingDate: json["launching_date"],
+      publishingDate: json["publishing_date"] == null ? null : DateTime.parse(json["publishing_date"]),
+      createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+      updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+      imageFeature: json["image_feature"],
+      slug: json["slug"],
+      basicHeight: json["basic_height"],
+      basicWeight: json["basic_weight"],
+      firstUpdate: json["first_update"],
+      shopWarehouseId: json["shop_warehouse_id"],
+      finalPrice: json["final_price"],
+      originalPrice: json["original_price"],
+      rate: json["rate"],
+      images: json["images"] == null ? [] : List<Image>.from(json["images"]!.map((x) => Image.fromJson(x))),
+      ratings: json["ratings"] == null ? [] : List<dynamic>.from(json["ratings"]!.map((x) => x)),
+      firstImage: json["first_image"] == null ? null : Image.fromJson(json["first_image"]),
+      getCategory: json["get_category"] == null ? null : GetCategory.fromJson(json["get_category"]),
+      favorites: json["favorites"] == null ? [] : List<Favorite>.from(json["favorites"]!.map((x) => Favorite.fromJson(x))),
+    );
+  }
+}

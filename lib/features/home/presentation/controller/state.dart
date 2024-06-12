@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:exponile_customer/features/home/domain/entities/top_categories_entity.dart';
 import '../../domain/entities/about_exponile_entity.dart';
 import '../../domain/entities/account_data_entity.dart';
 import '../../domain/entities/add_address_entity.dart';
@@ -7,6 +8,7 @@ import '../../domain/entities/add_offer_to_cart_entity.dart';
 import '../../domain/entities/add_to_cart_entity.dart';
 import '../../domain/entities/areas_entity.dart';
 import '../../domain/entities/best_sellers_store_entity.dart';
+import '../../domain/entities/best_selling_products_entity.dart';
 import '../../domain/entities/categories_entity.dart';
 import '../../domain/entities/cities_entity.dart';
 import '../../domain/entities/delete_account_entity.dart';
@@ -16,12 +18,15 @@ import '../../domain/entities/favourite_products_entity.dart';
 import '../../domain/entities/favourite_stores_entity.dart';
 import '../../domain/entities/get_location_entity.dart';
 import '../../domain/entities/home_favourite_store_entity.dart';
+import '../../domain/entities/hot_deals_entity.dart';
 import '../../domain/entities/landing_entity.dart';
 import '../../domain/entities/main_search_product_entity.dart';
 import '../../domain/entities/main_search_shop_entity.dart';
 import '../../domain/entities/most_deals_entity.dart';
+import '../../domain/entities/new_arrivals_entity.dart';
 import '../../domain/entities/product_data_entity.dart';
 import '../../domain/entities/product_details_entity.dart';
+import '../../domain/entities/recently_viewed_entity.dart';
 import '../../domain/entities/reset_password_entity.dart';
 import '../../domain/entities/shop_data_entity.dart';
 import '../../domain/entities/shop_location_entity.dart';
@@ -771,6 +776,131 @@ class BestSellersStoresErrorState extends HomeState {
   final String failure;
 
   BestSellersStoresErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+
+class NewArrivalsLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class NewArrivalsSuccessState extends HomeState {
+  final NewArrivalsEntity newArrivalsEntity;
+
+
+  NewArrivalsSuccessState({required this.newArrivalsEntity});
+
+  @override
+  List<Object?> get props => [newArrivalsEntity];
+}
+
+class NewArrivalsErrorState extends HomeState {
+  final String failure;
+
+  NewArrivalsErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+
+class HotDealsLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class HotDealsSuccessState extends HomeState {
+  final HotDealsEntity hotDealsEntity;
+
+
+  HotDealsSuccessState({required this.hotDealsEntity});
+
+  @override
+  List<Object?> get props => [hotDealsEntity];
+}
+
+class HotDealsErrorState extends HomeState {
+  final String failure;
+
+  HotDealsErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+
+class BestSellingProductsLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class BestSellingProductsSuccessState extends HomeState {
+  final List<BestSellingProductsEntity> bestSellingProductsEntity;
+
+
+  BestSellingProductsSuccessState({required this.bestSellingProductsEntity});
+
+  @override
+  List<Object?> get props => [bestSellingProductsEntity];
+}
+
+class BestSellingProductsErrorState extends HomeState {
+  final String failure;
+
+  BestSellingProductsErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+
+class TopCategoriesLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class TopCategoriesSuccessState extends HomeState {
+  final TopCategoriesEntity topCategoriesEntity;
+
+
+  TopCategoriesSuccessState({required this.topCategoriesEntity});
+
+  @override
+  List<Object?> get props => [topCategoriesEntity];
+}
+
+class TopCategoriesErrorState extends HomeState {
+  final String failure;
+
+  TopCategoriesErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+
+class RecentlyViewedLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class RecentlyViewedSuccessState extends HomeState {
+  final List<RecentlyViewedEntity> recentlyViewedEntity;
+
+
+  RecentlyViewedSuccessState({required this.recentlyViewedEntity});
+
+  @override
+  List<Object?> get props => [recentlyViewedEntity];
+}
+
+class RecentlyViewedErrorState extends HomeState {
+  final String failure;
+
+  RecentlyViewedErrorState({required this.failure});
   @override
   List<Object?> get props => [failure];
 }

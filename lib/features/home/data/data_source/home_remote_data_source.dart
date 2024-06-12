@@ -11,6 +11,7 @@ import '../models/add_to_cart_model.dart';
 import '../models/app_info_model.dart';
 import '../models/areasModel.dart';
 import '../models/best_sellers_stores_model.dart';
+import '../models/best_selling_products_model.dart';
 import '../models/categories_model.dart';
 import '../models/cities_model.dart';
 import '../models/delete_account_model.dart';
@@ -20,18 +21,22 @@ import '../models/favourite_products_model.dart';
 import '../models/favourite_stores_model.dart';
 import '../models/get_location_model.dart';
 import '../models/home_favourite_stores_model.dart';
+import '../models/hot_deals_model.dart';
 import '../models/landing_model.dart';
 import '../models/main_search_product_model.dart';
 import '../models/main_search_shop_model.dart';
 import '../models/most_offers_model.dart';
+import '../models/new_arrivals_model.dart';
 import '../models/product_data_model.dart';
 import '../models/product_details_model.dart';
+import '../models/recently_viewed_model.dart';
 import '../models/reset_password_model.dart';
 import '../models/shop_data_model.dart';
 import '../models/shop_location_model.dart';
 import '../models/store_offer_details_model.dart';
 import '../models/store_offers_model.dart';
 import '../models/submit_complain_model.dart';
+import '../models/top_categories_model.dart';
 
 abstract class HomeBaseRemoteDataSource {
   Future<AppInfoModel> appInfo();
@@ -144,6 +149,19 @@ abstract class HomeBaseRemoteDataSource {
     required String? offerType,
     required String? sortedBy,
   });
+  Future<NewArrivalsModel> newArrivals({
+    required int? pageNumber,
+    required List<String>? productCategories,
+    required List<String>? storeCategories,
+  });
+  Future<HotDealsModel> hotDeals({
+    required int? pageNumber,
+    required List<String>? productCategories,
+    required List<String>? storeCategories,
+  });
+  Future<List<BestSellingProductsModel>> bestSellingProducts();
+  Future<TopCategoriesModel> topCategories();
+  Future<List<RecentlyViewedModel>> recentlyViewed();
 
 }
 
@@ -718,6 +736,94 @@ class HomeRemoteDataSourceImpl
   }
 
 
+  @override
+  Future<NewArrivalsModel> newArrivals({
+    required int? pageNumber,
+    required List<String>? productCategories,
+    required List<String>? storeCategories,
+  }) async {
+    Map<String,dynamic> query= {
+      'lang': isRTL == true ? 'ar' : 'en',
+      'page': pageNumber,
+    };
+    if(productCategories != null){
+      query['category[0]'] = productCategories;
+    }
+
+    if(storeCategories != null){
+      query['store_category[0]'] = storeCategories;
+    }
+
+    final Response f = await dioHelper.get(
+      url: newArrivalsUrl,
+      query: query,
+    );
+    return NewArrivalsModel.fromJson(f.data);
+  }
+
+
+
+  @override
+  Future<HotDealsModel> hotDeals({
+    required int? pageNumber,
+    required List<String>? productCategories,
+    required List<String>? storeCategories,
+  }) async {
+    Map<String,dynamic> query= {
+      'lang': isRTL == true ? 'ar' : 'en',
+      'page': pageNumber,
+    };
+    if(productCategories != null){
+      query['category[0]'] = productCategories;
+    }
+
+    if(storeCategories != null){
+      query['store_category[0]'] = storeCategories;
+    }
+
+    final Response f = await dioHelper.get(
+      url: hotDealsUrl,
+      query: query,
+    );
+    return HotDealsModel.fromJson(f.data);
+  }
+
+
+  @override
+  Future<List<BestSellingProductsModel>> bestSellingProducts() async {
+    final Response f = await dioHelper.get(
+      url: '$bestSellingProductsUrl/${isRTL == true ? 'ar' : 'en'}',
+    );
+    return List<BestSellingProductsModel>.from(
+        (f.data as List).map((e) => BestSellingProductsModel.fromJson(e))
+    );
+  }
+
+
+  @override
+  Future<TopCategoriesModel> topCategories() async {
+    final Response f = await dioHelper.get(
+      url: topCategoriesUrl,
+      query: {
+        'lang': isRTL == true ? 'ar' : 'en',
+      }
+    );
+    return TopCategoriesModel.fromJson(f.data);
+
+  }
+
+
+  @override
+  Future<List<RecentlyViewedModel>> recentlyViewed() async {
+    final Response f = await dioHelper.get(
+        url: recentlyViewedURL,
+        query: {
+          'lang': isRTL == true ? 'ar' : 'en',
+        }    );
+    return List<RecentlyViewedModel>.from(
+        (f.data as List).map((e) => RecentlyViewedModel.fromJson(e))
+    );
+  }
 
 
 }

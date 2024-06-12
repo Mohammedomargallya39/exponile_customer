@@ -2,7 +2,6 @@ import 'package:exponile_customer/core/util/resources/extensions_manager.dart';
 import 'package:exponile_customer/features/home/presentation/controller/cubit.dart';
 import 'package:exponile_customer/features/home/presentation/controller/state.dart';
 import 'package:exponile_customer/features/home/presentation/screens/settings/add_new_address_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/util/cubit/cubit.dart';
@@ -19,29 +18,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
-
-  late final TabController _tabController;
-  late final TabController _bestSellingTabController;
-  late final TabController _topCategoriesShop;
-
-  final ScrollController _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 4, vsync: this);
-    _bestSellingTabController = TabController(length: 4, vsync: this);
-    _topCategoriesShop = TabController(length:  4, vsync: this);
-  }
-  @override
-  void dispose() {
-    _tabController.dispose();
-    _bestSellingTabController.dispose();
-    _topCategoriesShop.dispose();
-    _scrollController.dispose();
-    super.dispose();
-  }
+class _HomeScreenState extends State<HomeScreen>{
 
   @override
   Widget build(BuildContext context) {

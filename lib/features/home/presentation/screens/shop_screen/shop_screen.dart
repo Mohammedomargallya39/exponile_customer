@@ -9,10 +9,10 @@ import 'package:exponile_customer/features/home/presentation/controller/state.da
 import 'package:exponile_customer/features/home/presentation/screens/product_screen/product_card.dart';
 import 'package:exponile_customer/features/home/presentation/screens/product_screen/show_product_details.dart';
 import 'package:exponile_customer/features/home/presentation/screens/shop_screen/shop_view_card.dart';
-import 'package:exponile_customer/features/home/presentation/screens/shop_screen/offers/store_offer_screen.dart';
 import 'package:exponile_customer/features/home/presentation/screens/shop_screen/review/store_reviews_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../offers_screen/offers/store_offer_screen.dart';
 import 'filter_shops.dart';
 
 class ShopScreen extends StatefulWidget {

@@ -10,6 +10,7 @@ import '../../domain/entities/add_to_cart_entity.dart';
 import '../../domain/entities/app_info_entity.dart';
 import '../../domain/entities/areas_entity.dart';
 import '../../domain/entities/best_sellers_store_entity.dart';
+import '../../domain/entities/best_selling_products_entity.dart';
 import '../../domain/entities/categories_entity.dart';
 import '../../domain/entities/cities_entity.dart';
 import '../../domain/entities/delete_account_entity.dart';
@@ -19,18 +20,22 @@ import '../../domain/entities/favourite_products_entity.dart';
 import '../../domain/entities/favourite_stores_entity.dart';
 import '../../domain/entities/get_location_entity.dart';
 import '../../domain/entities/home_favourite_store_entity.dart';
+import '../../domain/entities/hot_deals_entity.dart';
 import '../../domain/entities/landing_entity.dart';
 import '../../domain/entities/main_search_product_entity.dart';
 import '../../domain/entities/main_search_shop_entity.dart';
 import '../../domain/entities/most_deals_entity.dart';
+import '../../domain/entities/new_arrivals_entity.dart';
 import '../../domain/entities/product_data_entity.dart';
 import '../../domain/entities/product_details_entity.dart';
+import '../../domain/entities/recently_viewed_entity.dart';
 import '../../domain/entities/reset_password_entity.dart';
 import '../../domain/entities/shop_data_entity.dart';
 import '../../domain/entities/shop_location_entity.dart';
 import '../../domain/entities/store_offer_details_entity.dart';
 import '../../domain/entities/store_offers_entity.dart';
 import '../../domain/entities/submit_complain_entity.dart';
+import '../../domain/entities/top_categories_entity.dart';
 import '../../domain/repository/home_base_rebository.dart';
 import '../data_source/home_remote_data_source.dart';
 
@@ -64,6 +69,11 @@ typedef CallMostOffers= Future<MostOffersEntity> Function();
 typedef CallHomeFavouriteStores= Future<HomeFavouriteStoresEntity> Function();
 typedef CallDiscoverNewStores= Future<DiscoverNewStoresEntity> Function();
 typedef CallBestSellersStores= Future<BestSellersStoresEntity> Function();
+typedef CallNewArrivals= Future<NewArrivalsEntity> Function();
+typedef CallHotDeals= Future<HotDealsEntity> Function();
+typedef CallBestSellingProducts= Future<List<BestSellingProductsEntity>> Function();
+typedef CallTopCategories= Future<TopCategoriesEntity> Function();
+typedef CallRecentlyViewed= Future<List<RecentlyViewedEntity>> Function();
 
 
 class HomeRepoImplementation extends HomeBaseRepository {
@@ -962,6 +972,144 @@ class HomeRepoImplementation extends HomeBaseRepository {
         offerType: offerType,
         sortedBy: sortedBy,
       );
+    });
+  }
+
+
+  Future<Either<Failure, NewArrivalsEntity>> fetchNewArrivals(
+      CallNewArrivals mainMethod,
+      ) async {
+    try {
+      final newArrivals = await mainMethod();
+      return Right(newArrivals);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, NewArrivalsEntity>> newArrivals({
+    required int? pageNumber,
+    required List<String>? productCategories,
+    required List<String>? storeCategories,
+  }) async {
+    return await fetchNewArrivals(()
+    {
+      return remoteDataSource.newArrivals(
+        pageNumber: pageNumber,
+        productCategories: productCategories,
+        storeCategories: storeCategories,
+      );
+    });
+  }
+
+
+
+  Future<Either<Failure, HotDealsEntity>> fetchHotDeals(
+      CallHotDeals mainMethod,
+      ) async {
+    try {
+      final hotDeals = await mainMethod();
+      return Right(hotDeals);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, HotDealsEntity>> hotDeals({
+    required int? pageNumber,
+    required List<String>? productCategories,
+    required List<String>? storeCategories,
+  }) async {
+    return await fetchHotDeals(()
+    {
+      return remoteDataSource.hotDeals(
+        pageNumber: pageNumber,
+        productCategories: productCategories,
+        storeCategories: storeCategories,
+      );
+    });
+  }
+
+
+  Future<Either<Failure, List<BestSellingProductsEntity>>> fetchBestSellingProducts(
+      CallBestSellingProducts mainMethod,
+      ) async {
+    try {
+      final bestSellingProducts = await mainMethod();
+      return Right(bestSellingProducts);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<BestSellingProductsEntity>>> bestSellingProducts() async {
+    return await fetchBestSellingProducts(()
+    {
+      return remoteDataSource.bestSellingProducts();
+    });
+  }
+
+
+
+  Future<Either<Failure, TopCategoriesEntity>> fetchTopCategories(
+      CallTopCategories mainMethod,
+      ) async {
+    try {
+      final topCategories = await mainMethod();
+      return Right(topCategories);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, TopCategoriesEntity>> topCategories() async {
+    return await fetchTopCategories(()
+    {
+      return remoteDataSource.topCategories();
+    });
+  }
+
+
+  Future<Either<Failure, List<RecentlyViewedEntity>>> fetchRecentlyViewed(
+      CallRecentlyViewed mainMethod,
+      ) async {
+    try {
+      final recentlyViewed = await mainMethod();
+      return Right(recentlyViewed);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<RecentlyViewedEntity>>> recentlyViewed() async {
+    return await fetchRecentlyViewed(()
+    {
+      return remoteDataSource.recentlyViewed();
     });
   }
 

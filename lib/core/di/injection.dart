@@ -30,6 +30,7 @@ import '../../features/home/domain/usecase/add_location_details_usecase.dart';
 import '../../features/home/domain/usecase/add_offer_to_cart_usecase.dart';
 import '../../features/home/domain/usecase/add_to_cart_usecase.dart';
 import '../../features/home/domain/usecase/areas_usecase.dart';
+import '../../features/home/domain/usecase/best_selling_products_usecase.dart';
 import '../../features/home/domain/usecase/categories_usecase.dart';
 import '../../features/home/domain/usecase/cities_usecase.dart';
 import '../../features/home/domain/usecase/delete_account_usecase.dart';
@@ -39,18 +40,22 @@ import '../../features/home/domain/usecase/favourite_products_usecase.dart';
 import '../../features/home/domain/usecase/favourite_stores_usecase.dart';
 import '../../features/home/domain/usecase/get_location_usecase.dart';
 import '../../features/home/domain/usecase/home_favourite_stores_usecase.dart';
+import '../../features/home/domain/usecase/hot_deals_usecase.dart';
 import '../../features/home/domain/usecase/landing_usecase.dart';
 import '../../features/home/domain/usecase/location_usecase.dart';
 import '../../features/home/domain/usecase/main_search_product_usecase.dart';
 import '../../features/home/domain/usecase/main_search_shop_usecase.dart';
 import '../../features/home/domain/usecase/most_offers_usecase.dart';
+import '../../features/home/domain/usecase/new_arrivals_usecase.dart';
 import '../../features/home/domain/usecase/product_data_usecase.dart';
 import '../../features/home/domain/usecase/product_details_usecase.dart';
+import '../../features/home/domain/usecase/recently_viewed_usecase.dart';
 import '../../features/home/domain/usecase/reset_password_usecase.dart';
 import '../../features/home/domain/usecase/shop_data_usecase.dart';
 import '../../features/home/domain/usecase/store_offer_details_usecase.dart';
 import '../../features/home/domain/usecase/store_offers_usecase.dart';
 import '../../features/home/domain/usecase/submit_complain_usecase.dart';
+import '../../features/home/domain/usecase/top_categories_usecase.dart';
 import '/core/network/local/cache_helper.dart';
 import '/core/network/remote/dio_helper.dart';
 import '/core/network/repository.dart';
@@ -108,6 +113,11 @@ Future<void> init() async {
           homeFavouriteStoresUseCase: sl(),
           discoverNewStoresUseCase: sl(),
           bestSellersStoresUseCase: sl(),
+          newArrivalsUseCase: sl(),
+          hotDealsUseCase: sl(),
+          bestSellingProductsUseCase: sl(),
+          topCategoriesUseCase: sl(),
+          recentlyViewedUseCase: sl(),
     ),
   );
 
@@ -171,6 +181,11 @@ Future<void> init() async {
   sl.registerLazySingleton(() => HomeFavouriteStoresUseCase(sl()));
   sl.registerLazySingleton(() => DiscoverNewStoresUseCase(sl()));
   sl.registerLazySingleton(() => BestSellersStoresUseCase(sl()));
+  sl.registerLazySingleton(() => NewArrivalsUseCase(sl()));
+  sl.registerLazySingleton(() => HotDealsUseCase(sl()));
+  sl.registerLazySingleton(() => BestSellingProductsUseCase(sl()));
+  sl.registerLazySingleton(() => TopCategoriesUseCase(sl()));
+  sl.registerLazySingleton(() => RecentlyViewedUseCase(sl()));
 
   sl.registerLazySingleton<LogInBaseRemoteDataSource>(
         () => LogInRemoteDataSourceImpl(dioHelper: sl()),

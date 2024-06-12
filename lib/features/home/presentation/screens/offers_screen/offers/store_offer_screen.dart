@@ -7,10 +7,10 @@ import 'package:exponile_customer/core/util/resources/extensions_manager.dart';
 import 'package:exponile_customer/core/util/widgets/main_appbar.dart';
 import 'package:exponile_customer/features/home/presentation/controller/cubit.dart';
 import 'package:exponile_customer/features/home/presentation/controller/state.dart';
-import 'package:exponile_customer/features/home/presentation/screens/shop_screen/offers/store_offer_card.dart';
+import 'package:exponile_customer/features/home/presentation/screens/offers_screen/offer_details_screen.dart';
+import 'package:exponile_customer/features/home/presentation/screens/offers_screen/offers/store_offer_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../offer_details_screen.dart';
 
 class StoreOffersScreen extends StatefulWidget {
   const StoreOffersScreen({super.key, this.storeId,required this.category});
