@@ -27,6 +27,8 @@ import '../models/main_search_product_model.dart';
 import '../models/main_search_shop_model.dart';
 import '../models/most_offers_model.dart';
 import '../models/new_arrivals_model.dart';
+import '../models/offers_model.dart';
+import '../models/orders_model.dart';
 import '../models/product_data_model.dart';
 import '../models/product_details_model.dart';
 import '../models/recently_viewed_model.dart';
@@ -162,7 +164,15 @@ abstract class HomeBaseRemoteDataSource {
   Future<List<BestSellingProductsModel>> bestSellingProducts();
   Future<TopCategoriesModel> topCategories();
   Future<List<RecentlyViewedModel>> recentlyViewed();
-
+  Future<OffersModel> offers({
+    required int? pageNumber,
+    required List<String>? productCategories,
+    required List<String>? storeCategories,
+  });
+  Future<OrdersModel> orders({
+    required int? pageNumber,
+    required String? status,
+  });
 }
 
 class HomeRemoteDataSourceImpl
@@ -824,6 +834,53 @@ class HomeRemoteDataSourceImpl
         (f.data as List).map((e) => RecentlyViewedModel.fromJson(e))
     );
   }
+
+
+
+  @override
+  Future<OffersModel> offers({
+    required int? pageNumber,
+    required List<String>? productCategories,
+    required List<String>? storeCategories,
+  }) async {
+    Map<String,dynamic> query= {
+      'lang': isRTL == true ? 'ar' : 'en',
+      'page': pageNumber,
+    };
+    if(productCategories != null){
+      query['category[0]'] = productCategories;
+    }
+
+    if(storeCategories != null){
+      query['store_category[0]'] = storeCategories;
+    }
+
+    final Response f = await dioHelper.get(
+      url: offersURL,
+      query: query,
+    );
+    return OffersModel.fromJson(f.data);
+  }
+
+
+  @override
+  Future<OrdersModel> orders({
+    required int? pageNumber,
+    required String? status,
+  }) async {
+
+    final Response f = await dioHelper.get(
+      url: ordersURL,
+      query: {
+        'lang': isRTL == true ? 'ar' : 'en',
+        'page': pageNumber,
+        'status': status ?? 'orders',
+      },
+      token: token
+    );
+    return OrdersModel.fromJson(f.data);
+  }
+
 
 
 }

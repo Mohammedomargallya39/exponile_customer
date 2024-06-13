@@ -25,6 +25,8 @@ import '../entities/main_search_product_entity.dart';
 import '../entities/main_search_shop_entity.dart';
 import '../entities/most_deals_entity.dart';
 import '../entities/new_arrivals_entity.dart';
+import '../entities/offers_entity.dart';
+import '../entities/orders_entity.dart';
 import '../entities/product_data_entity.dart';
 import '../entities/product_details_entity.dart';
 import '../entities/recently_viewed_entity.dart';
@@ -173,4 +175,13 @@ abstract class HomeBaseRepository {
   Future<Either<Failure, List<BestSellingProductsEntity>>> bestSellingProducts();
   Future<Either<Failure, TopCategoriesEntity>> topCategories();
   Future<Either<Failure, List<RecentlyViewedEntity>>> recentlyViewed();
+  Future<Either<Failure, OffersEntity>> offers({
+    required int? pageNumber,
+    required List<String>? productCategories,
+    required List<String>? storeCategories,
+  });
+  Future<Either<Failure, OrdersEntity>> orders({
+    required int? pageNumber,
+    required String? status
+  });
 }

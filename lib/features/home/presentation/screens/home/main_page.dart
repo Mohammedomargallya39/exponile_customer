@@ -1,3 +1,4 @@
+import 'package:exponile_customer/core/util/resources/extensions_manager.dart';
 import 'package:exponile_customer/features/home/presentation/controller/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,7 +20,10 @@ class MainPage extends StatelessWidget {
                 body: ListView.builder(
                     itemCount: homeCubit.homeWidgets.length,
                     itemBuilder: (context, index) {
-                      return homeCubit.homeWidgets[index];
+                      return Padding(
+                        padding: EdgeInsets.symmetric(vertical: 1.h),
+                        child: homeCubit.homeWidgets[index],
+                      );
                     },
                 ),
               );

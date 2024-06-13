@@ -47,6 +47,8 @@ import '../../features/home/domain/usecase/main_search_product_usecase.dart';
 import '../../features/home/domain/usecase/main_search_shop_usecase.dart';
 import '../../features/home/domain/usecase/most_offers_usecase.dart';
 import '../../features/home/domain/usecase/new_arrivals_usecase.dart';
+import '../../features/home/domain/usecase/offers_usecase.dart';
+import '../../features/home/domain/usecase/orders_usecase.dart';
 import '../../features/home/domain/usecase/product_data_usecase.dart';
 import '../../features/home/domain/usecase/product_details_usecase.dart';
 import '../../features/home/domain/usecase/recently_viewed_usecase.dart';
@@ -118,6 +120,8 @@ Future<void> init() async {
           bestSellingProductsUseCase: sl(),
           topCategoriesUseCase: sl(),
           recentlyViewedUseCase: sl(),
+          offersUseCase: sl(),
+          ordersUseCase: sl(),
     ),
   );
 
@@ -186,6 +190,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => BestSellingProductsUseCase(sl()));
   sl.registerLazySingleton(() => TopCategoriesUseCase(sl()));
   sl.registerLazySingleton(() => RecentlyViewedUseCase(sl()));
+  sl.registerLazySingleton(() => OffersUseCase(sl()));
+  sl.registerLazySingleton(() => OrdersUseCase(sl()));
 
   sl.registerLazySingleton<LogInBaseRemoteDataSource>(
         () => LogInRemoteDataSourceImpl(dioHelper: sl()),

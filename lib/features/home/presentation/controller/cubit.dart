@@ -8,8 +8,11 @@ import 'package:exponile_customer/features/home/domain/usecase/best_sellers_stor
 import 'package:exponile_customer/features/home/domain/usecase/home_favourite_stores_usecase.dart';
 import 'package:exponile_customer/features/home/domain/usecase/most_offers_usecase.dart';
 import 'package:exponile_customer/features/home/domain/usecase/new_arrivals_usecase.dart';
+import 'package:exponile_customer/features/home/domain/usecase/offers_usecase.dart';
 import 'package:exponile_customer/features/home/domain/usecase/recently_viewed_usecase.dart';
 import 'package:exponile_customer/features/home/presentation/controller/state.dart';
+import 'package:exponile_customer/features/home/presentation/screens/categories/categories.dart';
+import 'package:exponile_customer/features/home/presentation/screens/offers_screen/all_offer_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,6 +34,8 @@ import '../../domain/entities/main_search_product_entity.dart';
 import '../../domain/entities/main_search_shop_entity.dart';
 import '../../domain/entities/most_deals_entity.dart';
 import '../../domain/entities/new_arrivals_entity.dart';
+import '../../domain/entities/offers_entity.dart';
+import '../../domain/entities/orders_entity.dart';
 import '../../domain/entities/product_data_entity.dart';
 import '../../domain/entities/product_details_entity.dart';
 import '../../domain/entities/recently_viewed_entity.dart';
@@ -59,6 +64,7 @@ import '../../domain/usecase/landing_usecase.dart';
 import '../../domain/usecase/location_usecase.dart';
 import '../../domain/usecase/main_search_product_usecase.dart';
 import '../../domain/usecase/main_search_shop_usecase.dart';
+import '../../domain/usecase/orders_usecase.dart';
 import '../../domain/usecase/product_data_usecase.dart';
 import '../../domain/usecase/product_details_usecase.dart';
 import '../../domain/usecase/reset_password_usecase.dart';
@@ -79,6 +85,7 @@ import '../screens/home/widgets/hot_deals_list.dart';
 import '../screens/home/widgets/offers_list.dart';
 import '../screens/home/widgets/top_categories_list.dart';
 import '../screens/home/widgets/recently_list.dart';
+import '../screens/orders_screen/orders_screen.dart';
 import '../screens/settings/setting_screen.dart';
 
 class HomeCubit extends Cubit<HomeState> {
@@ -116,6 +123,8 @@ class HomeCubit extends Cubit<HomeState> {
    final BestSellingProductsUseCase _bestSellingProductsUseCase;
    final TopCategoriesUseCase _topCategoriesUseCase;
    final RecentlyViewedUseCase _recentlyViewedUseCase;
+   final OffersUseCase _offersUseCase;
+   final OrdersUseCase _ordersUseCase;
 
   HomeCubit(
       {
@@ -153,6 +162,8 @@ class HomeCubit extends Cubit<HomeState> {
     required BestSellingProductsUseCase bestSellingProductsUseCase,
     required TopCategoriesUseCase topCategoriesUseCase,
     required RecentlyViewedUseCase recentlyViewedUseCase,
+    required OffersUseCase offersUseCase,
+    required OrdersUseCase ordersUseCase,
   }
   ) :
        _mainSearchProductUseCase = mainSearchProductUseCase,
@@ -189,6 +200,8 @@ class HomeCubit extends Cubit<HomeState> {
        _bestSellingProductsUseCase = bestSellingProductsUseCase,
        _topCategoriesUseCase = topCategoriesUseCase,
        _recentlyViewedUseCase = recentlyViewedUseCase,
+       _offersUseCase = offersUseCase,
+       _ordersUseCase = ordersUseCase,
 
 
       super(Empty());
@@ -205,10 +218,10 @@ class HomeCubit extends Cubit<HomeState> {
 
   List<Widget> customer = [
     const HomeScreen(),
+    const AllOffersScreen(),
+    const CategoriesScreen(),
     Container(),
-    Container(),
-    Container(),
-    Container(),
+    const OrdersScreen(),
     const SettingsScreen(),
   ];
 
@@ -1109,6 +1122,8 @@ class HomeCubit extends Cubit<HomeState> {
        ));
      }, (data) {
        categoriesEntity = data;
+       filterCategoriesProduct = data.data.productCats;
+       filterCategoriesStores = data.data.storeCats;
        emit(CategoriesSuccessState(
            categoriesEntity: data
        )
@@ -1137,8 +1152,6 @@ class HomeCubit extends Cubit<HomeState> {
    }
 
 
-  int pageNumber = 1;
-
   HomeFavouriteStoresEntity? homeFavouriteStoresEntity;
    void homeFavouriteStores({
      required String? storeCategory,
@@ -1149,7 +1162,7 @@ class HomeCubit extends Cubit<HomeState> {
 
      final result = await _homeFavouriteStoresUseCase(
        HomeFavouriteStoresParams(
-           pageNumber: pageNumber,
+           pageNumber: 1,
            storeCategory: storeCategory,
            offerType: offerType,
            sortedBy: sortedBy
@@ -1180,7 +1193,7 @@ class HomeCubit extends Cubit<HomeState> {
 
      final result = await _discoverNewStoresUseCase(
          DiscoverNewStoresParams(
-             pageNumber: pageNumber,
+             pageNumber: 1,
              storeCategory: storeCategory,
              offerType: offerType,
              sortedBy: sortedBy
@@ -1212,7 +1225,7 @@ class HomeCubit extends Cubit<HomeState> {
 
      final result = await _bestSellersStoresUseCase(
          BestSellersStoresParams(
-             pageNumber: pageNumber,
+             pageNumber: 1,
              storeCategory: storeCategory,
              offerType: offerType,
              sortedBy: sortedBy
@@ -1243,7 +1256,7 @@ class HomeCubit extends Cubit<HomeState> {
 
      final result = await _newArrivalsUseCase(
          NewArrivalsParams(
-             pageNumber: pageNumber,
+             pageNumber: 1,
              productCategories: productCategories,
              storeCategories: storeCategories,
          )
@@ -1272,7 +1285,7 @@ class HomeCubit extends Cubit<HomeState> {
 
      final result = await _hotDealsUseCase(
          HotDealsParams(
-           pageNumber: pageNumber,
+           pageNumber: 1,
            productCategories: productCategories,
            storeCategories: storeCategories,
          )
@@ -1396,6 +1409,131 @@ class HomeCubit extends Cubit<HomeState> {
      const TopCategoriesList(),
      const RecentlyList(),
    ];
+
+
+   int pageNumber = 1;
+
+   OffersEntity? offersEntity;
+   void offers({
+     required List<String>? productCategories,
+     required List<String>? storeCategories,
+   }) async {
+     emit(OffersLoadingState());
+
+     final result = await _offersUseCase(
+         OffersParams(
+           pageNumber: pageNumber,
+           productCategories: productCategories,
+           storeCategories: storeCategories,
+         )
+     );
+
+     result.fold((failure) {
+       emit(OffersErrorState(
+           failure: mapFailureToMessage(failure)
+       ));
+     }, (data) {
+       offersEntity = data;
+       emit(OffersSuccessState(
+           offersEntity: data
+       )
+       );
+     });
+   }
+
+   void changePageNumber({
+     required int page,
+   }){
+     emit(InitState());
+     pageNumber = page;
+     emit(ChangeState());
+   }
+
+
+
+
+   final TextEditingController searchCategoryProductFilter = TextEditingController();
+   final TextEditingController searchCategoryStoreFilter = TextEditingController();
+
+
+
+   List<ProductCat> filterCategoriesProduct = [];
+   void filterCategoriesProducts(String value) {
+     emit(ChangeState());
+     if (value.isNotEmpty) {
+       // Filter the categories based on the search value
+       filterCategoriesProduct = [];
+       filterCategoriesProduct = categoriesEntity!.data.productCats.where((category) =>
+           category.name.toLowerCase().contains(value.toLowerCase())).toList();
+     } else {
+       // If the search value is empty, revert to full data
+       filterCategoriesProduct = categoriesEntity!.data.productCats;
+     }
+     emit(FilterState());
+   }
+
+   String? selectedCategoriesProductsName;
+
+   void changeCategoriesProductsValue({
+     required String? categoriesProductsName,
+   }){
+     emit(InitState());
+     selectedCategoriesProductsName = categoriesProductsName;
+     emit(ChangeState());
+   }
+
+
+   List<StoreCat> filterCategoriesStores = [];
+   void filterCategoriesStore(String value) {
+     emit(ChangeState());
+     if (value.isNotEmpty) {
+       // Filter the categories based on the search value
+       filterCategoriesStores = [];
+       filterCategoriesStores = categoriesEntity!.data.storeCats.where((category) =>
+           category.name.toLowerCase().contains(value.toLowerCase())).toList();
+     } else {
+       // If the search value is empty, revert to full data
+       filterCategoriesStores = categoriesEntity!.data.storeCats;
+     }
+     emit(FilterState());
+   }
+
+   String? selectedCategoriesStoresName;
+
+   void changeCategoriesStoresValue({
+     required String? categoriesStoresName,
+   }){
+     emit(InitState());
+     selectedCategoriesStoresName = categoriesStoresName;
+     emit(ChangeState());
+   }
+
+
+   OrdersEntity? ordersEntity;
+   void orders({
+     required String? status,
+   }) async {
+     emit(OrdersLoadingState());
+
+     final result = await _ordersUseCase(
+         OrdersParams(
+           pageNumber: pageNumber,
+           status: status,
+         )
+     );
+
+     result.fold((failure) {
+       emit(OrdersErrorState(
+           failure: mapFailureToMessage(failure)
+       ));
+     }, (data) {
+       ordersEntity = data;
+       emit(OrdersSuccessState(
+           ordersEntity: data
+       )
+       );
+     });
+   }
 
 
 }

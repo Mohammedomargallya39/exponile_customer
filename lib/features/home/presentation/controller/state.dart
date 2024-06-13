@@ -24,6 +24,8 @@ import '../../domain/entities/main_search_product_entity.dart';
 import '../../domain/entities/main_search_shop_entity.dart';
 import '../../domain/entities/most_deals_entity.dart';
 import '../../domain/entities/new_arrivals_entity.dart';
+import '../../domain/entities/offers_entity.dart';
+import '../../domain/entities/orders_entity.dart';
 import '../../domain/entities/product_data_entity.dart';
 import '../../domain/entities/product_details_entity.dart';
 import '../../domain/entities/recently_viewed_entity.dart';
@@ -901,6 +903,56 @@ class RecentlyViewedErrorState extends HomeState {
   final String failure;
 
   RecentlyViewedErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+
+class OffersLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class OffersSuccessState extends HomeState {
+  final OffersEntity offersEntity;
+
+
+  OffersSuccessState({required this.offersEntity});
+
+  @override
+  List<Object?> get props => [offersEntity];
+}
+
+class OffersErrorState extends HomeState {
+  final String failure;
+
+  OffersErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+
+class OrdersLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class OrdersSuccessState extends HomeState {
+  final OrdersEntity ordersEntity;
+
+
+  OrdersSuccessState({required this.ordersEntity});
+
+  @override
+  List<Object?> get props => [ordersEntity];
+}
+
+class OrdersErrorState extends HomeState {
+  final String failure;
+
+  OrdersErrorState({required this.failure});
   @override
   List<Object?> get props => [failure];
 }

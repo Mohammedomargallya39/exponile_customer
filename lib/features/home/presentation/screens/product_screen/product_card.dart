@@ -53,7 +53,7 @@ class ProductCard extends StatelessWidget {
           border: Border.all(
             width: 1.rSp,
             color: ColorsManager.black,
-          )
+          ),
         ),
         child: InkWell(
             onTap: onProductTap,

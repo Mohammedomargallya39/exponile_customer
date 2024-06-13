@@ -38,4 +38,6 @@ const String hotDealsUrl = 'website/hot-deals';
 const String bestSellingProductsUrl = 'best-selling-products';
 const String topCategoriesUrl = 'get-top-categories-shop';
 const String recentlyViewedURL = 'recently-viewed';
+const String offersURL = 'website/offers';
+const String ordersURL = 'website/orders';
 

@@ -26,6 +26,8 @@ import '../../domain/entities/main_search_product_entity.dart';
 import '../../domain/entities/main_search_shop_entity.dart';
 import '../../domain/entities/most_deals_entity.dart';
 import '../../domain/entities/new_arrivals_entity.dart';
+import '../../domain/entities/offers_entity.dart';
+import '../../domain/entities/orders_entity.dart';
 import '../../domain/entities/product_data_entity.dart';
 import '../../domain/entities/product_details_entity.dart';
 import '../../domain/entities/recently_viewed_entity.dart';
@@ -74,6 +76,8 @@ typedef CallHotDeals= Future<HotDealsEntity> Function();
 typedef CallBestSellingProducts= Future<List<BestSellingProductsEntity>> Function();
 typedef CallTopCategories= Future<TopCategoriesEntity> Function();
 typedef CallRecentlyViewed= Future<List<RecentlyViewedEntity>> Function();
+typedef CallOffers= Future<OffersEntity> Function();
+typedef CallOrders= Future<OrdersEntity> Function();
 
 
 class HomeRepoImplementation extends HomeBaseRepository {
@@ -1110,6 +1114,70 @@ class HomeRepoImplementation extends HomeBaseRepository {
     return await fetchRecentlyViewed(()
     {
       return remoteDataSource.recentlyViewed();
+    });
+  }
+
+
+
+  Future<Either<Failure, OffersEntity>> fetchOffers(
+      CallOffers mainMethod,
+      ) async {
+    try {
+      final offers = await mainMethod();
+      return Right(offers);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, OffersEntity>> offers({
+    required int? pageNumber,
+    required List<String>? productCategories,
+    required List<String>? storeCategories,
+}) async {
+    return await fetchOffers(()
+    {
+      return remoteDataSource.offers(
+        pageNumber: pageNumber,
+        productCategories: productCategories,
+        storeCategories: storeCategories,
+      );
+    });
+  }
+
+
+
+  Future<Either<Failure, OrdersEntity>> fetchOrders(
+      CallOrders mainMethod,
+      ) async {
+    try {
+      final orders = await mainMethod();
+      return Right(orders);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, OrdersEntity>> orders({
+    required int? pageNumber,
+    required String? status,
+}) async {
+    return await fetchOrders(()
+    {
+      return remoteDataSource.orders(
+        pageNumber: pageNumber,
+        status: status,
+      );
     });
   }
 
