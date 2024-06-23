@@ -39,7 +39,9 @@ class _HomeScreenState extends State<HomeScreen>{
             body: HideKeyboardPage(
               child: Column(
                 children: [
+                  if(token != null)
                   verticalSpace(0.1.h),
+                  if(token != null)
                   InkWell(
                     onTap: () {
                       navigateTo(

@@ -79,14 +79,7 @@ class _BestSellingProductsListState extends State<BestSellingProductsList>  with
             }
           },
           builder: (context, state) {
-            return homeCubit.newArrivalsEntity ==  null && homeCubit.bestSellingProductsEntity == null ?
-            CardLoading(
-              height: 20.h,
-              borderRadius: BorderRadius.all(Radius.circular(15.rSp)),
-              width: 100.w,
-              margin: EdgeInsets.only(bottom: 10.rSp),
-            ) :
-
+            return homeCubit.newArrivalsEntity !=  null && homeCubit.bestSellingProductsEntity != null ?
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -247,7 +240,7 @@ class _BestSellingProductsListState extends State<BestSellingProductsList>  with
                                   itemCount: homeCubit.bestSellingProductsEntity![homeCubit.bestSellingCurrentIndex].products!.length,
                                   shrinkWrap: true,
                                 ) :
-                                    svgImage(path: Assets.images.svg.noImage),
+                                svgImage(path: Assets.images.svg.noImage),
                               ),
                             ),
                           ),
@@ -256,6 +249,14 @@ class _BestSellingProductsListState extends State<BestSellingProductsList>  with
                     ),
                 ],
               ),
+            ):
+            (homeCubit.newArrivalsEntity !=  null && homeCubit.newArrivalsEntity!.data.products!.data!.isEmpty) && homeCubit.bestSellingProductsEntity != null?
+            Container():
+            CardLoading(
+              height: 20.h,
+              borderRadius: BorderRadius.all(Radius.circular(15.rSp)),
+              width: 100.w,
+              margin: EdgeInsets.only(bottom: 10.rSp),
             );
           },
         )

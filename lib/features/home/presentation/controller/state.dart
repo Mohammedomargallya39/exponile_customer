@@ -9,6 +9,7 @@ import '../../domain/entities/add_to_cart_entity.dart';
 import '../../domain/entities/areas_entity.dart';
 import '../../domain/entities/best_sellers_store_entity.dart';
 import '../../domain/entities/best_selling_products_entity.dart';
+import '../../domain/entities/cancel_order_entity.dart';
 import '../../domain/entities/categories_entity.dart';
 import '../../domain/entities/cities_entity.dart';
 import '../../domain/entities/delete_account_entity.dart';
@@ -25,7 +26,9 @@ import '../../domain/entities/main_search_shop_entity.dart';
 import '../../domain/entities/most_deals_entity.dart';
 import '../../domain/entities/new_arrivals_entity.dart';
 import '../../domain/entities/offers_entity.dart';
+import '../../domain/entities/order_details_entity.dart';
 import '../../domain/entities/orders_entity.dart';
+import '../../domain/entities/payment_order_data_entity.dart';
 import '../../domain/entities/product_data_entity.dart';
 import '../../domain/entities/product_details_entity.dart';
 import '../../domain/entities/recently_viewed_entity.dart';
@@ -953,6 +956,82 @@ class OrdersErrorState extends HomeState {
   final String failure;
 
   OrdersErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+
+
+class CancelOrderLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class CancelOrderSuccessState extends HomeState {
+  final CancelOrderEntity cancelOrderEntity;
+
+
+  CancelOrderSuccessState({required this.cancelOrderEntity});
+
+  @override
+  List<Object?> get props => [cancelOrderEntity];
+}
+
+class CancelOrderErrorState extends HomeState {
+  final String failure;
+
+  CancelOrderErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+
+class PaymentOrderDataLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class PaymentOrderDataSuccessState extends HomeState {
+  final PaymentOrderDataEntity paymentOrderDataEntity;
+
+
+  PaymentOrderDataSuccessState({required this.paymentOrderDataEntity});
+
+  @override
+  List<Object?> get props => [paymentOrderDataEntity];
+}
+
+class PaymentOrderDataErrorState extends HomeState {
+  final String failure;
+
+  PaymentOrderDataErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+
+class OrderDetailsLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class OrderDetailsSuccessState extends HomeState {
+  final OrderDetailsEntity orderDetailsEntity;
+
+
+  OrderDetailsSuccessState({required this.orderDetailsEntity});
+
+  @override
+  List<Object?> get props => [orderDetailsEntity];
+}
+
+class OrderDetailsErrorState extends HomeState {
+  final String failure;
+
+  OrderDetailsErrorState({required this.failure});
   @override
   List<Object?> get props => [failure];
 }

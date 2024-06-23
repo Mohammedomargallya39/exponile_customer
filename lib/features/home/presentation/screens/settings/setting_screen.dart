@@ -502,8 +502,10 @@ class SettingsScreen extends StatelessWidget {
 
 
                           /// delete account
-                          verticalSpace(3.h),
-                          InkWell(
+                          if(token != null)
+                            verticalSpace(3.h),
+                          if(token != null)
+                            InkWell(
                             onTap: ()
                             {
                               showDialog(
@@ -537,16 +539,20 @@ class SettingsScreen extends StatelessWidget {
                               ],
                             ),
                           ),
-                          verticalSpace(3.h),
-                          Divider(
+                          if(token != null)
+                            verticalSpace(3.h),
+                          if(token != null)
+                            Divider(
                             height: 1.rSp,
                             thickness: 1.rSp,
                             color: ColorsManager.black.withOpacity(0.2),
                           ),
 
                           /// logout
-                          verticalSpace(3.h),
-                          InkWell(
+                          if(token != null)
+                            verticalSpace(3.h),
+                          if(token != null)
+                            InkWell(
                             onTap: ()
                             {
                               showDialog(
@@ -590,8 +596,10 @@ class SettingsScreen extends StatelessWidget {
                               ],
                             ),
                           ),
-                          verticalSpace(3.h),
-                          Divider(
+                          if(token != null)
+                            verticalSpace(3.h),
+                          if(token != null)
+                            Divider(
                             height: 1.rSp,
                             thickness: 1.rSp,
                             color: ColorsManager.black.withOpacity(0.2),

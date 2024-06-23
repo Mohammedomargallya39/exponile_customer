@@ -31,6 +31,7 @@ import '../../features/home/domain/usecase/add_offer_to_cart_usecase.dart';
 import '../../features/home/domain/usecase/add_to_cart_usecase.dart';
 import '../../features/home/domain/usecase/areas_usecase.dart';
 import '../../features/home/domain/usecase/best_selling_products_usecase.dart';
+import '../../features/home/domain/usecase/cancel_order_usecase.dart';
 import '../../features/home/domain/usecase/categories_usecase.dart';
 import '../../features/home/domain/usecase/cities_usecase.dart';
 import '../../features/home/domain/usecase/delete_account_usecase.dart';
@@ -39,6 +40,7 @@ import '../../features/home/domain/usecase/discover_new_stores_usecase.dart';
 import '../../features/home/domain/usecase/favourite_products_usecase.dart';
 import '../../features/home/domain/usecase/favourite_stores_usecase.dart';
 import '../../features/home/domain/usecase/get_location_usecase.dart';
+import '../../features/home/domain/usecase/get_payment_order_usecase.dart';
 import '../../features/home/domain/usecase/home_favourite_stores_usecase.dart';
 import '../../features/home/domain/usecase/hot_deals_usecase.dart';
 import '../../features/home/domain/usecase/landing_usecase.dart';
@@ -48,6 +50,7 @@ import '../../features/home/domain/usecase/main_search_shop_usecase.dart';
 import '../../features/home/domain/usecase/most_offers_usecase.dart';
 import '../../features/home/domain/usecase/new_arrivals_usecase.dart';
 import '../../features/home/domain/usecase/offers_usecase.dart';
+import '../../features/home/domain/usecase/order_details_usecase.dart';
 import '../../features/home/domain/usecase/orders_usecase.dart';
 import '../../features/home/domain/usecase/product_data_usecase.dart';
 import '../../features/home/domain/usecase/product_details_usecase.dart';
@@ -122,6 +125,9 @@ Future<void> init() async {
           recentlyViewedUseCase: sl(),
           offersUseCase: sl(),
           ordersUseCase: sl(),
+          cancelOrderUseCase: sl(),
+          paymentOrderDataUseCase: sl(),
+          orderDetailsUseCase: sl(),
     ),
   );
 
@@ -192,6 +198,9 @@ Future<void> init() async {
   sl.registerLazySingleton(() => RecentlyViewedUseCase(sl()));
   sl.registerLazySingleton(() => OffersUseCase(sl()));
   sl.registerLazySingleton(() => OrdersUseCase(sl()));
+  sl.registerLazySingleton(() => CancelOrderUseCase(sl()));
+  sl.registerLazySingleton(() => PaymentOrderDataUseCase(sl()));
+  sl.registerLazySingleton(() => OrderDetailsUseCase(sl()));
 
   sl.registerLazySingleton<LogInBaseRemoteDataSource>(
         () => LogInRemoteDataSourceImpl(dioHelper: sl()),

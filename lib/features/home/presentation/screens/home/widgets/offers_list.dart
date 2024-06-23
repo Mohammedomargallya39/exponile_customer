@@ -21,13 +21,7 @@ class OffersList extends StatelessWidget {
         textDirection: appBloc.isArabic ? TextDirection.rtl : TextDirection.ltr,
         child: BlocBuilder<HomeCubit,HomeState>(
             builder: (context, state) {
-              return homeCubit.mostOffersEntity ==  null || homeCubit.mostOffersEntity!.storesWithMostOffers.isEmpty ?
-              CardLoading(
-                height: 20.h,
-                borderRadius: BorderRadius.all(Radius.circular(15.rSp)),
-                width: 100.w,
-                margin: EdgeInsets.only(bottom: 10.rSp),
-              ) :
+              return homeCubit.mostOffersEntity !=  null && homeCubit.mostOffersEntity!.storesWithMostOffers.isNotEmpty ?
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,21 +38,29 @@ class OffersList extends StatelessWidget {
                     height: 30.h,
                     width: 100.w,
                     child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemCount: homeCubit.mostOffersEntity!.storesWithMostOffers.length,
-                        itemBuilder: (context, index) {
-                          return StoresCards(
-                            storeLogo: homeCubit.mostOffersEntity!.storesWithMostOffers[index].bannerPath,
-                            storeName: homeCubit.mostOffersEntity!.storesWithMostOffers[index].shopName,
-                            shopID: homeCubit.mostOffersEntity!.storesWithMostOffers[index].id,
-                            totalOffers: homeCubit.mostOffersEntity!.storesWithMostOffers[index].totalOffers,
-                            rates: homeCubit.mostOffersEntity!.storesWithMostOffers[index].rate,
-                          );
-                        },
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      itemCount: homeCubit.mostOffersEntity!.storesWithMostOffers.length,
+                      itemBuilder: (context, index) {
+                        return StoresCards(
+                          storeLogo: homeCubit.mostOffersEntity!.storesWithMostOffers[index].bannerPath,
+                          storeName: homeCubit.mostOffersEntity!.storesWithMostOffers[index].shopName,
+                          shopID: homeCubit.mostOffersEntity!.storesWithMostOffers[index].id,
+                          totalOffers: homeCubit.mostOffersEntity!.storesWithMostOffers[index].totalOffers,
+                          rates: homeCubit.mostOffersEntity!.storesWithMostOffers[index].rate,
+                        );
+                      },
                     ),
                   )
                 ],
+              ) :
+              homeCubit.mostOffersEntity !=  null && homeCubit.mostOffersEntity!.storesWithMostOffers.isEmpty ?
+              Container():
+              CardLoading(
+                height: 20.h,
+                borderRadius: BorderRadius.all(Radius.circular(15.rSp)),
+                width: 100.w,
+                margin: EdgeInsets.only(bottom: 10.rSp),
               );
             },
         )

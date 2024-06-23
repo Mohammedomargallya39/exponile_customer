@@ -11,6 +11,7 @@ import '../../domain/entities/app_info_entity.dart';
 import '../../domain/entities/areas_entity.dart';
 import '../../domain/entities/best_sellers_store_entity.dart';
 import '../../domain/entities/best_selling_products_entity.dart';
+import '../../domain/entities/cancel_order_entity.dart';
 import '../../domain/entities/categories_entity.dart';
 import '../../domain/entities/cities_entity.dart';
 import '../../domain/entities/delete_account_entity.dart';
@@ -27,7 +28,9 @@ import '../../domain/entities/main_search_shop_entity.dart';
 import '../../domain/entities/most_deals_entity.dart';
 import '../../domain/entities/new_arrivals_entity.dart';
 import '../../domain/entities/offers_entity.dart';
+import '../../domain/entities/order_details_entity.dart';
 import '../../domain/entities/orders_entity.dart';
+import '../../domain/entities/payment_order_data_entity.dart';
 import '../../domain/entities/product_data_entity.dart';
 import '../../domain/entities/product_details_entity.dart';
 import '../../domain/entities/recently_viewed_entity.dart';
@@ -78,6 +81,9 @@ typedef CallTopCategories= Future<TopCategoriesEntity> Function();
 typedef CallRecentlyViewed= Future<List<RecentlyViewedEntity>> Function();
 typedef CallOffers= Future<OffersEntity> Function();
 typedef CallOrders= Future<OrdersEntity> Function();
+typedef CallCancelOrder= Future<CancelOrderEntity> Function();
+typedef CallOrderDetails= Future<OrderDetailsEntity> Function();
+typedef CallPaymentOrderData= Future<PaymentOrderDataEntity> Function();
 
 
 class HomeRepoImplementation extends HomeBaseRepository {
@@ -1177,6 +1183,91 @@ class HomeRepoImplementation extends HomeBaseRepository {
       return remoteDataSource.orders(
         pageNumber: pageNumber,
         status: status,
+      );
+    });
+  }
+
+
+  Future<Either<Failure, CancelOrderEntity>> fetchCancelOrder(
+      CallCancelOrder mainMethod,
+      ) async {
+    try {
+      final cancelOrder = await mainMethod();
+      return Right(cancelOrder);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, CancelOrderEntity>> cancelOrder({
+    required String? orderNumber,
+  }) async {
+    return await fetchCancelOrder(()
+    {
+      return remoteDataSource.cancelOrder(
+        orderNumber: orderNumber,
+      );
+    });
+  }
+
+
+  Future<Either<Failure, OrderDetailsEntity>> fetchOrderDetails(
+      CallOrderDetails mainMethod,
+      ) async {
+    try {
+      final orderDetails = await mainMethod();
+      return Right(orderDetails);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, OrderDetailsEntity>> orderDetails({
+    required String? orderNumber,
+  }) async {
+    return await fetchOrderDetails(()
+    {
+      return remoteDataSource.orderDetails(
+        orderNumber: orderNumber,
+      );
+    });
+  }
+
+
+
+  Future<Either<Failure, PaymentOrderDataEntity>> fetchPaymentOrderData(
+      CallPaymentOrderData mainMethod,
+      ) async {
+    try {
+      final paymentOrderData = await mainMethod();
+      return Right(paymentOrderData);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, PaymentOrderDataEntity>> paymentOrderData({
+    required String? poNumber,
+  }) async {
+    return await fetchPaymentOrderData(()
+    {
+      return remoteDataSource.paymentOrderData(
+        poNumber: poNumber,
       );
     });
   }

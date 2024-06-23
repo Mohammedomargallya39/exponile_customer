@@ -511,7 +511,10 @@ class _MainLayoutState extends State<MainLayout> {
                                   ),
                                 ),
                               Expanded(
-                                  child: homeCubit.customer.elementAt(homeCubit.currentNavIndex)
+                                  child: token != null?
+                                  homeCubit.customer.elementAt(homeCubit.currentNavIndex):
+                                  homeCubit.customerWithoutLogin.elementAt(homeCubit.currentNavIndex)
+
                               ),
                             ],
                           )

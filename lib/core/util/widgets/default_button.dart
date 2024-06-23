@@ -35,7 +35,7 @@ class DefaultButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
-        color: color ?? Theme.of(context).backgroundColor,
+        color: color ?? Theme.of(context).colorScheme.background,
         minWidth: width,
         height: height ?? 6.h,
         elevation: elevation,

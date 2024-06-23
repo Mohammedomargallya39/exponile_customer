@@ -197,7 +197,7 @@ Future<void> designToastDialog({
                                           Text(
                                             chooseTitle(toast, context),
                                             style:
-                                            Theme.of(context).textTheme.subtitle1!.copyWith(
+                                            Theme.of(context).textTheme.titleMedium!.copyWith(
                                               color: ColorsManager.darkGrey,
                                               fontWeight: FontWeightManager.bold,
                                               fontSize: 18.0.rSp,
@@ -227,7 +227,7 @@ Future<void> designToastDialog({
                                         text.isNotEmpty
                                             ? text
                                             : appBloc.translationModel!.deleteMessage,
-                                        style: Theme.of(context).textTheme.caption!.copyWith(
+                                        style: Theme.of(context).textTheme.displayMedium!.copyWith(
                                             color: ColorsManager.darkGrey,
                                             fontWeight: FontWeightManager.regular,
                                             fontSize: 14.0.rSp),

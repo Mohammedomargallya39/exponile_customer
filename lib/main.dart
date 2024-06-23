@@ -27,6 +27,8 @@ void main() async {
 
   isRTL = await sl<CacheHelper>().get('isRtl') ?? false;
 
+  isArabic = await sl<CacheHelper>().get('isRtl') ?? false;
+
   token = await sl<CacheHelper>().get('token');
 
   email = await sl<CacheHelper>().get('email');

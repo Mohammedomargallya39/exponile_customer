@@ -12,6 +12,7 @@ import '../models/app_info_model.dart';
 import '../models/areasModel.dart';
 import '../models/best_sellers_stores_model.dart';
 import '../models/best_selling_products_model.dart';
+import '../models/cancel_order_model.dart';
 import '../models/categories_model.dart';
 import '../models/cities_model.dart';
 import '../models/delete_account_model.dart';
@@ -28,7 +29,9 @@ import '../models/main_search_shop_model.dart';
 import '../models/most_offers_model.dart';
 import '../models/new_arrivals_model.dart';
 import '../models/offers_model.dart';
+import '../models/order_details_model.dart';
 import '../models/orders_model.dart';
+import '../models/payment_order_data_model.dart';
 import '../models/product_data_model.dart';
 import '../models/product_details_model.dart';
 import '../models/recently_viewed_model.dart';
@@ -172,6 +175,15 @@ abstract class HomeBaseRemoteDataSource {
   Future<OrdersModel> orders({
     required int? pageNumber,
     required String? status,
+  });
+  Future<CancelOrderModel> cancelOrder({
+    required String? orderNumber,
+  });
+  Future<OrderDetailsModel> orderDetails({
+    required String? orderNumber,
+  });
+  Future<PaymentOrderDataModel> paymentOrderData({
+    required String? poNumber,
   });
 }
 
@@ -879,6 +891,54 @@ class HomeRemoteDataSourceImpl
       token: token
     );
     return OrdersModel.fromJson(f.data);
+  }
+
+
+
+  @override
+  Future<CancelOrderModel> cancelOrder({
+    required String? orderNumber,
+  }) async {
+
+    final Response f = await dioHelper.post(
+      url: cancelOrderURL,
+      data: {
+        'lang': isRTL == true ? 'ar' : 'en',
+        'order_number': orderNumber,
+      },
+      token: token
+    );
+    return CancelOrderModel.fromJson(f.data);
+  }
+
+
+  @override
+  Future<OrderDetailsModel> orderDetails({
+    required String? orderNumber,
+  }) async {
+
+    final Response f = await dioHelper.get(
+      url: orderDetailsURL,
+      query: {
+        'lang': isRTL == true ? 'ar' : 'en',
+        'order_number': orderNumber,
+      },
+      token: token
+    );
+    return OrderDetailsModel.fromJson(f.data);
+  }
+
+
+  @override
+  Future<PaymentOrderDataModel> paymentOrderData({
+    required String? poNumber,
+  }) async {
+
+    final Response f = await dioHelper.get(
+      url: '$paymentOrderDataURL$poNumber',
+      token: token
+    );
+    return PaymentOrderDataModel.fromJson(f.data);
   }
 
 

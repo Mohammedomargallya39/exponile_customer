@@ -87,6 +87,8 @@ class Banners extends StatelessWidget {
                     viewportFraction: 1,
                   ),
                 ) :
+                homeCubit.landingEntity != null && homeCubit.landingEntity!.data.banners.isEmpty?
+                Container():
                 CardLoading(
                   height: 20.h,
                   borderRadius: BorderRadius.all(Radius.circular(15.rSp)),

@@ -57,13 +57,7 @@ class HotDealsList extends StatelessWidget {
             }
           },
           builder: (context, state) {
-            return homeCubit.hotDealsEntity ==  null || homeCubit.hotDealsEntity!.data.products!.data!.isEmpty ?
-            CardLoading(
-              height: 20.h,
-              borderRadius: BorderRadius.all(Radius.circular(15.rSp)),
-              width: 100.w,
-              margin: EdgeInsets.only(bottom: 10.rSp),
-            ) :
+            return homeCubit.hotDealsEntity !=  null && homeCubit.hotDealsEntity!.data.products!.data!.isNotEmpty ?
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -122,7 +116,7 @@ class HotDealsList extends StatelessWidget {
                             ) * 100).toStringAsFixed(2)
                                 :null,
                             offerType: homeCubit.hotDealsEntity!.data.products!.data![index].originalPrice != null && (
-                        double.parse(double.parse(homeCubit.hotDealsEntity!.data.products!.data![index].originalPrice!).toStringAsFixed(2))!= double.parse(double.parse(homeCubit.hotDealsEntity!.data.products!.data![index].finalPrice!).toStringAsFixed(2)))? 1 : null,
+                                double.parse(double.parse(homeCubit.hotDealsEntity!.data.products!.data![index].originalPrice!).toStringAsFixed(2))!= double.parse(double.parse(homeCubit.hotDealsEntity!.data.products!.data![index].finalPrice!).toStringAsFixed(2)))? 1 : null,
                           ),
                         );
                       },
@@ -130,6 +124,14 @@ class HotDealsList extends StatelessWidget {
                   )
                 ],
               ),
+            ):
+            homeCubit.hotDealsEntity !=  null && homeCubit.hotDealsEntity!.data.products!.data!.isEmpty?
+            Container():
+            CardLoading(
+              height: 20.h,
+              borderRadius: BorderRadius.all(Radius.circular(15.rSp)),
+              width: 100.w,
+              margin: EdgeInsets.only(bottom: 10.rSp),
             );
           },
         )

@@ -239,6 +239,7 @@ class TranslationModel {
   late String newArrival;
   late String bestSelling;
   late String recentlyViewed;
+  late String financialTransactions;
 
 
 
@@ -482,5 +483,6 @@ class TranslationModel {
     newArrival= json['newArrival'];
     bestSelling= json['bestSelling'];
     recentlyViewed= json['recentlyViewed'];
+    financialTransactions= json['financialTransactions'];
   }
 }

@@ -21,13 +21,7 @@ class DiscoverList extends StatelessWidget {
         textDirection: appBloc.isArabic ? TextDirection.rtl : TextDirection.ltr,
         child: BlocBuilder<HomeCubit,HomeState>(
           builder: (context, state) {
-            return homeCubit.discoverNewStoresEntity ==  null || homeCubit.discoverNewStoresEntity!.data.stores!.data!.isEmpty ?
-            CardLoading(
-              height: 20.h,
-              borderRadius: BorderRadius.all(Radius.circular(15.rSp)),
-              width: 100.w,
-              margin: EdgeInsets.only(bottom: 10.rSp),
-            ) :
+            return homeCubit.discoverNewStoresEntity !=  null && homeCubit.discoverNewStoresEntity!.data.stores!.data!.isNotEmpty ?
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,6 +64,14 @@ class DiscoverList extends StatelessWidget {
                   ),
                 )
               ],
+            ):
+            homeCubit.discoverNewStoresEntity !=  null && homeCubit.discoverNewStoresEntity!.data.stores!.data!.isEmpty?
+            Container():
+            CardLoading(
+              height: 20.h,
+              borderRadius: BorderRadius.all(Radius.circular(15.rSp)),
+              width: 100.w,
+              margin: EdgeInsets.only(bottom: 10.rSp),
             );
           },
         )

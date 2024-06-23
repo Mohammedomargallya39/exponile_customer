@@ -22,6 +22,7 @@ import '../../domain/entities/account_data_entity.dart';
 import '../../domain/entities/add_address_entity.dart';
 import '../../domain/entities/areas_entity.dart';
 import '../../domain/entities/best_sellers_store_entity.dart';
+import '../../domain/entities/cancel_order_entity.dart';
 import '../../domain/entities/cities_entity.dart';
 import '../../domain/entities/discover_new_store_entity.dart';
 import '../../domain/entities/favourite_products_entity.dart';
@@ -35,7 +36,9 @@ import '../../domain/entities/main_search_shop_entity.dart';
 import '../../domain/entities/most_deals_entity.dart';
 import '../../domain/entities/new_arrivals_entity.dart';
 import '../../domain/entities/offers_entity.dart';
+import '../../domain/entities/order_details_entity.dart';
 import '../../domain/entities/orders_entity.dart';
+import '../../domain/entities/payment_order_data_entity.dart';
 import '../../domain/entities/product_data_entity.dart';
 import '../../domain/entities/product_details_entity.dart';
 import '../../domain/entities/recently_viewed_entity.dart';
@@ -51,6 +54,7 @@ import '../../domain/usecase/add_offer_to_cart_usecase.dart';
 import '../../domain/usecase/add_to_cart_usecase.dart';
 import '../../domain/usecase/areas_usecase.dart';
 import '../../domain/usecase/best_selling_products_usecase.dart';
+import '../../domain/usecase/cancel_order_usecase.dart';
 import '../../domain/usecase/categories_usecase.dart';
 import '../../domain/usecase/cities_usecase.dart';
 import '../../domain/usecase/delete_account_usecase.dart';
@@ -59,11 +63,13 @@ import '../../domain/usecase/discover_new_stores_usecase.dart';
 import '../../domain/usecase/favourite_products_usecase.dart';
 import '../../domain/usecase/favourite_stores_usecase.dart';
 import '../../domain/usecase/get_location_usecase.dart';
+import '../../domain/usecase/get_payment_order_usecase.dart';
 import '../../domain/usecase/hot_deals_usecase.dart';
 import '../../domain/usecase/landing_usecase.dart';
 import '../../domain/usecase/location_usecase.dart';
 import '../../domain/usecase/main_search_product_usecase.dart';
 import '../../domain/usecase/main_search_shop_usecase.dart';
+import '../../domain/usecase/order_details_usecase.dart';
 import '../../domain/usecase/orders_usecase.dart';
 import '../../domain/usecase/product_data_usecase.dart';
 import '../../domain/usecase/product_details_usecase.dart';
@@ -125,6 +131,9 @@ class HomeCubit extends Cubit<HomeState> {
    final RecentlyViewedUseCase _recentlyViewedUseCase;
    final OffersUseCase _offersUseCase;
    final OrdersUseCase _ordersUseCase;
+   final CancelOrderUseCase _cancelOrderUseCase;
+   final OrderDetailsUseCase _orderDetailsUseCase;
+   final PaymentOrderDataUseCase _paymentOrderDataUseCase;
 
   HomeCubit(
       {
@@ -164,6 +173,9 @@ class HomeCubit extends Cubit<HomeState> {
     required RecentlyViewedUseCase recentlyViewedUseCase,
     required OffersUseCase offersUseCase,
     required OrdersUseCase ordersUseCase,
+    required CancelOrderUseCase cancelOrderUseCase,
+    required PaymentOrderDataUseCase paymentOrderDataUseCase,
+    required OrderDetailsUseCase orderDetailsUseCase,
   }
   ) :
        _mainSearchProductUseCase = mainSearchProductUseCase,
@@ -202,6 +214,9 @@ class HomeCubit extends Cubit<HomeState> {
        _recentlyViewedUseCase = recentlyViewedUseCase,
        _offersUseCase = offersUseCase,
        _ordersUseCase = ordersUseCase,
+       _cancelOrderUseCase = cancelOrderUseCase,
+       _paymentOrderDataUseCase = paymentOrderDataUseCase,
+       _orderDetailsUseCase = orderDetailsUseCase,
 
 
       super(Empty());
@@ -224,6 +239,13 @@ class HomeCubit extends Cubit<HomeState> {
     const OrdersScreen(),
     const SettingsScreen(),
   ];
+
+   List<Widget> customerWithoutLogin = [
+     const HomeScreen(),
+     const AllOffersScreen(),
+     const CategoriesScreen(),
+     const SettingsScreen(),
+   ];
 
   TextEditingController mainSearchController = TextEditingController();
 
@@ -1528,12 +1550,106 @@ class HomeCubit extends Cubit<HomeState> {
        ));
      }, (data) {
        ordersEntity = data;
+       filteredStatus['orders'] = isArabic? 'كل الطلبات':'All Orders';
+       filteredStatus['pending'] = isArabic? 'قيد الانتظار':'Pending';
+       filteredStatus['preparing'] = isArabic? 'قيد التجهيز':'Preparing';
+       filteredStatus['packing'] = isArabic? 'قيد التعبئة':'Packing';
+       filteredStatus['delivered'] = isArabic? 'تم التوصيل':'Delivered';
+       filteredStatus['cancelled'] = isArabic? 'تم الإلغاء':'Cancelled';
        emit(OrdersSuccessState(
            ordersEntity: data
        )
        );
      });
    }
+
+   String? selectedStatusValue;
+   String? selectedStatusKey;
+
+   void changeStatue({
+     required String statusValue,
+     required String statusKey,
+   }){
+     emit(InitState());
+     selectedStatusValue = statusValue;
+     selectedStatusKey = statusKey;
+     emit(ChangeState());
+   }
+   Map<String,dynamic> filteredStatus = {};
+
+
+   void cancelOrder({
+     required String? orderNumber,
+   }) async {
+     emit(CancelOrderLoadingState());
+
+     final result = await _cancelOrderUseCase(
+         CancelOrderParams(
+           orderNumber: orderNumber!,
+         )
+     );
+
+     result.fold((failure) {
+       emit(CancelOrderErrorState(
+           failure: mapFailureToMessage(failure)
+       ));
+     }, (data) {
+       emit(CancelOrderSuccessState(
+           cancelOrderEntity: data
+       )
+       );
+     });
+   }
+
+
+   PaymentOrderDataEntity? paymentOrderDataEntity;
+   void paymentOrderData({
+     required String? poNumber,
+   }) async {
+     emit(PaymentOrderDataLoadingState());
+     final result = await _paymentOrderDataUseCase(
+         PaymentOrderDataParams(
+           poNumber: poNumber!,
+         )
+     );
+     result.fold((failure) {
+       emit(PaymentOrderDataErrorState(
+           failure: mapFailureToMessage(failure)
+       ));
+     }, (data) {
+       paymentOrderDataEntity = data;
+       emit(PaymentOrderDataSuccessState(
+           paymentOrderDataEntity: data
+       )
+       );
+     });
+   }
+
+   OrderDetailsEntity? orderDetailsEntity;
+   void orderDetails({
+     required String? orderNumber,
+   }) async {
+     emit(OrderDetailsLoadingState());
+
+     final result = await _orderDetailsUseCase(
+         OrderDetailsParams(
+           orderNumber: orderNumber!,
+         )
+     );
+
+     result.fold((failure) {
+       emit(OrderDetailsErrorState(
+           failure: mapFailureToMessage(failure)
+       ));
+     }, (data) {
+       orderDetailsEntity = data;
+       emit(OrderDetailsSuccessState(
+           orderDetailsEntity: data
+       )
+       );
+     });
+   }
+
 
 
 }

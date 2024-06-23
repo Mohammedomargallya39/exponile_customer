@@ -11,6 +11,7 @@ import '../entities/app_info_entity.dart';
 import '../entities/areas_entity.dart';
 import '../entities/best_sellers_store_entity.dart';
 import '../entities/best_selling_products_entity.dart';
+import '../entities/cancel_order_entity.dart';
 import '../entities/cities_entity.dart';
 import '../entities/delete_account_entity.dart';
 import '../entities/delete_address_entity.dart';
@@ -26,7 +27,9 @@ import '../entities/main_search_shop_entity.dart';
 import '../entities/most_deals_entity.dart';
 import '../entities/new_arrivals_entity.dart';
 import '../entities/offers_entity.dart';
+import '../entities/order_details_entity.dart';
 import '../entities/orders_entity.dart';
+import '../entities/payment_order_data_entity.dart';
 import '../entities/product_data_entity.dart';
 import '../entities/product_details_entity.dart';
 import '../entities/recently_viewed_entity.dart';
@@ -183,5 +186,13 @@ abstract class HomeBaseRepository {
   Future<Either<Failure, OrdersEntity>> orders({
     required int? pageNumber,
     required String? status
+  });
+  Future<Either<Failure, CancelOrderEntity>> cancelOrder({
+    required String? orderNumber
+  });  Future<Either<Failure, OrderDetailsEntity>> orderDetails({
+    required String? orderNumber
+  });
+  Future<Either<Failure, PaymentOrderDataEntity>> paymentOrderData({
+    required String? poNumber
   });
 }

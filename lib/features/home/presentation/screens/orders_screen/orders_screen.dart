@@ -5,7 +5,8 @@ import 'package:exponile_customer/features/home/presentation/controller/state.da
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/util/cubit/cubit.dart';
-import '../categories/product_categories.dart';
+import '../../../../../core/util/resources/constants_manager.dart';
+import '../../../../../core/util/widgets/filter_orders_dialog.dart';
 import 'order_list.dart';
 
 class OrdersScreen extends StatefulWidget {
@@ -21,6 +22,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   void initState() {
     HomeCubit homeCubit = HomeCubit.get(context);
     homeCubit.pageNumber =1;
+    homeCubit.filteredStatus['orders'] = isArabic? 'كل الطلبات':'All Orders';
     homeCubit.orders(
      status: null
     );
@@ -39,7 +41,12 @@ class _OrdersScreenState extends State<OrdersScreen> {
             floatingActionButton: IconButton(
                 icon: const Icon(Icons.filter_list,color: ColorsManager.mainColor,),
                 onPressed: (){
-
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return const FilterOrdersDialog();
+                    },
+                  );
                 },
             ),
             body: homeCubit.ordersEntity != null ?const OrderList(): const AllProductsLoading(),

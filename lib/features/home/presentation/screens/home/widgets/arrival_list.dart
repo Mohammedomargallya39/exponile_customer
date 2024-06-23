@@ -58,13 +58,7 @@ class NewArrivalsList extends StatelessWidget {
             }
           },
           builder: (context, state) {
-            return homeCubit.newArrivalsEntity ==  null || homeCubit.newArrivalsEntity!.data.products!.data!.isEmpty ?
-            CardLoading(
-              height: 20.h,
-              borderRadius: BorderRadius.all(Radius.circular(15.rSp)),
-              width: 100.w,
-              margin: EdgeInsets.only(bottom: 10.rSp),
-            ) :
+            return homeCubit.newArrivalsEntity !=  null && homeCubit.newArrivalsEntity!.data.products!.data!.isNotEmpty ?
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -139,6 +133,14 @@ class NewArrivalsList extends StatelessWidget {
                   )
                 ],
               ),
+            ) :
+            homeCubit.newArrivalsEntity !=  null && homeCubit.newArrivalsEntity!.data.products!.data!.isEmpty?
+            Container():
+            CardLoading(
+              height: 20.h,
+              borderRadius: BorderRadius.all(Radius.circular(15.rSp)),
+              width: 100.w,
+              margin: EdgeInsets.only(bottom: 10.rSp),
             );
           },
         )

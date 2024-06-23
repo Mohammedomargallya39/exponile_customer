@@ -40,4 +40,7 @@ const String topCategoriesUrl = 'get-top-categories-shop';
 const String recentlyViewedURL = 'recently-viewed';
 const String offersURL = 'website/offers';
 const String ordersURL = 'website/orders';
+const String cancelOrderURL = 'website/orders/cancel';
+const String orderDetailsURL = 'website/orders/edit';
+const String paymentOrderDataURL = 'website/cart/pay/';
 
