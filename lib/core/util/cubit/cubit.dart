@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -351,24 +350,24 @@ class AppBloc extends Cubit<AppState> {
   }
 
 
-  bool isAppConnected = true;
-  void connectivityListener() async {
-    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      if (result == ConnectivityResult.mobile ||
-          result == ConnectivityResult.wifi) {
-        isAppConnected = true;
-      } else {
-        isAppConnected = false;
-      }
-      debugPrint('isAppConnected: $isAppConnected');
-      emit(ConnectivityChanged());
-    }).onError(
-          (error) {
-        log(error.toString());
-        emit(ConnectivityChangedError());
-      },
-    );
-  }
+  // bool isAppConnected = true;
+  // void connectivityListener() async {
+  //   Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+  //     if (result == ConnectivityResult.mobile ||
+  //         result == ConnectivityResult.wifi) {
+  //       isAppConnected = true;
+  //     } else {
+  //       isAppConnected = false;
+  //     }
+  //     debugPrint('isAppConnected: $isAppConnected');
+  //     emit(ConnectivityChanged());
+  //   }).onError(
+  //         (error) {
+  //       log(error.toString());
+  //       emit(ConnectivityChangedError());
+  //     },
+  //   );
+  // }
 
   IconData visibilityShowPassword = Icons.visibility_outlined;
   bool showPassword = true;

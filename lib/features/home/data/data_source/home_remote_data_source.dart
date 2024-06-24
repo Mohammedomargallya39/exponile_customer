@@ -7,6 +7,7 @@ import '../models/about_exponile_model.dart';
 import '../models/account_data_model.dart';
 import '../models/add_location_model.dart';
 import '../models/add_offer_to_cart_model.dart';
+import '../models/add_rate_model.dart';
 import '../models/add_to_cart_model.dart';
 import '../models/app_info_model.dart';
 import '../models/areasModel.dart';
@@ -184,6 +185,13 @@ abstract class HomeBaseRemoteDataSource {
   });
   Future<PaymentOrderDataModel> paymentOrderData({
     required String? poNumber,
+  });
+  Future<AddRateModel> addRate({
+    required int id,
+    required String type,
+    required double rating,
+    required String review,
+    required int orderID
   });
 }
 
@@ -940,6 +948,33 @@ class HomeRemoteDataSourceImpl
     );
     return PaymentOrderDataModel.fromJson(f.data);
   }
+
+
+
+  @override
+  Future<AddRateModel> addRate({
+    required int id,
+    required String type,
+    required double rating,
+    required String review,
+    required int orderID
+  }) async {
+
+    final Response f = await dioHelper.post(
+        url: addRateURL,
+        data: {
+          'lang': isRTL == true ? 'ar' : 'en',
+          "rateable_id": id,
+          "rateable_type": type,
+          "rating": rating,
+          "review": review,
+          "order_id": orderID,
+        },
+        token: token
+    );
+    return AddRateModel.fromJson(f.data);
+  }
+
 
 
 

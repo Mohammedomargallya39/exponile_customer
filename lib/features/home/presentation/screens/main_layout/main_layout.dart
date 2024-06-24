@@ -235,6 +235,7 @@ class _MainLayoutState extends State<MainLayout> {
                         Stack(
                           children: [
                             Icon(Icons.production_quantity_limits_outlined,color: homeCubit.currentNavIndex == 3? ColorsManager.whiteColor:ColorsManager.black),
+                            if(homeCubit.landingEntity != null)
                             Positioned(
                               right: 0,
                                 child: Container(
@@ -244,10 +245,10 @@ class _MainLayoutState extends State<MainLayout> {
                                   ),
                                   padding: EdgeInsets.symmetric(horizontal: 3.rSp,vertical: 1.rSp),
                                   child:  DefaultText(
-                                      title: '0',
+                                      title: homeCubit.cartNum != '0' ?homeCubit.cartNum:homeCubit.landingEntity!.data.count.toString(),
                                       style: Style.small,
                                       fontSize: 7.rSp,
-                                      color: ColorsManager.whiteColor,
+                                      color: ColorsManager.black,
                                   ),
                                 )
                             )

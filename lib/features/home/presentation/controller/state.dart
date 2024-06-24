@@ -5,6 +5,7 @@ import '../../domain/entities/account_data_entity.dart';
 import '../../domain/entities/add_address_entity.dart';
 import '../../domain/entities/add_favourite_entity.dart';
 import '../../domain/entities/add_offer_to_cart_entity.dart';
+import '../../domain/entities/add_rate_entity.dart';
 import '../../domain/entities/add_to_cart_entity.dart';
 import '../../domain/entities/areas_entity.dart';
 import '../../domain/entities/best_sellers_store_entity.dart';
@@ -1034,4 +1035,76 @@ class OrderDetailsErrorState extends HomeState {
   OrderDetailsErrorState({required this.failure});
   @override
   List<Object?> get props => [failure];
+}
+
+
+class AddRateLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class AddRateSuccessState extends HomeState {
+  final AddRateEntity addRateEntity;
+
+
+  AddRateSuccessState({required this.addRateEntity});
+
+  @override
+  List<Object?> get props => [addRateEntity];
+}
+
+class AddRateErrorState extends HomeState {
+  final String failure;
+
+  AddRateErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+class SocketConnectedState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+
+class SocketErrorState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+
+class SocketDisconnectedState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+
+class SocketAddState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+
+class SocketUpdateState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+
+class SocketDeleteState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+
+class SocketChooseAddressState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+
+class SocketChoosePaymentState extends HomeState {
+  @override
+  List<Object?> get props => [];
 }

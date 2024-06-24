@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:exponile_customer/core/usecase/use_case.dart';
 import 'package:exponile_customer/core/util/resources/assets.gen.dart';
 import 'package:exponile_customer/features/home/domain/entities/about_exponile_entity.dart';
@@ -22,7 +24,6 @@ import '../../domain/entities/account_data_entity.dart';
 import '../../domain/entities/add_address_entity.dart';
 import '../../domain/entities/areas_entity.dart';
 import '../../domain/entities/best_sellers_store_entity.dart';
-import '../../domain/entities/cancel_order_entity.dart';
 import '../../domain/entities/cities_entity.dart';
 import '../../domain/entities/discover_new_store_entity.dart';
 import '../../domain/entities/favourite_products_entity.dart';
@@ -51,6 +52,7 @@ import '../../domain/usecase/account_data_usecase.dart';
 import '../../domain/usecase/add_favourite_usecase.dart';
 import '../../domain/usecase/add_location_details_usecase.dart';
 import '../../domain/usecase/add_offer_to_cart_usecase.dart';
+import '../../domain/usecase/add_rate_usecase.dart';
 import '../../domain/usecase/add_to_cart_usecase.dart';
 import '../../domain/usecase/areas_usecase.dart';
 import '../../domain/usecase/best_selling_products_usecase.dart';
@@ -93,9 +95,31 @@ import '../screens/home/widgets/top_categories_list.dart';
 import '../screens/home/widgets/recently_list.dart';
 import '../screens/orders_screen/orders_screen.dart';
 import '../screens/settings/setting_screen.dart';
-
+import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:laravel_echo/laravel_echo.dart';
 class HomeCubit extends Cubit<HomeState> {
-   final MainSearchProductUseCase _mainSearchProductUseCase;
+
+  late IO.Socket socket;
+  dynamic eventData;
+  bool isAddress = false;
+  int? paymentMethod;
+  int? deliveryMethod;
+  dynamic totalCarts;
+  dynamic totalShipping;
+  dynamic storesPromoAmount;
+  dynamic cartTotalWithShipping;
+  dynamic storesSubtotal;
+  dynamic storesDiscounts;
+  dynamic productsValidation;
+  dynamic offersValidation;
+  String? deliveryMethodValidation;
+  Map<int,String> validationProducts = {};
+  Map<int,String> validationProductsOffers = {};
+  String cartNum = '0';
+
+
+
+  final MainSearchProductUseCase _mainSearchProductUseCase;
    final MainSearchShopUseCase _mainSearchShopUseCase;
    final ProductDetailsUseCase _productDetailsUseCase;
    final ProductDataUseCase _productDataUseCase;
@@ -134,6 +158,7 @@ class HomeCubit extends Cubit<HomeState> {
    final CancelOrderUseCase _cancelOrderUseCase;
    final OrderDetailsUseCase _orderDetailsUseCase;
    final PaymentOrderDataUseCase _paymentOrderDataUseCase;
+   final AddRateUseCase _addRateUseCase;
 
   HomeCubit(
       {
@@ -176,6 +201,7 @@ class HomeCubit extends Cubit<HomeState> {
     required CancelOrderUseCase cancelOrderUseCase,
     required PaymentOrderDataUseCase paymentOrderDataUseCase,
     required OrderDetailsUseCase orderDetailsUseCase,
+    required AddRateUseCase addRateUseCase,
   }
   ) :
        _mainSearchProductUseCase = mainSearchProductUseCase,
@@ -217,9 +243,19 @@ class HomeCubit extends Cubit<HomeState> {
        _cancelOrderUseCase = cancelOrderUseCase,
        _paymentOrderDataUseCase = paymentOrderDataUseCase,
        _orderDetailsUseCase = orderDetailsUseCase,
+       _addRateUseCase = addRateUseCase,
 
 
-      super(Empty());
+      super(Empty()){
+    socket = IO.io(
+      'https://www.exponile.com:6001',
+      IO.OptionBuilder()
+          .disableAutoConnect()
+          .setTransports(['websocket'])
+          .build(),
+    );
+    _connectSocket(socket);
+  }
 
   static HomeCubit get(context) => BlocProvider.of(context);
 
@@ -1630,7 +1666,7 @@ class HomeCubit extends Cubit<HomeState> {
      required String? orderNumber,
    }) async {
      emit(OrderDetailsLoadingState());
-
+     orderDetailsEntity = null;
      final result = await _orderDetailsUseCase(
          OrderDetailsParams(
            orderNumber: orderNumber!,
@@ -1651,5 +1687,137 @@ class HomeCubit extends Cubit<HomeState> {
    }
 
 
+   bool isRateShop = false;
+   double rating = 0.0;
+   void changeRatingType(){
+     emit(InitState());
+     isRateShop = true;
+     emit(ChangeState());
+   }
 
+   void addRate({
+     required int id,
+     required String type,
+     required double rating,
+     required String review,
+     required int orderID
+   }) async {
+     emit(AddRateLoadingState());
+
+     final result = await _addRateUseCase(
+         AddRateParams(
+           id: id,
+           type: type,
+           rating: rating,
+           orderID: orderID,
+           review: review,
+         )
+     );
+
+     result.fold((failure) {
+       emit(AddRateErrorState(
+           failure: mapFailureToMessage(failure)
+       ));
+     }, (data) {
+       emit(AddRateSuccessState(
+           addRateEntity: data
+       )
+       );
+     });
+   }
+
+
+   ///Socket Part
+  void _connectSocket(IO.Socket socket) {
+    emit(InitState());
+    socket.connect();
+    Echo echo = Echo(
+        broadcaster: EchoBroadcasterType.SocketIO,
+        client: socket,
+        options: {
+          'auth': {
+            'headers': {
+              'Authorization': 'Bearer $token',
+            }
+          }
+        });
+
+
+    echo.channel('Cart.$userId').listen('.AddToCart', (e) {
+      eventData = e;
+      if(eventData != null){
+        cartNum = eventData['count'].toString();
+        eventData == null;
+
+      }
+      emit(SocketAddState());
+    });
+
+    echo.channel('Cart.$userId').listen('.UpdateCart', (e) {
+      eventData = e;
+      if(eventData != null){
+        cartNum = eventData['count'].toString();
+        eventData == null;
+      }
+      emit(SocketUpdateState());
+    });
+    echo.channel('Cart.$userId').listen('.DeleteCart', (e) {
+      eventData = e;
+      if(eventData != null){
+        cartNum = eventData['count'].toString();
+        eventData == null;
+
+      }
+      emit(SocketDeleteState());
+    });
+    echo.channel('Cart.$userId').listen('.ChooseAddress', (e) {
+      eventData = e;
+      deliveryMethod = eventData['items']['address_id'] as int;
+      storesDiscounts = eventData['items']['cartShopsDetails']['stores_discounts'] ;
+      storesPromoAmount = eventData['items']['cartShopsDetails']['stores_subtotal'];
+      storesPromoAmount = eventData['items']['cartShopsDetails']['stores_promo_amount'];
+      totalCarts = eventData['items']['cartShopsDetails']['totalCarts'];
+      totalShipping = eventData['items']['cartShopsDetails']['totalShipping'];
+      cartTotalWithShipping = eventData['items']['cartShopsDetails']['cartTotalWithShipping'];
+      productsValidation = eventData['items']['cartShopsDetails']['notAvailableItems']['products'];
+      offersValidation = eventData['items']['cartShopsDetails']['notAvailableItems']['offers'];
+      eventData = null;
+
+      emit(SocketChooseAddressState());
+    });
+    echo.channel('Cart.$userId').listen('.ChoosePaymentMethod', (e) {
+      eventData = e;
+      //paymentMethod = eventData['items']['paymentMethod'];
+      paymentMethod = eventData['items']['paymentMethod'] as int;
+      eventData = null;
+      emit(SocketChoosePaymentState());
+    });
+    log('pewpewpew');
+
+    socket.on('connect', (_) {
+      debugPrint('##### connected');
+      emit(SocketConnectedState());
+    });
+
+    socket.on('error', (_) {
+      debugPrint('#### error');
+      emit(SocketErrorState());
+    });
+
+    socket.on('disconnect', (_) {
+      debugPrint(' disconnected');
+      debugPrint(userId.toString());
+      emit(SocketDisconnectedState());
+    });
+  }
+
+
+
+   @override
+   Future<void> close() {
+     socket.close();
+     socket.disconnect();
+     socket.dispose();
+     return super.close();
+   }
 }

@@ -28,6 +28,7 @@ import '../../features/home/domain/usecase/account_data_usecase.dart';
 import '../../features/home/domain/usecase/add_favourite_usecase.dart';
 import '../../features/home/domain/usecase/add_location_details_usecase.dart';
 import '../../features/home/domain/usecase/add_offer_to_cart_usecase.dart';
+import '../../features/home/domain/usecase/add_rate_usecase.dart';
 import '../../features/home/domain/usecase/add_to_cart_usecase.dart';
 import '../../features/home/domain/usecase/areas_usecase.dart';
 import '../../features/home/domain/usecase/best_selling_products_usecase.dart';
@@ -128,6 +129,7 @@ Future<void> init() async {
           cancelOrderUseCase: sl(),
           paymentOrderDataUseCase: sl(),
           orderDetailsUseCase: sl(),
+          addRateUseCase: sl(),
     ),
   );
 
@@ -201,6 +203,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => CancelOrderUseCase(sl()));
   sl.registerLazySingleton(() => PaymentOrderDataUseCase(sl()));
   sl.registerLazySingleton(() => OrderDetailsUseCase(sl()));
+  sl.registerLazySingleton(() => AddRateUseCase(sl()));
 
   sl.registerLazySingleton<LogInBaseRemoteDataSource>(
         () => LogInRemoteDataSourceImpl(dioHelper: sl()),

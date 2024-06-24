@@ -6,6 +6,7 @@ import '../entities/account_data_entity.dart';
 import '../entities/add_address_entity.dart';
 import '../entities/add_favourite_entity.dart';
 import '../entities/add_offer_to_cart_entity.dart';
+import '../entities/add_rate_entity.dart';
 import '../entities/add_to_cart_entity.dart';
 import '../entities/app_info_entity.dart';
 import '../entities/areas_entity.dart';
@@ -194,5 +195,12 @@ abstract class HomeBaseRepository {
   });
   Future<Either<Failure, PaymentOrderDataEntity>> paymentOrderData({
     required String? poNumber
+  });
+  Future<Either<Failure, AddRateEntity>> addRate({
+    required int id,
+    required String type,
+    required double rating,
+    required String review,
+    required int orderID
   });
 }

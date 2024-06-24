@@ -153,22 +153,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
-  connectivity_plus:
-    dependency: "direct main"
-    description:
-      name: connectivity_plus
-      sha256: b74247fad72c171381dbe700ca17da24deac637ab6d43c343b42867acb95c991
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.6"
-  connectivity_plus_platform_interface:
-    dependency: transitive
-    description:
-      name: connectivity_plus_platform_interface
-      sha256: cf1d1c28f4416f8c654d7dc3cd638ec586076255d407cef3ddbdaf178272a71a
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.2.4"
   convert:
     dependency: transitive
     description:
@@ -241,14 +225,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.10.1"
-  dbus:
-    dependency: transitive
-    description:
-      name: dbus
-      sha256: "365c771ac3b0e58845f39ec6deebc76e3276aa9922b0cc60840712094d9047ac"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.7.10"
   dio:
     dependency: "direct main"
     description:
@@ -281,6 +257,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.5"
+  expansion_tile_card:
+    dependency: "direct main"
+    description:
+      name: expansion_tile_card
+      sha256: "27ce4cb518f00e21d0f2309aaa6462b26b148e93cee2029a73088cecf42b1eb0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
   fake_async:
     dependency: transitive
     description:
@@ -621,6 +605,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.9.0"
+  laravel_echo:
+    dependency: "direct main"
+    description:
+      name: laravel_echo
+      sha256: aec1c8a989f8718ffbb9864e746eed2181638e156d4e22724230a5be9cdf43ab
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0-beta.1"
   latlong2:
     dependency: "direct main"
     description:
@@ -677,6 +669,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.0"
+  logging:
+    dependency: transitive
+    description:
+      name: logging
+      sha256: "623a88c9594aa774443aa3eb2d41807a48486b5613e67599fb4c41c0ad47c340"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0"
   lottie:
     dependency: "direct main"
     description:
@@ -741,14 +741,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
-  nm:
-    dependency: transitive
-    description:
-      name: nm
-      sha256: "2c9aae4127bdc8993206464fcc063611e0e36e72018696cd9631023a31b24254"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.5.0"
   number_pagination:
     dependency: "direct main"
     description:
@@ -1050,6 +1042,22 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  socket_io_client:
+    dependency: "direct main"
+    description:
+      name: socket_io_client
+      sha256: ede469f3e4c55e8528b4e023bdedbc20832e8811ab9b61679d1ba3ed5f01f23b
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.3+1"
+  socket_io_common:
+    dependency: transitive
+    description:
+      name: socket_io_common
+      sha256: "2ab92f8ff3ebbd4b353bf4a98bee45cc157e3255464b2f90f66e09c4472047eb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.3"
   source_span:
     dependency: transitive
     description:

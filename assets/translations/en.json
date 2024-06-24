@@ -239,5 +239,8 @@
   "newArrival": "New Arrival",
   "bestSelling": "Best Selling Products",
   "recentlyViewed": "Recently Viewed",
-  "financialTransactions": "Financial Transactions"
+  "financialTransactions": "Financial Transactions",
+  "rateStore": "Rate Store",
+  "rateProduct": "Rate Product",
+  "next": "Next"
 }

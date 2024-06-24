@@ -88,7 +88,7 @@ class MyApp extends StatelessWidget {
             ..setTranslation(
               translation: translation,
             )
-            ..connectivityListener()
+            // ..connectivityListener()
             ..getAppInfo(),
         ),
         BlocProvider(

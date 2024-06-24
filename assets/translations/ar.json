@@ -239,6 +239,8 @@
   "newArrival": "وصل حديثا",
   "bestSelling": "المنتجات الأكثر مبيعا",
   "recentlyViewed": "شوهدت مؤخرا",
-  "financialTransactions": "المعاملات المالية"
-
+  "financialTransactions": "المعاملات المالية",
+  "rateStore": "قيم المتجر",
+  "rateProduct": "قيم المنتج",
+  "next": "التالي"
 }

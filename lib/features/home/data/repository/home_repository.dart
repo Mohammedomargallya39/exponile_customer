@@ -6,6 +6,7 @@ import '../../domain/entities/account_data_entity.dart';
 import '../../domain/entities/add_address_entity.dart';
 import '../../domain/entities/add_favourite_entity.dart';
 import '../../domain/entities/add_offer_to_cart_entity.dart';
+import '../../domain/entities/add_rate_entity.dart';
 import '../../domain/entities/add_to_cart_entity.dart';
 import '../../domain/entities/app_info_entity.dart';
 import '../../domain/entities/areas_entity.dart';
@@ -84,6 +85,7 @@ typedef CallOrders= Future<OrdersEntity> Function();
 typedef CallCancelOrder= Future<CancelOrderEntity> Function();
 typedef CallOrderDetails= Future<OrderDetailsEntity> Function();
 typedef CallPaymentOrderData= Future<PaymentOrderDataEntity> Function();
+typedef CallAddRate= Future<AddRateEntity> Function();
 
 
 class HomeRepoImplementation extends HomeBaseRepository {
@@ -1268,6 +1270,44 @@ class HomeRepoImplementation extends HomeBaseRepository {
     {
       return remoteDataSource.paymentOrderData(
         poNumber: poNumber,
+      );
+    });
+  }
+
+
+
+
+  Future<Either<Failure, AddRateEntity>> fetchAddRate(
+      CallAddRate mainMethod,
+      ) async {
+    try {
+      final addRate = await mainMethod();
+      return Right(addRate);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, AddRateEntity>> addRate({
+    required int id,
+    required String type,
+    required double rating,
+    required String review,
+    required int orderID
+  }) async {
+    return await fetchAddRate(()
+    {
+      return remoteDataSource.addRate(
+        id: id,
+        type: type,
+        rating: rating,
+        review: review,
+        orderID: orderID,
       );
     });
   }

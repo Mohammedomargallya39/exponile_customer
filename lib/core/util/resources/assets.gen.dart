@@ -58,6 +58,10 @@ class $AssetsImagesLottiGen {
 
   /// File path: assets/images/lotti/loading.json
   String get loading => 'assets/images/lotti/loading.json';
+  /// File path: assets/images/lotti/rate.json
+  String get rate => 'assets/images/lotti/rate.json';
+  /// File path: assets/images/lotti/rateNow.json
+  String get rateNow => 'assets/images/lotti/rate_now.json';
 
   /// List of all assets
   List<String> get values => [loading,];
@@ -70,6 +74,9 @@ class $AssetsImagesPngGen {
   AssetGenImage get google => const AssetGenImage('assets/images/png/google.png');
 
   String get logo => 'assets/images/png/logo.png';
+  String get star => 'assets/images/png/star.png';
+  String get starHalf => 'assets/images/png/star_border.png';
+  String get starBorder => 'assets/images/png/star_half.png';
 
   /// List of all assets
   List<AssetGenImage> get values => [google,];
