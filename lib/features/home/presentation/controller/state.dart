@@ -30,12 +30,14 @@ import '../../domain/entities/offers_entity.dart';
 import '../../domain/entities/order_details_entity.dart';
 import '../../domain/entities/orders_entity.dart';
 import '../../domain/entities/payment_order_data_entity.dart';
+import '../../domain/entities/product_category_details_entity.dart';
 import '../../domain/entities/product_data_entity.dart';
 import '../../domain/entities/product_details_entity.dart';
 import '../../domain/entities/recently_viewed_entity.dart';
 import '../../domain/entities/reset_password_entity.dart';
 import '../../domain/entities/shop_data_entity.dart';
 import '../../domain/entities/shop_location_entity.dart';
+import '../../domain/entities/store_category_details_entity.dart';
 import '../../domain/entities/store_offer_details_entity.dart';
 import '../../domain/entities/store_offers_entity.dart';
 import '../../domain/entities/submit_complain_entity.dart';
@@ -1060,6 +1062,63 @@ class AddRateErrorState extends HomeState {
   @override
   List<Object?> get props => [failure];
 }
+
+
+
+
+class StoreCategoryDetailsLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class StoreCategoryDetailsSuccessState extends HomeState {
+  final StoreCategoryDetailsEntity storeCategoryDetailsEntity;
+
+
+  StoreCategoryDetailsSuccessState({required this.storeCategoryDetailsEntity});
+
+  @override
+  List<Object?> get props => [storeCategoryDetailsEntity];
+}
+
+class StoreCategoryDetailsErrorState extends HomeState {
+  final String failure;
+
+  StoreCategoryDetailsErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+
+
+class ProductCategoryDetailsLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class ProductCategoryDetailsSuccessState extends HomeState {
+  final ProductCategoryDetailsEntity productCategoryDetailsEntity;
+
+
+  ProductCategoryDetailsSuccessState({required this.productCategoryDetailsEntity});
+
+  @override
+  List<Object?> get props => [productCategoryDetailsEntity];
+}
+
+class ProductCategoryDetailsErrorState extends HomeState {
+  final String failure;
+
+  ProductCategoryDetailsErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+
+
+
 
 
 class SocketConnectedState extends HomeState {

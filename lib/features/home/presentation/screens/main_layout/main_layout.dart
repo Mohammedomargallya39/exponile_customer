@@ -245,7 +245,7 @@ class _MainLayoutState extends State<MainLayout> {
                                   ),
                                   padding: EdgeInsets.symmetric(horizontal: 3.rSp,vertical: 1.rSp),
                                   child:  DefaultText(
-                                      title: homeCubit.cartNum != '0' ?homeCubit.cartNum:homeCubit.landingEntity!.data.count.toString(),
+                                      title: homeCubit.eventData == null ? (homeCubit.landingEntity!.data.count ?? 0).toString() : homeCubit.cartNum,
                                       style: Style.small,
                                       fontSize: 7.rSp,
                                       color: ColorsManager.black,

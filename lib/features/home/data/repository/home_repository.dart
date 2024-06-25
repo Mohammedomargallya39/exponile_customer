@@ -32,12 +32,14 @@ import '../../domain/entities/offers_entity.dart';
 import '../../domain/entities/order_details_entity.dart';
 import '../../domain/entities/orders_entity.dart';
 import '../../domain/entities/payment_order_data_entity.dart';
+import '../../domain/entities/product_category_details_entity.dart';
 import '../../domain/entities/product_data_entity.dart';
 import '../../domain/entities/product_details_entity.dart';
 import '../../domain/entities/recently_viewed_entity.dart';
 import '../../domain/entities/reset_password_entity.dart';
 import '../../domain/entities/shop_data_entity.dart';
 import '../../domain/entities/shop_location_entity.dart';
+import '../../domain/entities/store_category_details_entity.dart';
 import '../../domain/entities/store_offer_details_entity.dart';
 import '../../domain/entities/store_offers_entity.dart';
 import '../../domain/entities/submit_complain_entity.dart';
@@ -86,6 +88,8 @@ typedef CallCancelOrder= Future<CancelOrderEntity> Function();
 typedef CallOrderDetails= Future<OrderDetailsEntity> Function();
 typedef CallPaymentOrderData= Future<PaymentOrderDataEntity> Function();
 typedef CallAddRate= Future<AddRateEntity> Function();
+typedef CallStoreCategoryDetails= Future<StoreCategoryDetailsEntity> Function();
+typedef CallProductCategoryDetails= Future<ProductCategoryDetailsEntity> Function();
 
 
 class HomeRepoImplementation extends HomeBaseRepository {
@@ -1308,6 +1312,64 @@ class HomeRepoImplementation extends HomeBaseRepository {
         rating: rating,
         review: review,
         orderID: orderID,
+      );
+    });
+  }
+
+
+
+  Future<Either<Failure, StoreCategoryDetailsEntity>> fetchStoreCategoryDetails(
+      CallStoreCategoryDetails mainMethod,
+      ) async {
+    try {
+      final storeCategoryDetails = await mainMethod();
+      return Right(storeCategoryDetails);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, StoreCategoryDetailsEntity>> storeCategoryDetails({
+    required String slug,
+  }) async {
+    return await fetchStoreCategoryDetails(()
+    {
+      return remoteDataSource.storeCategoryDetails(
+        slug: slug,
+      );
+    });
+  }
+
+
+
+  Future<Either<Failure, ProductCategoryDetailsEntity>> fetchProductCategoryDetails(
+      CallProductCategoryDetails mainMethod,
+      ) async {
+    try {
+      final productCategoryDetails = await mainMethod();
+      return Right(productCategoryDetails);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ProductCategoryDetailsEntity>> productCategoryDetails({
+    required String slug,
+  }) async {
+    return await fetchProductCategoryDetails(()
+    {
+      return remoteDataSource.productCategoryDetails(
+        slug: slug,
       );
     });
   }

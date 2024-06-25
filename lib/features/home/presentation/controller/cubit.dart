@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:exponile_customer/core/usecase/use_case.dart';
 import 'package:exponile_customer/core/util/resources/assets.gen.dart';
 import 'package:exponile_customer/features/home/domain/entities/about_exponile_entity.dart';
@@ -40,11 +38,13 @@ import '../../domain/entities/offers_entity.dart';
 import '../../domain/entities/order_details_entity.dart';
 import '../../domain/entities/orders_entity.dart';
 import '../../domain/entities/payment_order_data_entity.dart';
+import '../../domain/entities/product_category_details_entity.dart';
 import '../../domain/entities/product_data_entity.dart';
 import '../../domain/entities/product_details_entity.dart';
 import '../../domain/entities/recently_viewed_entity.dart';
 import '../../domain/entities/shop_data_entity.dart';
 import '../../domain/entities/shop_location_entity.dart';
+import '../../domain/entities/store_category_details_entity.dart';
 import '../../domain/entities/store_offer_details_entity.dart';
 import '../../domain/entities/store_offers_entity.dart';
 import '../../domain/entities/top_categories_entity.dart';
@@ -73,10 +73,12 @@ import '../../domain/usecase/main_search_product_usecase.dart';
 import '../../domain/usecase/main_search_shop_usecase.dart';
 import '../../domain/usecase/order_details_usecase.dart';
 import '../../domain/usecase/orders_usecase.dart';
+import '../../domain/usecase/product_category_details_usecase.dart';
 import '../../domain/usecase/product_data_usecase.dart';
 import '../../domain/usecase/product_details_usecase.dart';
 import '../../domain/usecase/reset_password_usecase.dart';
 import '../../domain/usecase/shop_data_usecase.dart';
+import '../../domain/usecase/store_category_details_usecase.dart';
 import '../../domain/usecase/store_offer_details_usecase.dart';
 import '../../domain/usecase/store_offers_usecase.dart';
 import '../../domain/usecase/submit_complain_usecase.dart';
@@ -159,6 +161,8 @@ class HomeCubit extends Cubit<HomeState> {
    final OrderDetailsUseCase _orderDetailsUseCase;
    final PaymentOrderDataUseCase _paymentOrderDataUseCase;
    final AddRateUseCase _addRateUseCase;
+   final StoreCategoryDetailsUseCase _storeCategoryDetailsUseCase;
+   final ProductCategoryDetailsUseCase _productCategoryDetailsUseCase;
 
   HomeCubit(
       {
@@ -202,6 +206,8 @@ class HomeCubit extends Cubit<HomeState> {
     required PaymentOrderDataUseCase paymentOrderDataUseCase,
     required OrderDetailsUseCase orderDetailsUseCase,
     required AddRateUseCase addRateUseCase,
+    required StoreCategoryDetailsUseCase storeCategoryDetailsUseCase,
+    required ProductCategoryDetailsUseCase productCategoryDetailsUseCase,
   }
   ) :
        _mainSearchProductUseCase = mainSearchProductUseCase,
@@ -244,6 +250,8 @@ class HomeCubit extends Cubit<HomeState> {
        _paymentOrderDataUseCase = paymentOrderDataUseCase,
        _orderDetailsUseCase = orderDetailsUseCase,
        _addRateUseCase = addRateUseCase,
+       _storeCategoryDetailsUseCase = storeCategoryDetailsUseCase,
+       _productCategoryDetailsUseCase = productCategoryDetailsUseCase,
 
 
       super(Empty()){
@@ -1727,7 +1735,70 @@ class HomeCubit extends Cubit<HomeState> {
    }
 
 
-   ///Socket Part
+
+  StoreCategoryDetailsEntity? storeCategoryDetailsEntity;
+  void storeCategoryDetails({
+    required String slug,
+  }) async {
+    emit(StoreCategoryDetailsLoadingState());
+    storeCategoryDetailsEntity = null;
+    final result = await _storeCategoryDetailsUseCase(
+        StoreCategoryDetailsParams(
+          slug: slug,
+        )
+    );
+
+    result.fold((failure) {
+      emit(StoreCategoryDetailsErrorState(
+          failure: mapFailureToMessage(failure)
+      ));
+    }, (data) {
+      storeCategoryDetailsEntity = data;
+      emit(StoreCategoryDetailsSuccessState(
+          storeCategoryDetailsEntity: data
+      )
+      );
+    });
+  }
+
+
+
+  ProductCategoryDetailsEntity? productCategoryDetailsEntity;
+  void productCategoryDetails({
+    required String slug,
+  }) async {
+    emit(ProductCategoryDetailsLoadingState());
+    productCategoryDetailsEntity = null;
+    final result = await _productCategoryDetailsUseCase(
+        ProductCategoryDetailsParams(
+          slug: slug,
+        )
+    );
+
+    result.fold((failure) {
+      emit(ProductCategoryDetailsErrorState(
+          failure: mapFailureToMessage(failure)
+      ));
+    }, (data) {
+      productCategoryDetailsEntity = data;
+      emit(ProductCategoryDetailsSuccessState(
+          productCategoryDetailsEntity: data
+      )
+      );
+    });
+  }
+
+
+
+
+
+
+
+
+
+
+
+  ///Socket Part
   void _connectSocket(IO.Socket socket) {
     emit(InitState());
     socket.connect();
@@ -1744,16 +1815,17 @@ class HomeCubit extends Cubit<HomeState> {
 
 
     echo.channel('Cart.$userId').listen('.AddToCart', (e) {
+      emit(InitState());
       eventData = e;
       if(eventData != null){
         cartNum = eventData['count'].toString();
         eventData == null;
-
       }
       emit(SocketAddState());
     });
 
     echo.channel('Cart.$userId').listen('.UpdateCart', (e) {
+      emit(InitState());
       eventData = e;
       if(eventData != null){
         cartNum = eventData['count'].toString();
@@ -1762,15 +1834,16 @@ class HomeCubit extends Cubit<HomeState> {
       emit(SocketUpdateState());
     });
     echo.channel('Cart.$userId').listen('.DeleteCart', (e) {
+      emit(InitState());
       eventData = e;
       if(eventData != null){
         cartNum = eventData['count'].toString();
         eventData == null;
-
       }
       emit(SocketDeleteState());
     });
     echo.channel('Cart.$userId').listen('.ChooseAddress', (e) {
+      emit(InitState());
       eventData = e;
       deliveryMethod = eventData['items']['address_id'] as int;
       storesDiscounts = eventData['items']['cartShopsDetails']['stores_discounts'] ;
@@ -1782,29 +1855,30 @@ class HomeCubit extends Cubit<HomeState> {
       productsValidation = eventData['items']['cartShopsDetails']['notAvailableItems']['products'];
       offersValidation = eventData['items']['cartShopsDetails']['notAvailableItems']['offers'];
       eventData = null;
-
       emit(SocketChooseAddressState());
     });
     echo.channel('Cart.$userId').listen('.ChoosePaymentMethod', (e) {
+      emit(InitState());
       eventData = e;
       //paymentMethod = eventData['items']['paymentMethod'];
       paymentMethod = eventData['items']['paymentMethod'] as int;
       eventData = null;
       emit(SocketChoosePaymentState());
     });
-    log('pewpewpew');
-
     socket.on('connect', (_) {
+      emit(InitState());
       debugPrint('##### connected');
       emit(SocketConnectedState());
     });
 
     socket.on('error', (_) {
+      emit(InitState());
       debugPrint('#### error');
       emit(SocketErrorState());
     });
 
     socket.on('disconnect', (_) {
+      emit(InitState());
       debugPrint(' disconnected');
       debugPrint(userId.toString());
       emit(SocketDisconnectedState());

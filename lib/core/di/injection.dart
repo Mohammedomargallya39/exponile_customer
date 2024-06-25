@@ -53,11 +53,13 @@ import '../../features/home/domain/usecase/new_arrivals_usecase.dart';
 import '../../features/home/domain/usecase/offers_usecase.dart';
 import '../../features/home/domain/usecase/order_details_usecase.dart';
 import '../../features/home/domain/usecase/orders_usecase.dart';
+import '../../features/home/domain/usecase/product_category_details_usecase.dart';
 import '../../features/home/domain/usecase/product_data_usecase.dart';
 import '../../features/home/domain/usecase/product_details_usecase.dart';
 import '../../features/home/domain/usecase/recently_viewed_usecase.dart';
 import '../../features/home/domain/usecase/reset_password_usecase.dart';
 import '../../features/home/domain/usecase/shop_data_usecase.dart';
+import '../../features/home/domain/usecase/store_category_details_usecase.dart';
 import '../../features/home/domain/usecase/store_offer_details_usecase.dart';
 import '../../features/home/domain/usecase/store_offers_usecase.dart';
 import '../../features/home/domain/usecase/submit_complain_usecase.dart';
@@ -130,6 +132,8 @@ Future<void> init() async {
           paymentOrderDataUseCase: sl(),
           orderDetailsUseCase: sl(),
           addRateUseCase: sl(),
+          storeCategoryDetailsUseCase: sl(),
+          productCategoryDetailsUseCase: sl(),
     ),
   );
 
@@ -204,6 +208,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => PaymentOrderDataUseCase(sl()));
   sl.registerLazySingleton(() => OrderDetailsUseCase(sl()));
   sl.registerLazySingleton(() => AddRateUseCase(sl()));
+  sl.registerLazySingleton(() => StoreCategoryDetailsUseCase(sl()));
+  sl.registerLazySingleton(() => ProductCategoryDetailsUseCase(sl()));
 
   sl.registerLazySingleton<LogInBaseRemoteDataSource>(
         () => LogInRemoteDataSourceImpl(dioHelper: sl()),

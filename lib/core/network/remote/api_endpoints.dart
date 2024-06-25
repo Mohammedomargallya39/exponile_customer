@@ -44,4 +44,6 @@ const String cancelOrderURL = 'website/orders/cancel';
 const String orderDetailsURL = 'website/orders/edit';
 const String paymentOrderDataURL = 'website/cart/pay/';
 const String addRateURL = 'website/customer-rate';
+const String storeCategoryDetailsURL = 'website/stores';
+const String productsCategoryDetailsURL = 'website/product/category';
 

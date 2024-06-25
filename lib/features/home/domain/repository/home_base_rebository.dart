@@ -31,12 +31,14 @@ import '../entities/offers_entity.dart';
 import '../entities/order_details_entity.dart';
 import '../entities/orders_entity.dart';
 import '../entities/payment_order_data_entity.dart';
+import '../entities/product_category_details_entity.dart';
 import '../entities/product_data_entity.dart';
 import '../entities/product_details_entity.dart';
 import '../entities/recently_viewed_entity.dart';
 import '../entities/reset_password_entity.dart';
 import '../entities/shop_data_entity.dart';
 import '../entities/shop_location_entity.dart';
+import '../entities/store_category_details_entity.dart';
 import '../entities/store_offer_details_entity.dart';
 import '../entities/store_offers_entity.dart';
 import '../entities/submit_complain_entity.dart';
@@ -202,5 +204,11 @@ abstract class HomeBaseRepository {
     required double rating,
     required String review,
     required int orderID
+  });
+  Future<Either<Failure, StoreCategoryDetailsEntity>> storeCategoryDetails({
+    required String slug,
+  });
+  Future<Either<Failure, ProductCategoryDetailsEntity>> productCategoryDetails({
+    required String slug,
   });
 }

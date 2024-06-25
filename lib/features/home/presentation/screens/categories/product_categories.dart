@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:exponile_customer/core/util/resources/extensions_manager.dart';
 import 'package:exponile_customer/features/home/presentation/controller/cubit.dart';
 import 'package:exponile_customer/features/home/presentation/controller/state.dart';
+import 'package:exponile_customer/features/home/presentation/screens/categories/product_category_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -55,50 +56,59 @@ class ProductCategories extends StatelessWidget {
                                   child: FadeInAnimation(
                                     child: Column(
                                       children: [
-                                        Row(
-                                          children: [
-                                            SizedBox(
-                                              height: 8.h,
-                                              width: 16.w,
-                                              child: CachedNetworkImage(
-                                                imageUrl: homeCubit.categoriesEntity!.data.productCats[index].bannerPath,
-                                                imageBuilder: (context, imageProvider) => Container(
-                                                  decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.all(Radius.circular(10.rSp)),
-                                                    image: DecorationImage(
-                                                        image: imageProvider, fit: BoxFit.cover),
-                                                  ),
-                                                ),
-                                                errorWidget: (context, url, error) => Container(
-                                                  height: 10.h,
-                                                  width: 20.w,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.only(
-                                                      bottomLeft:  Radius.circular(!appBloc.isArabic?10.rSp:0),
-                                                      topLeft: Radius.circular(!appBloc.isArabic?10.rSp:0),
-                                                      bottomRight: Radius.circular(appBloc.isArabic?10.rSp:0),
-                                                      topRight: Radius.circular(appBloc.isArabic?10.rSp:0),
+                                        InkWell(
+                                          onTap: () {
+                                            navigateTo(
+                                                context, ProductCategoryDetails(
+                                                productCategorySlug: homeCubit.categoriesEntity!.data.productCats[index].slug
+                                            )
+                                            );
+                                          },
+                                          child: Row(
+                                            children: [
+                                              SizedBox(
+                                                height: 8.h,
+                                                width: 16.w,
+                                                child: CachedNetworkImage(
+                                                  imageUrl: homeCubit.categoriesEntity!.data.productCats[index].bannerPath,
+                                                  imageBuilder: (context, imageProvider) => Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.all(Radius.circular(10.rSp)),
+                                                      image: DecorationImage(
+                                                          image: imageProvider, fit: BoxFit.cover),
                                                     ),
                                                   ),
-                                                  child: svgImage(path: Assets.images.svg.noImage),
+                                                  errorWidget: (context, url, error) => Container(
+                                                    height: 10.h,
+                                                    width: 20.w,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.only(
+                                                        bottomLeft:  Radius.circular(!appBloc.isArabic?10.rSp:0),
+                                                        topLeft: Radius.circular(!appBloc.isArabic?10.rSp:0),
+                                                        bottomRight: Radius.circular(appBloc.isArabic?10.rSp:0),
+                                                        topRight: Radius.circular(appBloc.isArabic?10.rSp:0),
+                                                      ),
+                                                    ),
+                                                    child: svgImage(path: Assets.images.svg.noImage),
+                                                  ),
+                                                  placeholder: (context, url) => Container(
+                                                    color: Colors.black.withOpacity(0.5),
+                                                  ),
+                                                  fit: BoxFit.cover,
                                                 ),
-                                                placeholder: (context, url) => Container(
-                                                  color: Colors.black.withOpacity(0.5),
+                                              ),
+                                              horizontalSpace(2.w),
+                                              Expanded(
+                                                child: DefaultText(
+                                                  title: homeCubit.categoriesEntity!.data.productCats[index].name,
+                                                  style: Style.headLarge,
+                                                  fontSize: 12.rSp,
+                                                  fontWeight: FontWeight.w700,
+                                                  maxLines: 1,
                                                 ),
-                                                fit: BoxFit.cover,
                                               ),
-                                            ),
-                                            horizontalSpace(2.w),
-                                            Expanded(
-                                              child: DefaultText(
-                                                title: homeCubit.categoriesEntity!.data.productCats[index].name,
-                                                style: Style.headLarge,
-                                                fontSize: 12.rSp,
-                                                fontWeight: FontWeight.w700,
-                                                maxLines: 1,
-                                              ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                         verticalSpace(1.h),
                                         Divider(

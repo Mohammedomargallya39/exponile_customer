@@ -33,12 +33,14 @@ import '../models/offers_model.dart';
 import '../models/order_details_model.dart';
 import '../models/orders_model.dart';
 import '../models/payment_order_data_model.dart';
+import '../models/product_category_data_model.dart';
 import '../models/product_data_model.dart';
 import '../models/product_details_model.dart';
 import '../models/recently_viewed_model.dart';
 import '../models/reset_password_model.dart';
 import '../models/shop_data_model.dart';
 import '../models/shop_location_model.dart';
+import '../models/store_category_data_model.dart';
 import '../models/store_offer_details_model.dart';
 import '../models/store_offers_model.dart';
 import '../models/submit_complain_model.dart';
@@ -192,6 +194,12 @@ abstract class HomeBaseRemoteDataSource {
     required double rating,
     required String review,
     required int orderID
+  });
+  Future<StoreCategoryDetailsModel> storeCategoryDetails({
+    required String slug,
+  });
+  Future<ProductCategoryDetailsModel> productCategoryDetails({
+    required String slug,
   });
 }
 
@@ -973,6 +981,41 @@ class HomeRemoteDataSourceImpl
         token: token
     );
     return AddRateModel.fromJson(f.data);
+  }
+
+
+  @override
+  Future<StoreCategoryDetailsModel> storeCategoryDetails({
+    required String slug,
+  }) async {
+
+    final Response f = await dioHelper.get(
+        url: storeCategoryDetailsURL,
+        query: {
+          'lang': isRTL == true ? 'ar' : 'en',
+          'category': slug,
+        },
+        token: token
+    );
+    return StoreCategoryDetailsModel.fromJson(f.data);
+  }
+
+
+
+  @override
+  Future<ProductCategoryDetailsModel> productCategoryDetails({
+    required String slug,
+  }) async {
+
+    final Response f = await dioHelper.get(
+        url: productsCategoryDetailsURL,
+        query: {
+          'lang': isRTL == true ? 'ar' : 'en',
+          'slug': slug,
+        },
+        token: token
+    );
+    return ProductCategoryDetailsModel.fromJson(f.data);
   }
 
 
