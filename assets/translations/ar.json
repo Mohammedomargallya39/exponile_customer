@@ -242,5 +242,9 @@
   "financialTransactions": "المعاملات المالية",
   "rateStore": "قيم المتجر",
   "rateProduct": "قيم المنتج",
-  "next": "التالي"
+  "next": "التالي",
+  "cart": "عربة التسوق",
+  "free": "مجانا",
+  "checkout": "الدفع"
+
 }

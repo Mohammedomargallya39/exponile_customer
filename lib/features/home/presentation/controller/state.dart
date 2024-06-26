@@ -11,6 +11,7 @@ import '../../domain/entities/areas_entity.dart';
 import '../../domain/entities/best_sellers_store_entity.dart';
 import '../../domain/entities/best_selling_products_entity.dart';
 import '../../domain/entities/cancel_order_entity.dart';
+import '../../domain/entities/cart_entity.dart';
 import '../../domain/entities/categories_entity.dart';
 import '../../domain/entities/cities_entity.dart';
 import '../../domain/entities/delete_account_entity.dart';
@@ -41,6 +42,7 @@ import '../../domain/entities/store_category_details_entity.dart';
 import '../../domain/entities/store_offer_details_entity.dart';
 import '../../domain/entities/store_offers_entity.dart';
 import '../../domain/entities/submit_complain_entity.dart';
+import '../../domain/entities/update_cart_product_entity.dart';
 
 abstract class HomeState extends Equatable{}
 
@@ -1116,7 +1118,53 @@ class ProductCategoryDetailsErrorState extends HomeState {
 }
 
 
+class CartLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
 
+class CartSuccessState extends HomeState {
+  final CartEntity cartEntity;
+
+
+  CartSuccessState({required this.cartEntity});
+
+  @override
+  List<Object?> get props => [cartEntity];
+}
+
+class CartErrorState extends HomeState {
+  final String failure;
+
+  CartErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+
+class UpdateCartProductLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class UpdateCartProductSuccessState extends HomeState {
+  final UpdateCartProductEntity updateCartProductEntity;
+
+
+  UpdateCartProductSuccessState({required this.updateCartProductEntity});
+
+  @override
+  List<Object?> get props => [updateCartProductEntity];
+}
+
+class UpdateCartProductErrorState extends HomeState {
+  final String failure;
+
+  UpdateCartProductErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
 
 
 

@@ -33,6 +33,7 @@ import '../../features/home/domain/usecase/add_to_cart_usecase.dart';
 import '../../features/home/domain/usecase/areas_usecase.dart';
 import '../../features/home/domain/usecase/best_selling_products_usecase.dart';
 import '../../features/home/domain/usecase/cancel_order_usecase.dart';
+import '../../features/home/domain/usecase/cart_usecase.dart';
 import '../../features/home/domain/usecase/categories_usecase.dart';
 import '../../features/home/domain/usecase/cities_usecase.dart';
 import '../../features/home/domain/usecase/delete_account_usecase.dart';
@@ -64,6 +65,7 @@ import '../../features/home/domain/usecase/store_offer_details_usecase.dart';
 import '../../features/home/domain/usecase/store_offers_usecase.dart';
 import '../../features/home/domain/usecase/submit_complain_usecase.dart';
 import '../../features/home/domain/usecase/top_categories_usecase.dart';
+import '../../features/home/domain/usecase/update_product_cart_usecase.dart';
 import '/core/network/local/cache_helper.dart';
 import '/core/network/remote/dio_helper.dart';
 import '/core/network/repository.dart';
@@ -134,6 +136,8 @@ Future<void> init() async {
           addRateUseCase: sl(),
           storeCategoryDetailsUseCase: sl(),
           productCategoryDetailsUseCase: sl(),
+          cartUseCase: sl(),
+          updateCartProductUseCase: sl(),
     ),
   );
 
@@ -210,6 +214,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => AddRateUseCase(sl()));
   sl.registerLazySingleton(() => StoreCategoryDetailsUseCase(sl()));
   sl.registerLazySingleton(() => ProductCategoryDetailsUseCase(sl()));
+  sl.registerLazySingleton(() => CartUseCase(sl()));
+  sl.registerLazySingleton(() => UpdateCartProductUseCase(sl()));
 
   sl.registerLazySingleton<LogInBaseRemoteDataSource>(
         () => LogInRemoteDataSourceImpl(dioHelper: sl()),

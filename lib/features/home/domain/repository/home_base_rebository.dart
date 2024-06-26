@@ -13,6 +13,7 @@ import '../entities/areas_entity.dart';
 import '../entities/best_sellers_store_entity.dart';
 import '../entities/best_selling_products_entity.dart';
 import '../entities/cancel_order_entity.dart';
+import '../entities/cart_entity.dart';
 import '../entities/cities_entity.dart';
 import '../entities/delete_account_entity.dart';
 import '../entities/delete_address_entity.dart';
@@ -43,6 +44,7 @@ import '../entities/store_offer_details_entity.dart';
 import '../entities/store_offers_entity.dart';
 import '../entities/submit_complain_entity.dart';
 import '../entities/top_categories_entity.dart';
+import '../entities/update_cart_product_entity.dart';
 
 abstract class HomeBaseRepository {
   Future<Either<Failure, AppInfoEntity>> appInfo();
@@ -210,5 +212,14 @@ abstract class HomeBaseRepository {
   });
   Future<Either<Failure, ProductCategoryDetailsEntity>> productCategoryDetails({
     required String slug,
+  });
+  Future<Either<Failure, CartEntity>> cart();
+  Future<Either<Failure, UpdateCartProductEntity>> updateCartProduct({
+    required int? shop,
+    required int? item,
+    required int? f1,
+    required int? f2,
+    required int? qty,
+    required String? action,
   });
 }

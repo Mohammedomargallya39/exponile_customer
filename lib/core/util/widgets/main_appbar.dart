@@ -11,11 +11,19 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const MainAppBar({super.key,required this.title, required this.isBack, required this.isLang,this.widget});
+  const MainAppBar({
+    super.key,
+    required this.title,
+    required this.isBack,
+    required this.isLang,
+    this.widget,
+    this.isBackPress
+  });
   final String? title;
   final Widget? widget;
   final bool? isBack;
   final bool? isLang;
+  final VoidCallback? isBackPress;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AppBloc,AppState>(
@@ -66,7 +74,8 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
               padding: EdgeInsets.symmetric(horizontal: 2.w),
               child: isBack == true ? DefaultIconButton(
                 icon: Icon(Icons.arrow_back_ios,color: ColorsManager.white.withOpacity(0.9),),
-                onPressed: ()
+                onPressed:
+                    isBackPress ?? ()
                 {
                   Navigator.pop(context);
                 },

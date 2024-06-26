@@ -243,6 +243,9 @@ class TranslationModel {
   late String rateStore;
   late String rateProduct;
   late String next;
+  late String cart;
+  late String free;
+  late String checkout;
 
 
 
@@ -490,5 +493,8 @@ class TranslationModel {
     rateStore= json['rateStore'];
     rateProduct= json['rateProduct'];
     next= json['next'];
+    cart= json['cart'];
+    free= json['free'];
+    checkout= json['checkout'];
   }
 }

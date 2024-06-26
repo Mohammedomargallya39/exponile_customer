@@ -13,6 +13,7 @@ import '../../domain/entities/areas_entity.dart';
 import '../../domain/entities/best_sellers_store_entity.dart';
 import '../../domain/entities/best_selling_products_entity.dart';
 import '../../domain/entities/cancel_order_entity.dart';
+import '../../domain/entities/cart_entity.dart';
 import '../../domain/entities/categories_entity.dart';
 import '../../domain/entities/cities_entity.dart';
 import '../../domain/entities/delete_account_entity.dart';
@@ -44,6 +45,7 @@ import '../../domain/entities/store_offer_details_entity.dart';
 import '../../domain/entities/store_offers_entity.dart';
 import '../../domain/entities/submit_complain_entity.dart';
 import '../../domain/entities/top_categories_entity.dart';
+import '../../domain/entities/update_cart_product_entity.dart';
 import '../../domain/repository/home_base_rebository.dart';
 import '../data_source/home_remote_data_source.dart';
 
@@ -90,6 +92,8 @@ typedef CallPaymentOrderData= Future<PaymentOrderDataEntity> Function();
 typedef CallAddRate= Future<AddRateEntity> Function();
 typedef CallStoreCategoryDetails= Future<StoreCategoryDetailsEntity> Function();
 typedef CallProductCategoryDetails= Future<ProductCategoryDetailsEntity> Function();
+typedef CallCart= Future<CartEntity> Function();
+typedef CallUpdateCartProduct= Future<UpdateCartProductEntity> Function();
 
 
 class HomeRepoImplementation extends HomeBaseRepository {
@@ -1375,6 +1379,68 @@ class HomeRepoImplementation extends HomeBaseRepository {
   }
 
 
+  Future<Either<Failure, CartEntity>> fetchCart(
+      CallCart mainMethod,
+      ) async {
+    try {
+      final cart = await mainMethod();
+      return Right(cart);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, CartEntity>> cart() async {
+    return await fetchCart(()
+    {
+      return remoteDataSource.cart();
+    });
+  }
+
+
+
+
+  Future<Either<Failure, UpdateCartProductEntity>> fetchUpdateCartProduct(
+      CallUpdateCartProduct mainMethod,
+      ) async {
+    try {
+      final updateCartProduct = await mainMethod();
+      return Right(updateCartProduct);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, UpdateCartProductEntity>> updateCartProduct({
+    required int? shop,
+    required int? item,
+    required int? f1,
+    required int? f2,
+    required int? qty,
+    required String? action,
+}) async {
+    return await fetchUpdateCartProduct(()
+    {
+      return remoteDataSource.updateCartProduct(
+        shop:shop,
+        item:item,
+        f1:f1,
+        f2:f2,
+        action:action,
+        qty:qty,
+      );
+    });
+  }
 
 
 

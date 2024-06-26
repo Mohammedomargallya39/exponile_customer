@@ -242,5 +242,8 @@
   "financialTransactions": "Financial Transactions",
   "rateStore": "Rate Store",
   "rateProduct": "Rate Product",
-  "next": "Next"
+  "next": "Next",
+  "cart": "Cart",
+  "free": "Free",
+  "checkout": "Checkout"
 }

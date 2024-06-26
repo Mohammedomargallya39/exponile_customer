@@ -22,6 +22,7 @@ import '../../domain/entities/account_data_entity.dart';
 import '../../domain/entities/add_address_entity.dart';
 import '../../domain/entities/areas_entity.dart';
 import '../../domain/entities/best_sellers_store_entity.dart';
+import '../../domain/entities/cart_entity.dart';
 import '../../domain/entities/cities_entity.dart';
 import '../../domain/entities/discover_new_store_entity.dart';
 import '../../domain/entities/favourite_products_entity.dart';
@@ -48,6 +49,7 @@ import '../../domain/entities/store_category_details_entity.dart';
 import '../../domain/entities/store_offer_details_entity.dart';
 import '../../domain/entities/store_offers_entity.dart';
 import '../../domain/entities/top_categories_entity.dart';
+import '../../domain/entities/update_cart_product_entity.dart';
 import '../../domain/usecase/account_data_usecase.dart';
 import '../../domain/usecase/add_favourite_usecase.dart';
 import '../../domain/usecase/add_location_details_usecase.dart';
@@ -57,6 +59,7 @@ import '../../domain/usecase/add_to_cart_usecase.dart';
 import '../../domain/usecase/areas_usecase.dart';
 import '../../domain/usecase/best_selling_products_usecase.dart';
 import '../../domain/usecase/cancel_order_usecase.dart';
+import '../../domain/usecase/cart_usecase.dart';
 import '../../domain/usecase/categories_usecase.dart';
 import '../../domain/usecase/cities_usecase.dart';
 import '../../domain/usecase/delete_account_usecase.dart';
@@ -83,6 +86,8 @@ import '../../domain/usecase/store_offer_details_usecase.dart';
 import '../../domain/usecase/store_offers_usecase.dart';
 import '../../domain/usecase/submit_complain_usecase.dart';
 import '../../domain/usecase/top_categories_usecase.dart';
+import '../../domain/usecase/update_product_cart_usecase.dart';
+import '../screens/cart/cart_screen.dart';
 import '../screens/home/home_screen.dart';
 import '../screens/home/widgets/arrival_list.dart';
 import '../screens/home/widgets/banars.dart';
@@ -99,28 +104,10 @@ import '../screens/orders_screen/orders_screen.dart';
 import '../screens/settings/setting_screen.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:laravel_echo/laravel_echo.dart';
+
+
+
 class HomeCubit extends Cubit<HomeState> {
-
-  late IO.Socket socket;
-  dynamic eventData;
-  bool isAddress = false;
-  int? paymentMethod;
-  int? deliveryMethod;
-  dynamic totalCarts;
-  dynamic totalShipping;
-  dynamic storesPromoAmount;
-  dynamic cartTotalWithShipping;
-  dynamic storesSubtotal;
-  dynamic storesDiscounts;
-  dynamic productsValidation;
-  dynamic offersValidation;
-  String? deliveryMethodValidation;
-  Map<int,String> validationProducts = {};
-  Map<int,String> validationProductsOffers = {};
-  String cartNum = '0';
-
-
-
   final MainSearchProductUseCase _mainSearchProductUseCase;
    final MainSearchShopUseCase _mainSearchShopUseCase;
    final ProductDetailsUseCase _productDetailsUseCase;
@@ -163,6 +150,8 @@ class HomeCubit extends Cubit<HomeState> {
    final AddRateUseCase _addRateUseCase;
    final StoreCategoryDetailsUseCase _storeCategoryDetailsUseCase;
    final ProductCategoryDetailsUseCase _productCategoryDetailsUseCase;
+   final CartUseCase _cartUseCase;
+   final UpdateCartProductUseCase _updateCartProductUseCase;
 
   HomeCubit(
       {
@@ -208,6 +197,8 @@ class HomeCubit extends Cubit<HomeState> {
     required AddRateUseCase addRateUseCase,
     required StoreCategoryDetailsUseCase storeCategoryDetailsUseCase,
     required ProductCategoryDetailsUseCase productCategoryDetailsUseCase,
+    required CartUseCase cartUseCase,
+    required UpdateCartProductUseCase updateCartProductUseCase,
   }
   ) :
        _mainSearchProductUseCase = mainSearchProductUseCase,
@@ -252,6 +243,8 @@ class HomeCubit extends Cubit<HomeState> {
        _addRateUseCase = addRateUseCase,
        _storeCategoryDetailsUseCase = storeCategoryDetailsUseCase,
        _productCategoryDetailsUseCase = productCategoryDetailsUseCase,
+       _cartUseCase = cartUseCase,
+       _updateCartProductUseCase= updateCartProductUseCase,
 
 
       super(Empty()){
@@ -279,7 +272,7 @@ class HomeCubit extends Cubit<HomeState> {
     const HomeScreen(),
     const AllOffersScreen(),
     const CategoriesScreen(),
-    Container(),
+    const CartScreen(),
     const OrdersScreen(),
     const SettingsScreen(),
   ];
@@ -1790,15 +1783,95 @@ class HomeCubit extends Cubit<HomeState> {
 
 
 
+  CartEntity? cartEntity;
+  void cart() async {
+    emit(CartLoadingState());
+    final result = await _cartUseCase(NoParams());
 
+    result.fold((failure) {
+      emit(CartErrorState(
+          failure: mapFailureToMessage(failure)
+      ));
+    }, (data) {
+      cartEntity = data;
+      keys = cartData.shopsCart.keys.toList();
+      emit(CartSuccessState(
+          cartEntity: data
+      )
+      );
+    });
+  }
 
-
-
-
-
+  void updateCartProduct({
+    required int? shop,
+    required int? item,
+    required int? f1,
+    required int? f2,
+    required int? qty,
+    required String? action,
+}) async {
+    emit(UpdateCartProductLoadingState());
+    final result = await _updateCartProductUseCase(
+      UpdateCartProductParams(
+          shop: shop,
+          item: item,
+          f1: f1,
+          f2: f2,
+          qty: qty,
+          action: action
+      )
+    );
+    result.fold((failure) {
+      emit(UpdateCartProductErrorState(
+          failure: mapFailureToMessage(failure)
+      ));
+    }, (data) {
+      emit(UpdateCartProductSuccessState(
+          updateCartProductEntity: data
+      )
+      );
+    });
+  }
 
 
   ///Socket Part
+
+  late IO.Socket socket;
+  dynamic eventData;
+  bool isAddress = false;
+  int? paymentMethod;
+  int? deliveryMethod;
+  dynamic totalCarts;
+  dynamic totalShipping;
+  dynamic storesPromoAmount;
+  dynamic cartTotalWithShipping;
+  dynamic storesSubtotal;
+  dynamic storesDiscounts;
+  dynamic productsValidation;
+  dynamic offersValidation;
+  String? deliveryMethodValidation;
+  Map<int,String> validationProducts = {};
+  Map<int,String> validationProductsOffers = {};
+  String cartNum = '0';
+  bool inCart = false;
+  bool inCheckout = false;
+  dynamic eventProductData;
+  dynamic eventOfferData;
+  dynamic cartData;
+  dynamic offerBuyList;
+  dynamic offerGetList;
+  List<TextEditingController> promoController = [
+    for (int i = 1; i < 100; i++) TextEditingController()
+  ];
+  List<Map<int, String>> storesPromo = [];
+  Map<String, dynamic> storeTotals = {};
+  double totalStoresPrice = 0;
+  dynamic keys;
+  String categoriesCart = '';
+
+
+
+
   void _connectSocket(IO.Socket socket) {
     emit(InitState());
     socket.connect();

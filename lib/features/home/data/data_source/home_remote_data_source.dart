@@ -14,6 +14,7 @@ import '../models/areasModel.dart';
 import '../models/best_sellers_stores_model.dart';
 import '../models/best_selling_products_model.dart';
 import '../models/cancel_order_model.dart';
+import '../models/cart_model.dart';
 import '../models/categories_model.dart';
 import '../models/cities_model.dart';
 import '../models/delete_account_model.dart';
@@ -45,6 +46,7 @@ import '../models/store_offer_details_model.dart';
 import '../models/store_offers_model.dart';
 import '../models/submit_complain_model.dart';
 import '../models/top_categories_model.dart';
+import '../models/update_cart_product_model.dart';
 
 abstract class HomeBaseRemoteDataSource {
   Future<AppInfoModel> appInfo();
@@ -200,6 +202,15 @@ abstract class HomeBaseRemoteDataSource {
   });
   Future<ProductCategoryDetailsModel> productCategoryDetails({
     required String slug,
+  });
+  Future<CartModel> cart();
+  Future<UpdateCartProductModel> updateCartProduct({
+    required int? shop,
+    required int? item,
+    required int? f1,
+    required int? f2,
+    required int? qty,
+    required String? action,
   });
 }
 
@@ -1019,6 +1030,45 @@ class HomeRemoteDataSourceImpl
   }
 
 
+  @override
+  Future<CartModel> cart() async {
+
+    final Response f = await dioHelper.get(
+        url: cartURL,
+        query: {
+          'lang': isRTL == true ? 'ar' : 'en',
+        },
+        token: token
+    );
+    return CartModel.fromJson(f.data);
+  }
+
+
+  @override
+  Future<UpdateCartProductModel> updateCartProduct({
+    required int? shop,
+    required int? item,
+    required int? f1,
+    required int? f2,
+    required int? qty,
+    required String? action,
+}) async {
+
+    final Response f = await dioHelper.post(
+        url: updateCartProductUrl,
+        data: {
+          'lang': isRTL == true ? 'ar' : 'en',
+          'shop': shop,
+          'item': item,
+          'f1': f1,
+          'f2': f2,
+          'qty': qty,
+          'action': action
+        },
+        token: token
+    );
+    return UpdateCartProductModel.fromJson(f.data);
+  }
 
 
 }
