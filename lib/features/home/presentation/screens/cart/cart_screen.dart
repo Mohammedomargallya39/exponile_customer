@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
-import 'package:exponile_customer/core/util/loading_files/map_loading.dart';
 import 'package:exponile_customer/core/util/resources/assets.gen.dart';
 import 'package:exponile_customer/core/util/resources/colors_manager.dart';
 import 'package:exponile_customer/core/util/resources/constants_manager.dart';
@@ -8,16 +7,18 @@ import 'package:exponile_customer/core/util/resources/extensions_manager.dart';
 import 'package:exponile_customer/core/util/widgets/default_button.dart';
 import 'package:exponile_customer/core/util/widgets/default_text_field.dart';
 import 'package:exponile_customer/features/home/presentation/controller/cubit.dart';
+import 'package:exponile_customer/features/home/presentation/screens/cart/checkout_screen/checkout_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../../core/util/cubit/cubit.dart';
 import '../../../../../core/util/loading_files/all_product_loading.dart';
 import '../../../../../core/util/widgets/default_text.dart';
 import '../../../../../core/util/widgets/hideKeyboard.dart';
+import '../../../../../core/util/widgets/progress.dart';
 import '../../controller/state.dart';
+import 'cart_offer_card.dart';
 import 'cart_product_card.dart';
 
 class CartScreen extends StatefulWidget {
@@ -42,9 +43,119 @@ class _CartScreenState extends State<CartScreen> {
       textDirection: appBloc.isArabic ? TextDirection.rtl : TextDirection.ltr,
       child: BlocConsumer<HomeCubit, HomeState>(
         listener: (context, state) {
-      if(homeCubit.eventData != null && homeCubit.inCart == true){
+
+      if (state is UpdateCartProductSuccessState && state.updateCartProductEntity.success == 1) {
+        Navigator.pop(context);
         homeCubit.cart();
+        designToastDialog(
+            context: context,
+            toast: TOAST.success,
+            text: state.updateCartProductEntity.message!);
       }
+
+      if (state is UpdateCartProductSuccessState && state.updateCartProductEntity.success ==0) {
+        Navigator.pop(context);
+        designToastDialog(
+            context: context,
+            toast: TOAST.error,
+            text: state.updateCartProductEntity.message!);
+      }
+
+      if (state is UpdateCartProductErrorState) {
+        Navigator.pop(context);
+        designToastDialog(
+            context: context,
+            toast: TOAST.error,
+            text: state.failure.toString());
+      }
+
+      if(state is UpdateCartProductLoadingState) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return ProgressDialog(message: appBloc.translationModel!.loading);
+          },
+        );
+      }
+
+
+
+      if (state is DeleteCartItemSuccessState && state.deleteCartItemEntity.success == 1) {
+        Navigator.pop(context);
+        homeCubit.cart();
+        designToastDialog(
+            context: context,
+            toast: TOAST.success,
+            text: state.deleteCartItemEntity.message!);
+      }
+
+      if (state is DeleteCartItemSuccessState && state.deleteCartItemEntity.success ==0) {
+        Navigator.pop(context);
+        designToastDialog(
+            context: context,
+            toast: TOAST.error,
+            text: state.deleteCartItemEntity.message!);
+      }
+
+      if (state is DeleteCartItemErrorState) {
+        Navigator.pop(context);
+        designToastDialog(
+            context: context,
+            toast: TOAST.error,
+            text: state.failure.toString());
+      }
+
+      if(state is DeleteCartItemLoadingState) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return ProgressDialog(message: appBloc.translationModel!.loading);
+          },
+        );
+      }
+
+
+
+
+      if (state is UpdateCartOfferSuccessState && state.updateCartOfferEntity.success == 1) {
+        Navigator.pop(context);
+        homeCubit.cart();
+        designToastDialog(
+            context: context,
+            toast: TOAST.success,
+            text: state.updateCartOfferEntity.message!);
+      }
+
+      if (state is UpdateCartOfferSuccessState && state.updateCartOfferEntity.success ==0) {
+        Navigator.pop(context);
+        designToastDialog(
+            context: context,
+            toast: TOAST.error,
+            text: state.updateCartOfferEntity.message!);
+      }
+
+      if (state is UpdateCartOfferErrorState) {
+        Navigator.pop(context);
+        designToastDialog(
+            context: context,
+            toast: TOAST.error,
+            text: state.failure.toString());
+      }
+
+      if(state is UpdateCartOfferLoadingState) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return ProgressDialog(message: appBloc.translationModel!.loading);
+          },
+        );
+      }
+
+
+
+
+
+
 
         },
         builder: (context, state) {
@@ -84,13 +195,13 @@ class _CartScreenState extends State<CartScreen> {
                                             physics:
                                             const NeverScrollableScrollPhysics(),
                                             scrollDirection: Axis.vertical,
-                                            itemCount: homeCubit.cartData.shopsCart.length,
+                                            itemCount: homeCubit.cartEntity!.data.shopsCart.length,
                                             itemBuilder: (BuildContext context, int index) {
-                                              var val = homeCubit.cartData.shopsCart[homeCubit.keys[index]];
+                                              var val = homeCubit.cartEntity!.data.shopsCart[homeCubit.keys[index]];
 
-                                              val!.shop.categories.forEach((element) {
+                                              for (var element in val!.shop.categories) {
                                                 homeCubit.categoriesList.add(element.name);
-                                              });
+                                              }
                                               homeCubit.categoriesCart = [
                                                 for (var data in (homeCubit.categoriesList)) data
                                               ].join(",");
@@ -103,8 +214,8 @@ class _CartScreenState extends State<CartScreen> {
                                                   initiallyExpanded: true,
                                                   //key: cardA,
                                                   leading: SizedBox(
-                                                      width: 40.rSp,
-                                                      height: 50.rSp,
+                                                      width: 15.w,
+                                                      height: 10.h,
                                                       child: CachedNetworkImage(
                                                         imageUrl: val.shop.logoPath ?? '',
                                                         imageBuilder: (context, imageProvider) => Container(
@@ -138,10 +249,11 @@ class _CartScreenState extends State<CartScreen> {
                                                           title: val.shop.categories[0].name ?? '', //categories
                                                           fontSize: 10.rSp,
                                                           fontWeight: FontWeight.normal,
-                                                          color: ColorsManager.mainColor.withOpacity(0.5),
+                                                          color: ColorsManager.mainColor.withOpacity(0.7),
                                                           maxLines: 2,
                                                           style: Style.small
                                                       ),
+                                                      verticalSpace(1.h),
                                                       DefaultText(
                                                           title: val.shop.shopName ?? '',
                                                           fontSize: 16.rSp,
@@ -168,6 +280,7 @@ class _CartScreenState extends State<CartScreen> {
                                                         onRatingUpdate: (rating) {
                                                         },
                                                       ),
+                                                      verticalSpace(1.h),
                                                       DefaultText(
                                                           title: '${appBloc.translationModel!.totalAfterDiscount} : ${val.storeTotalAfterDiscount} ${appBloc.translationModel!.currency}',
                                                           fontSize: 10.rSp,
@@ -244,7 +357,6 @@ class _CartScreenState extends State<CartScreen> {
                                                                     deleteOnTap:
                                                                         () {
                                                                           homeCubit.deleteCartItem(
-                                                                          context: context,
                                                                           type:
                                                                           'products',
                                                                           shop: val.products[index].shop ?? 0,
@@ -276,7 +388,7 @@ class _CartScreenState extends State<CartScreen> {
                                                                       (context,
                                                                       index) {
                                                                     return CartOfferCard(
-                                                                      totalPrice: val.storeTotalAfterDiscount,
+                                                                      totalPrice: val.storeTotalAfterDiscount!,
                                                                       offerProductsWidget: ExpansionTile(
                                                                         title: DefaultText(
                                                                             title: '${appBloc.translationModel!.products} ${appBloc.translationModel!.offers}',
@@ -413,7 +525,7 @@ class _CartScreenState extends State<CartScreen> {
                                                                       offerBanner: val.offers![index].bannerPath ?? '',
                                                                       offerName: val.offers![index].name ?? '',
                                                                       offerPrice: val.offers![index].price ?? '',
-                                                                      offerCount: homeCubit.eventOfferData == null || state is LoadingUpdateCartProductState
+                                                                      offerCount: homeCubit.eventOfferData == null || state is UpdateCartOfferLoadingState
                                                                           ? (val.offers![index].qty ??
                                                                           0)
                                                                           .toString()
@@ -421,22 +533,20 @@ class _CartScreenState extends State<CartScreen> {
                                                                           val.offers![index].id
                                                                           ? homeCubit.eventOfferData['item']['qty'].toString()
                                                                           : (val.offers![index].qty ?? 0).toString(),
-                                                                      addOnTap: state is LoadingUpdateCartProductState
+                                                                      addOnTap: state is UpdateCartOfferLoadingState
                                                                           ? () {}
                                                                           : () {
-                                                                        homeCubit.updateCartOfferData(
-                                                                            context: context,
+                                                                        homeCubit.updateCartOffer(
                                                                             shop: val.offers![index].shop ?? 0,
                                                                             item: val.offers![index].id ?? 0,
                                                                             qty: homeCubit.eventOfferData != null && homeCubit.eventOfferData['item']['id'] == val.offers![index].id ? homeCubit.eventOfferData['item']['qty'] + 1 : val.offers![index].qty! + 1,
                                                                             action: 'plus');
                                                                       },
                                                                       subOnTap: state
-                                                                      is LoadingUpdateCartProductState
+                                                                      is UpdateCartOfferLoadingState
                                                                           ? () {}
                                                                           : () {
-                                                                        homeCubit.updateCartOfferData(
-                                                                            context: context,
+                                                                        homeCubit.updateCartOffer(
                                                                             shop: val.offers![index].shop ?? 0,
                                                                             item: val.offers![index].id ?? 0,
                                                                             qty: homeCubit.eventOfferData != null && homeCubit.eventOfferData['item']['id'] == val.offers![index].id ? homeCubit.eventOfferData['item']['qty'] - 1 : val.offers![index].qty! - 1,
@@ -444,14 +554,11 @@ class _CartScreenState extends State<CartScreen> {
                                                                       },
                                                                       deleteOnTap:
                                                                           () {
-                                                                            homeCubit.deleteCartItemData(
-                                                                            context: context,
-                                                                            type:
-                                                                            'offers',
-                                                                            shop: val.offers![index].shop ??
-                                                                                0,
-                                                                            item: val.offers![index].id ??
-                                                                                0);
+                                                                            homeCubit.deleteCartItem(
+                                                                            type: 'offers',
+                                                                            shop: val.offers![index].shop ?? 0,
+                                                                            item: val.offers![index].id ?? 0
+                                                                            );
                                                                       },
                                                                     );
                                                                   },
@@ -471,7 +578,7 @@ class _CartScreenState extends State<CartScreen> {
                                                       thickness: 1.0.rSp,
                                                       height: 1.0.rSp,
                                                     ),
-
+                                                    verticalSpace(3.h),
                                                     Padding(
                                                       padding: EdgeInsets.symmetric(horizontal: 10.rSp),
                                                       child: Column(
@@ -504,7 +611,6 @@ class _CartScreenState extends State<CartScreen> {
                                                                       text: appBloc.translationModel!.submit,
                                                                       onPressed: () {
                                                                         homeCubit.promoCode(
-                                                                            context: context,
                                                                             shop: val.shop.id ?? 0,
                                                                             promo: homeCubit.promoController[index].text, minAmount: val.price ?? '');
                                                                         if (homeCubit.promoCodeEntity != null && homeCubit.promoCodeEntity!.data.status != 'invalid') {
@@ -587,7 +693,7 @@ class _CartScreenState extends State<CartScreen> {
                                                   ),
                                                   const Spacer(),
                                                   DefaultText(
-                                                      title: '${(homeCubit.eventOfferData == null && homeCubit.eventProductData == null) ? homeCubit.cartData.storesSubtotal : homeCubit.eventOfferData == null ? homeCubit.eventProductData['stores_subtotal'] : homeCubit.eventOfferData['stores_subtotal']} ${appBloc.translationModel!.currency}',
+                                                      title: '${(homeCubit.eventOfferData == null && homeCubit.eventProductData == null) ? homeCubit.cartEntity!.data.storesSubtotal : homeCubit.eventOfferData == null ? homeCubit.eventProductData['stores_subtotal'] : homeCubit.eventOfferData['stores_subtotal']} ${appBloc.translationModel!.currency}',
                                                       fontSize: 12.rSp,
                                                       style: Style.small,
                                                       fontWeight: FontWeight.w500
@@ -605,7 +711,7 @@ class _CartScreenState extends State<CartScreen> {
                                                   ),
                                                   const Spacer(),
                                                   DefaultText(
-                                                      title: '${(homeCubit.eventOfferData == null && homeCubit.eventProductData == null) ? homeCubit.cartData.storesDiscounts : homeCubit.eventOfferData == null ? homeCubit.eventProductData['stores_discounts'] : homeCubit.eventOfferData['stores_discounts']} ${appBloc.translationModel!.currency}',
+                                                      title: '${(homeCubit.eventOfferData == null && homeCubit.eventProductData == null) ? homeCubit.cartEntity!.data.storesDiscounts : homeCubit.eventOfferData == null ? homeCubit.eventProductData['stores_discounts'] : homeCubit.eventOfferData['stores_discounts']} ${appBloc.translationModel!.currency}',
                                                       fontSize: 12.rSp,
                                                       style: Style.small,
                                                       fontWeight: FontWeight.w500
@@ -623,7 +729,7 @@ class _CartScreenState extends State<CartScreen> {
                                                   ),
                                                   const Spacer(),
                                                   DefaultText(
-                                                      title: '${(homeCubit.eventOfferData == null && homeCubit.eventProductData == null) ? homeCubit.cartData.storesPromoAmount : homeCubit.eventOfferData == null ? homeCubit.eventProductData['stores_promo_amount'] : homeCubit.eventOfferData['stores_promo_amount']} ${appBloc.translationModel!.currency}',
+                                                      title: '${(homeCubit.eventOfferData == null && homeCubit.eventProductData == null) ? homeCubit.cartEntity!.data.storesPromoAmount : homeCubit.eventOfferData == null ? homeCubit.eventProductData['stores_promo_amount'] : homeCubit.eventOfferData['stores_promo_amount']} ${appBloc.translationModel!.currency}',
                                                       fontSize: 12.rSp,
                                                       style: Style.small,
                                                       fontWeight: FontWeight.w500
@@ -641,7 +747,7 @@ class _CartScreenState extends State<CartScreen> {
                                                   ),
                                                   const Spacer(),
                                                   DefaultText(
-                                                      title: '${(homeCubit.eventOfferData == null && homeCubit.eventProductData == null) ? homeCubit.cartData.totalCarts : homeCubit.eventOfferData == null ? homeCubit.eventProductData['total'] : homeCubit.eventOfferData['total']} ${appBloc.translationModel!.currency}',
+                                                      title: '${(homeCubit.eventOfferData == null && homeCubit.eventProductData == null) ? homeCubit.cartEntity!.data.totalCarts : homeCubit.eventOfferData == null ? homeCubit.eventProductData['total'] : homeCubit.eventOfferData['total']} ${appBloc.translationModel!.currency}',
                                                       fontSize: 12.rSp,
                                                       style: Style.small,
                                                       fontWeight: FontWeight.w500
@@ -652,13 +758,17 @@ class _CartScreenState extends State<CartScreen> {
                                           ),
                                         ),
                                         verticalSpace(2.h),
-                                        DefaultButton(
-                                            text: appBloc.translationModel!.checkout,
-                                            onPressed: () {
-                                              //   navigateTo(context, checkOut);
-                                              homeCubit.inCart = false;
-                                            },
-                                            ),
+                                        if(homeCubit.cartEntity!.data.shopsCart.isNotEmpty)
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(horizontal: 2.w),
+                                          child: DefaultButton(
+                                              text: appBloc.translationModel!.checkout,
+                                              onPressed: () {
+                                                navigateTo(context, const CheckoutScreen());
+                                                homeCubit.inCart = false;
+                                              },
+                                              ),
+                                        ),
                                         verticalSpace(2.h),
                                       ],
                                     ),

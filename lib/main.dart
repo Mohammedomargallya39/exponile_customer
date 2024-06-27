@@ -114,7 +114,8 @@ class MyApp extends StatelessWidget {
             ..hotDeals(productCategories: null, storeCategories: null)
             ..bestSellingProducts()
             ..topCategories()
-            ..recentlyViewed(),
+            ..recentlyViewed()
+            ..cart(),
         ),
       ],
       child: BlocBuilder<AppBloc, AppState>(

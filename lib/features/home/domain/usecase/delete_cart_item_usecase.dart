@@ -2,8 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import '../../../../../core/error/failures.dart';
 import '../../../../../core/usecase/use_case.dart';
-import '../entities/add_offer_to_cart_entity.dart';
-import '../entities/update_cart_product_entity.dart';
+import '../entities/delete_cart_item_entity.dart';
 import '../repository/home_base_rebository.dart';
 
 class DeleteCartItemUseCase implements UseCase<DeleteCartItemEntity, DeleteCartItemParams> {
@@ -16,7 +15,7 @@ class DeleteCartItemUseCase implements UseCase<DeleteCartItemEntity, DeleteCartI
     return await repository.deleteCartItem(
       shop: params.shop,
       item: params.item,
-      item: params.type,
+      type: params.type,
     );
   }
 }

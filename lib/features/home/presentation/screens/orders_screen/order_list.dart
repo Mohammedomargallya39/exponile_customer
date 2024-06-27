@@ -13,6 +13,7 @@ import '../../../../../core/util/resources/constants_manager.dart';
 import '../../../../../core/util/widgets/default_text.dart';
 import '../../../../../core/util/widgets/progress.dart';
 import '../../../../../core/util/widgets/two_option_dialog.dart';
+import '../cart/payment_screens/order_receipt_screen.dart';
 
 class OrderList extends StatelessWidget {
   const OrderList({super.key});
@@ -59,7 +60,7 @@ class OrderList extends StatelessWidget {
 
             if (state is PaymentOrderDataSuccessState && state.paymentOrderDataEntity.success ==1) {
               Navigator.pop(context);
-              /// will add nav to payment screen
+              navigateTo(context, PayScreen(orderPage:true,getPaymentModel: state.paymentOrderDataEntity,));
               designToastDialog(
                   context: context,
                   toast: TOAST.success,

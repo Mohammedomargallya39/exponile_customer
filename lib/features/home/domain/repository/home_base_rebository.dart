@@ -14,13 +14,17 @@ import '../entities/best_sellers_store_entity.dart';
 import '../entities/best_selling_products_entity.dart';
 import '../entities/cancel_order_entity.dart';
 import '../entities/cart_entity.dart';
+import '../entities/check_out_view_entity.dart';
+import '../entities/checkout_entity.dart';
 import '../entities/cities_entity.dart';
 import '../entities/delete_account_entity.dart';
 import '../entities/delete_address_entity.dart';
+import '../entities/delete_cart_item_entity.dart';
 import '../entities/discover_new_store_entity.dart';
 import '../entities/favourite_products_entity.dart';
 import '../entities/favourite_stores_entity.dart';
 import '../entities/get_location_entity.dart';
+import '../entities/get_payment_method_entity.dart';
 import '../entities/home_favourite_store_entity.dart';
 import '../entities/hot_deals_entity.dart';
 import '../entities/landing_entity.dart';
@@ -35,8 +39,10 @@ import '../entities/payment_order_data_entity.dart';
 import '../entities/product_category_details_entity.dart';
 import '../entities/product_data_entity.dart';
 import '../entities/product_details_entity.dart';
+import '../entities/promo_code_entity.dart';
 import '../entities/recently_viewed_entity.dart';
 import '../entities/reset_password_entity.dart';
+import '../entities/shipping_address_entity.dart';
 import '../entities/shop_data_entity.dart';
 import '../entities/shop_location_entity.dart';
 import '../entities/store_category_details_entity.dart';
@@ -44,6 +50,7 @@ import '../entities/store_offer_details_entity.dart';
 import '../entities/store_offers_entity.dart';
 import '../entities/submit_complain_entity.dart';
 import '../entities/top_categories_entity.dart';
+import '../entities/update_cart_offer_entity.dart';
 import '../entities/update_cart_product_entity.dart';
 
 abstract class HomeBaseRepository {
@@ -214,6 +221,7 @@ abstract class HomeBaseRepository {
     required String slug,
   });
   Future<Either<Failure, CartEntity>> cart();
+  Future<Either<Failure, CheckOutViewEntity>> checkOutView();
   Future<Either<Failure, UpdateCartProductEntity>> updateCartProduct({
     required int? shop,
     required int? item,
@@ -221,5 +229,32 @@ abstract class HomeBaseRepository {
     required int? f2,
     required int? qty,
     required String? action,
+  });
+  Future<Either<Failure, DeleteCartItemEntity>> deleteCartItem({
+    required int? shop,
+    required int? item,
+    required String? type,
+  });
+  Future<Either<Failure, UpdateCartOfferEntity>> updateCartOffer({
+    required int? shop,
+    required int? item,
+    required int? qty,
+    required String? action,
+  });
+  Future<Either<Failure, PromoCodeEntity>> promoCode({
+    required int? shop,
+    required String? promo,
+    required String? minAmount,
+  });
+  Future<Either<Failure, GetShippingAddressFeesEntity>> getShippingAddressFees({
+    required int? city,
+    required int? addressID,
+  });
+  Future<Either<Failure, GetPaymentMethodEntity>> getPaymentMethod({
+    required int? paymentID,
+  });
+  Future<Either<Failure, CheckoutEntity>> checkout({
+    required int? paymentID,
+    required int? addressID,
   });
 }

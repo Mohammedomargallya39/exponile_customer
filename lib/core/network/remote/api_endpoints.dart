@@ -48,4 +48,9 @@ const String storeCategoryDetailsURL = 'website/stores';
 const String productsCategoryDetailsURL = 'website/product/category';
 const String cartURL = 'website/cart';
 const String updateCartProductUrl = 'website/cart/update/product';
+const String deleteCartItemUrl = 'website/cart/delete';
+const String updateCartOfferURL = 'website/cart/update/offer';
+const String checkoutViewsURL = 'website/cart/checkout-view';
+const String shippingAddressesFeesURL = 'website/cart/change-address';
+const String paymentMethodURL = 'website/cart/change-payment-method';
 

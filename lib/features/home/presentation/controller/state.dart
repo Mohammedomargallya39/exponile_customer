@@ -13,13 +13,17 @@ import '../../domain/entities/best_selling_products_entity.dart';
 import '../../domain/entities/cancel_order_entity.dart';
 import '../../domain/entities/cart_entity.dart';
 import '../../domain/entities/categories_entity.dart';
+import '../../domain/entities/check_out_view_entity.dart';
+import '../../domain/entities/checkout_entity.dart';
 import '../../domain/entities/cities_entity.dart';
 import '../../domain/entities/delete_account_entity.dart';
 import '../../domain/entities/delete_address_entity.dart';
+import '../../domain/entities/delete_cart_item_entity.dart';
 import '../../domain/entities/discover_new_store_entity.dart';
 import '../../domain/entities/favourite_products_entity.dart';
 import '../../domain/entities/favourite_stores_entity.dart';
 import '../../domain/entities/get_location_entity.dart';
+import '../../domain/entities/get_payment_method_entity.dart';
 import '../../domain/entities/home_favourite_store_entity.dart';
 import '../../domain/entities/hot_deals_entity.dart';
 import '../../domain/entities/landing_entity.dart';
@@ -34,14 +38,17 @@ import '../../domain/entities/payment_order_data_entity.dart';
 import '../../domain/entities/product_category_details_entity.dart';
 import '../../domain/entities/product_data_entity.dart';
 import '../../domain/entities/product_details_entity.dart';
+import '../../domain/entities/promo_code_entity.dart';
 import '../../domain/entities/recently_viewed_entity.dart';
 import '../../domain/entities/reset_password_entity.dart';
+import '../../domain/entities/shipping_address_entity.dart';
 import '../../domain/entities/shop_data_entity.dart';
 import '../../domain/entities/shop_location_entity.dart';
 import '../../domain/entities/store_category_details_entity.dart';
 import '../../domain/entities/store_offer_details_entity.dart';
 import '../../domain/entities/store_offers_entity.dart';
 import '../../domain/entities/submit_complain_entity.dart';
+import '../../domain/entities/update_cart_offer_entity.dart';
 import '../../domain/entities/update_cart_product_entity.dart';
 
 abstract class HomeState extends Equatable{}
@@ -1165,6 +1172,201 @@ class UpdateCartProductErrorState extends HomeState {
   @override
   List<Object?> get props => [failure];
 }
+
+
+class DeleteCartItemLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class DeleteCartItemSuccessState extends HomeState {
+  final DeleteCartItemEntity deleteCartItemEntity;
+
+
+  DeleteCartItemSuccessState({required this.deleteCartItemEntity});
+
+  @override
+  List<Object?> get props => [deleteCartItemEntity];
+}
+
+class DeleteCartItemErrorState extends HomeState {
+  final String failure;
+
+  DeleteCartItemErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+
+
+class UpdateCartOfferLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class UpdateCartOfferSuccessState extends HomeState {
+  final UpdateCartOfferEntity updateCartOfferEntity;
+
+
+  UpdateCartOfferSuccessState({required this.updateCartOfferEntity});
+
+  @override
+  List<Object?> get props => [updateCartOfferEntity];
+}
+
+class UpdateCartOfferErrorState extends HomeState {
+  final String failure;
+
+  UpdateCartOfferErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+
+class PromoCodeLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class PromoCodeSuccessState extends HomeState {
+  final PromoCodeEntity promoCodeEntity;
+
+
+  PromoCodeSuccessState({required this.promoCodeEntity});
+
+  @override
+  List<Object?> get props => [promoCodeEntity];
+}
+
+class PromoCodeErrorState extends HomeState {
+  final String failure;
+
+  PromoCodeErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+
+
+class CheckOutViewLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class CheckOutViewSuccessState extends HomeState {
+  final CheckOutViewEntity checkOutViewEntity;
+
+
+  CheckOutViewSuccessState({required this.checkOutViewEntity});
+
+  @override
+  List<Object?> get props => [checkOutViewEntity];
+}
+
+class CheckOutViewErrorState extends HomeState {
+  final String failure;
+
+  CheckOutViewErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+
+
+class GetShippingAddressFeesLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class GetShippingAddressFeesSuccessState extends HomeState {
+  final GetShippingAddressFeesEntity getShippingAddressFeesEntity;
+
+
+  GetShippingAddressFeesSuccessState({required this.getShippingAddressFeesEntity});
+
+  @override
+  List<Object?> get props => [getShippingAddressFeesEntity];
+}
+
+class GetShippingAddressFeesErrorState extends HomeState {
+  final String failure;
+
+  GetShippingAddressFeesErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+
+class GetPaymentMethodLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class GetPaymentMethodSuccessState extends HomeState {
+  final GetPaymentMethodEntity getPaymentMethodEntity;
+
+
+  GetPaymentMethodSuccessState({required this.getPaymentMethodEntity});
+
+  @override
+  List<Object?> get props => [getPaymentMethodEntity];
+}
+
+class GetPaymentMethodErrorState extends HomeState {
+  final String failure;
+
+  GetPaymentMethodErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+
+
+class CheckoutLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class CheckoutSuccessState extends HomeState {
+  final CheckoutEntity checkoutEntity;
+
+
+  CheckoutSuccessState({required this.checkoutEntity});
+
+  @override
+  List<Object?> get props => [checkoutEntity];
+}
+
+class CheckoutErrorState extends HomeState {
+  final String failure;
+
+  CheckoutErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

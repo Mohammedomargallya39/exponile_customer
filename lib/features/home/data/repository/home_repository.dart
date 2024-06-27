@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:exponile_customer/features/home/domain/entities/delete_cart_item_entity.dart';
 import '../../../../../core/error/exceptions.dart';
 import '../../../../../core/error/failures.dart';
 import '../../domain/entities/about_exponile_entity.dart';
@@ -15,6 +16,8 @@ import '../../domain/entities/best_selling_products_entity.dart';
 import '../../domain/entities/cancel_order_entity.dart';
 import '../../domain/entities/cart_entity.dart';
 import '../../domain/entities/categories_entity.dart';
+import '../../domain/entities/check_out_view_entity.dart';
+import '../../domain/entities/checkout_entity.dart';
 import '../../domain/entities/cities_entity.dart';
 import '../../domain/entities/delete_account_entity.dart';
 import '../../domain/entities/delete_address_entity.dart';
@@ -22,6 +25,7 @@ import '../../domain/entities/discover_new_store_entity.dart';
 import '../../domain/entities/favourite_products_entity.dart';
 import '../../domain/entities/favourite_stores_entity.dart';
 import '../../domain/entities/get_location_entity.dart';
+import '../../domain/entities/get_payment_method_entity.dart';
 import '../../domain/entities/home_favourite_store_entity.dart';
 import '../../domain/entities/hot_deals_entity.dart';
 import '../../domain/entities/landing_entity.dart';
@@ -36,8 +40,10 @@ import '../../domain/entities/payment_order_data_entity.dart';
 import '../../domain/entities/product_category_details_entity.dart';
 import '../../domain/entities/product_data_entity.dart';
 import '../../domain/entities/product_details_entity.dart';
+import '../../domain/entities/promo_code_entity.dart';
 import '../../domain/entities/recently_viewed_entity.dart';
 import '../../domain/entities/reset_password_entity.dart';
+import '../../domain/entities/shipping_address_entity.dart';
 import '../../domain/entities/shop_data_entity.dart';
 import '../../domain/entities/shop_location_entity.dart';
 import '../../domain/entities/store_category_details_entity.dart';
@@ -45,6 +51,7 @@ import '../../domain/entities/store_offer_details_entity.dart';
 import '../../domain/entities/store_offers_entity.dart';
 import '../../domain/entities/submit_complain_entity.dart';
 import '../../domain/entities/top_categories_entity.dart';
+import '../../domain/entities/update_cart_offer_entity.dart';
 import '../../domain/entities/update_cart_product_entity.dart';
 import '../../domain/repository/home_base_rebository.dart';
 import '../data_source/home_remote_data_source.dart';
@@ -93,7 +100,14 @@ typedef CallAddRate= Future<AddRateEntity> Function();
 typedef CallStoreCategoryDetails= Future<StoreCategoryDetailsEntity> Function();
 typedef CallProductCategoryDetails= Future<ProductCategoryDetailsEntity> Function();
 typedef CallCart= Future<CartEntity> Function();
+typedef CallCheckOutView= Future<CheckOutViewEntity> Function();
 typedef CallUpdateCartProduct= Future<UpdateCartProductEntity> Function();
+typedef CallDeleteCartItem= Future<DeleteCartItemEntity> Function();
+typedef CallUpdateCartOffer= Future<UpdateCartOfferEntity> Function();
+typedef CallPromoCode= Future<PromoCodeEntity> Function();
+typedef CallGetShippingAddressFees= Future<GetShippingAddressFeesEntity> Function();
+typedef CallGetPaymentMethod= Future<GetPaymentMethodEntity> Function();
+typedef CallCheckout= Future<CheckoutEntity> Function();
 
 
 class HomeRepoImplementation extends HomeBaseRepository {
@@ -1441,6 +1455,226 @@ class HomeRepoImplementation extends HomeBaseRepository {
       );
     });
   }
+
+
+
+  Future<Either<Failure, DeleteCartItemEntity>> fetchDeleteCartItem(
+      CallDeleteCartItem mainMethod,
+      ) async {
+    try {
+      final deleteCartItem = await mainMethod();
+      return Right(deleteCartItem);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, DeleteCartItemEntity>> deleteCartItem({
+    required int? shop,
+    required int? item,
+    required String? type,
+  }) async {
+    return await fetchDeleteCartItem(()
+    {
+      return remoteDataSource.deleteCartItem(
+        shop:shop,
+        item:item,
+        type:type,
+      );
+    });
+  }
+
+
+
+  Future<Either<Failure, UpdateCartOfferEntity>> fetchUpdateCartOffer(
+      CallUpdateCartOffer mainMethod,
+      ) async {
+    try {
+      final updateCartOffer = await mainMethod();
+      return Right(updateCartOffer);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, UpdateCartOfferEntity>> updateCartOffer({
+    required int? shop,
+    required int? item,
+    required int? qty,
+    required String? action,
+  }) async {
+    return await fetchUpdateCartOffer(()
+    {
+      return remoteDataSource.updateCartOffer(
+        shop:shop,
+        item:item,
+        action:action,
+        qty:qty,
+      );
+    });
+  }
+
+
+
+
+
+  Future<Either<Failure, PromoCodeEntity>> fetchPromoCode(
+      CallPromoCode mainMethod,
+      ) async {
+    try {
+      final promoCode = await mainMethod();
+      return Right(promoCode);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, PromoCodeEntity>> promoCode({
+    required int? shop,
+    required String? promo,
+    required String? minAmount,
+  }) async {
+    return await fetchPromoCode(()
+    {
+      return remoteDataSource.promoCode(
+        shop:shop,
+        promo:promo,
+        minAmount:minAmount,
+      );
+    });
+  }
+
+
+  Future<Either<Failure, CheckOutViewEntity>> fetchCheckOutView(
+      CallCheckOutView mainMethod,
+      ) async {
+    try {
+      final checkOutView = await mainMethod();
+      return Right(checkOutView);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, CheckOutViewEntity>> checkOutView() async {
+    return await fetchCheckOutView(()
+    {
+      return remoteDataSource.checkOutView();
+    });
+  }
+
+
+
+
+  Future<Either<Failure, GetShippingAddressFeesEntity>> fetchGetShippingAddressFees(
+      CallGetShippingAddressFees mainMethod,
+      ) async {
+    try {
+      final getShippingAddressFees = await mainMethod();
+      return Right(getShippingAddressFees);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, GetShippingAddressFeesEntity>> getShippingAddressFees({
+    required int? city,
+    required int? addressID,
+  }) async {
+    return await fetchGetShippingAddressFees(()
+    {
+      return remoteDataSource.getShippingAddressFees(
+        city:city,
+        addressID:addressID,
+      );
+    });
+  }
+
+
+
+  Future<Either<Failure, GetPaymentMethodEntity>> fetchGetPaymentMethod(
+      CallGetPaymentMethod mainMethod,
+      ) async {
+    try {
+      final getPaymentMethod = await mainMethod();
+      return Right(getPaymentMethod);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, GetPaymentMethodEntity>> getPaymentMethod({
+    required int? paymentID,
+  }) async {
+    return await fetchGetPaymentMethod(()
+    {
+      return remoteDataSource.getPaymentMethod(
+        paymentID:paymentID,
+      );
+    });
+  }
+
+
+
+  Future<Either<Failure, CheckoutEntity>> fetchCheckout(
+      CallCheckout mainMethod,
+      ) async {
+    try {
+      final checkout = await mainMethod();
+      return Right(checkout);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, CheckoutEntity>> checkout({
+    required int? paymentID,
+    required int? addressID,
+  }) async {
+    return await fetchCheckout(()
+    {
+      return remoteDataSource.checkout(
+        paymentID:paymentID,
+        addressID:addressID,
+      );
+    });
+  }
+
 
 
 

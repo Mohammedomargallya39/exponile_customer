@@ -3,8 +3,10 @@ import 'package:exponile_customer/core/util/resources/assets.gen.dart';
 import 'package:exponile_customer/features/home/domain/entities/about_exponile_entity.dart';
 import 'package:exponile_customer/features/home/domain/entities/best_selling_products_entity.dart';
 import 'package:exponile_customer/features/home/domain/entities/categories_entity.dart';
+import 'package:exponile_customer/features/home/domain/entities/get_payment_method_entity.dart';
 import 'package:exponile_customer/features/home/domain/usecase/about_exponile_usecase.dart';
 import 'package:exponile_customer/features/home/domain/usecase/best_sellers_stores_usecase.dart';
+import 'package:exponile_customer/features/home/domain/usecase/checkout_view_usecase.dart';
 import 'package:exponile_customer/features/home/domain/usecase/home_favourite_stores_usecase.dart';
 import 'package:exponile_customer/features/home/domain/usecase/most_offers_usecase.dart';
 import 'package:exponile_customer/features/home/domain/usecase/new_arrivals_usecase.dart';
@@ -23,6 +25,8 @@ import '../../domain/entities/add_address_entity.dart';
 import '../../domain/entities/areas_entity.dart';
 import '../../domain/entities/best_sellers_store_entity.dart';
 import '../../domain/entities/cart_entity.dart';
+import '../../domain/entities/check_out_view_entity.dart';
+import '../../domain/entities/checkout_entity.dart';
 import '../../domain/entities/cities_entity.dart';
 import '../../domain/entities/discover_new_store_entity.dart';
 import '../../domain/entities/favourite_products_entity.dart';
@@ -42,14 +46,15 @@ import '../../domain/entities/payment_order_data_entity.dart';
 import '../../domain/entities/product_category_details_entity.dart';
 import '../../domain/entities/product_data_entity.dart';
 import '../../domain/entities/product_details_entity.dart';
+import '../../domain/entities/promo_code_entity.dart';
 import '../../domain/entities/recently_viewed_entity.dart';
+import '../../domain/entities/shipping_address_entity.dart';
 import '../../domain/entities/shop_data_entity.dart';
 import '../../domain/entities/shop_location_entity.dart';
 import '../../domain/entities/store_category_details_entity.dart';
 import '../../domain/entities/store_offer_details_entity.dart';
 import '../../domain/entities/store_offers_entity.dart';
 import '../../domain/entities/top_categories_entity.dart';
-import '../../domain/entities/update_cart_product_entity.dart';
 import '../../domain/usecase/account_data_usecase.dart';
 import '../../domain/usecase/add_favourite_usecase.dart';
 import '../../domain/usecase/add_location_details_usecase.dart';
@@ -61,13 +66,16 @@ import '../../domain/usecase/best_selling_products_usecase.dart';
 import '../../domain/usecase/cancel_order_usecase.dart';
 import '../../domain/usecase/cart_usecase.dart';
 import '../../domain/usecase/categories_usecase.dart';
+import '../../domain/usecase/checkout_usecase.dart';
 import '../../domain/usecase/cities_usecase.dart';
 import '../../domain/usecase/delete_account_usecase.dart';
 import '../../domain/usecase/delete_address_usecase.dart';
+import '../../domain/usecase/delete_cart_item_usecase.dart';
 import '../../domain/usecase/discover_new_stores_usecase.dart';
 import '../../domain/usecase/favourite_products_usecase.dart';
 import '../../domain/usecase/favourite_stores_usecase.dart';
 import '../../domain/usecase/get_location_usecase.dart';
+import '../../domain/usecase/get_payment_method_usecase.dart';
 import '../../domain/usecase/get_payment_order_usecase.dart';
 import '../../domain/usecase/hot_deals_usecase.dart';
 import '../../domain/usecase/landing_usecase.dart';
@@ -79,13 +87,16 @@ import '../../domain/usecase/orders_usecase.dart';
 import '../../domain/usecase/product_category_details_usecase.dart';
 import '../../domain/usecase/product_data_usecase.dart';
 import '../../domain/usecase/product_details_usecase.dart';
+import '../../domain/usecase/promo_code_usecase.dart';
 import '../../domain/usecase/reset_password_usecase.dart';
+import '../../domain/usecase/shippingg_address_fees_usecase.dart';
 import '../../domain/usecase/shop_data_usecase.dart';
 import '../../domain/usecase/store_category_details_usecase.dart';
 import '../../domain/usecase/store_offer_details_usecase.dart';
 import '../../domain/usecase/store_offers_usecase.dart';
 import '../../domain/usecase/submit_complain_usecase.dart';
 import '../../domain/usecase/top_categories_usecase.dart';
+import '../../domain/usecase/update_offer_cart_usecase.dart';
 import '../../domain/usecase/update_product_cart_usecase.dart';
 import '../screens/cart/cart_screen.dart';
 import '../screens/home/home_screen.dart';
@@ -152,6 +163,13 @@ class HomeCubit extends Cubit<HomeState> {
    final ProductCategoryDetailsUseCase _productCategoryDetailsUseCase;
    final CartUseCase _cartUseCase;
    final UpdateCartProductUseCase _updateCartProductUseCase;
+   final DeleteCartItemUseCase _deleteCartItemUseCase;
+   final UpdateCartOfferUseCase _updateCartOfferUseCase;
+   final PromoCodeUseCase _promoCodeUseCase;
+   final CheckOutViewUseCase _checkOutViewUseCase;
+   final GetShippingAddressFeesUseCase _getShippingAddressFeesUseCase;
+   final GetPaymentMethodUseCase _getPaymentMethodUseCase;
+   final CheckoutUseCase _checkoutUseCase;
 
   HomeCubit(
       {
@@ -199,6 +217,13 @@ class HomeCubit extends Cubit<HomeState> {
     required ProductCategoryDetailsUseCase productCategoryDetailsUseCase,
     required CartUseCase cartUseCase,
     required UpdateCartProductUseCase updateCartProductUseCase,
+    required DeleteCartItemUseCase deleteCartItemUseCase,
+    required UpdateCartOfferUseCase updateCartOfferUseCase,
+    required PromoCodeUseCase promoCodeUseCase,
+    required CheckOutViewUseCase checkOutViewUseCase,
+    required GetShippingAddressFeesUseCase getShippingAddressFeesUseCase,
+    required GetPaymentMethodUseCase getPaymentMethodUseCase,
+    required CheckoutUseCase checkoutUseCase,
   }
   ) :
        _mainSearchProductUseCase = mainSearchProductUseCase,
@@ -245,6 +270,13 @@ class HomeCubit extends Cubit<HomeState> {
        _productCategoryDetailsUseCase = productCategoryDetailsUseCase,
        _cartUseCase = cartUseCase,
        _updateCartProductUseCase= updateCartProductUseCase,
+       _deleteCartItemUseCase= deleteCartItemUseCase,
+       _updateCartOfferUseCase= updateCartOfferUseCase,
+       _promoCodeUseCase= promoCodeUseCase,
+       _checkOutViewUseCase= checkOutViewUseCase,
+       _getShippingAddressFeesUseCase= getShippingAddressFeesUseCase,
+       _getPaymentMethodUseCase= getPaymentMethodUseCase,
+       _checkoutUseCase= checkoutUseCase,
 
 
       super(Empty()){
@@ -1794,7 +1826,7 @@ class HomeCubit extends Cubit<HomeState> {
       ));
     }, (data) {
       cartEntity = data;
-      keys = cartData.shopsCart.keys.toList();
+      keys = data.data.shopsCart.keys.toList();
       emit(CartSuccessState(
           cartEntity: data
       )
@@ -1834,6 +1866,207 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
 
+  void deleteCartItem({
+    required int? shop,
+    required int? item,
+    required String? type,
+  }) async {
+    emit(DeleteCartItemLoadingState());
+    final result = await _deleteCartItemUseCase(
+        DeleteCartItemParams(
+            shop: shop,
+            item: item,
+            type: type
+        )
+    );
+    result.fold((failure) {
+      emit(DeleteCartItemErrorState(
+          failure: mapFailureToMessage(failure)
+      ));
+    }, (data) {
+      emit(DeleteCartItemSuccessState(
+          deleteCartItemEntity: data
+      )
+      );
+    });
+  }
+
+
+
+
+
+  void updateCartOffer({
+    required int? shop,
+    required int? item,
+    required int? qty,
+    required String? action,
+  }) async {
+    emit(UpdateCartOfferLoadingState());
+    final result = await _updateCartOfferUseCase(
+        UpdateCartOfferParams(
+            shop: shop,
+            item: item,
+            qty: qty,
+            action: action
+        )
+    );
+    result.fold((failure) {
+      emit(UpdateCartOfferErrorState(
+          failure: mapFailureToMessage(failure)
+      ));
+    }, (data) {
+      emit(UpdateCartOfferSuccessState(
+          updateCartOfferEntity: data
+      )
+      );
+    });
+  }
+
+
+  PromoCodeEntity? promoCodeEntity;
+  void promoCode({
+    required int? shop,
+    required String? promo,
+    required String? minAmount,
+  }) async {
+    emit(PromoCodeLoadingState());
+    final result = await _promoCodeUseCase(
+        PromoCodeParams(
+            shop: shop,
+            minAmount: minAmount,
+            promo: promo
+        )
+    );
+    result.fold((failure) {
+      emit(PromoCodeErrorState(
+          failure: mapFailureToMessage(failure)
+      ));
+    }, (data) {
+      promoCodeEntity = data;
+      emit(PromoCodeSuccessState(
+          promoCodeEntity: data
+      )
+      );
+    });
+  }
+
+  CheckOutViewEntity? checkOutViewEntity;
+  void checkOutView() async {
+    emit(CheckOutViewLoadingState());
+    checkOutViewEntity = null;
+    final result = await _checkOutViewUseCase(NoParams());
+
+    result.fold((failure) {
+      emit(CheckOutViewErrorState(
+          failure: mapFailureToMessage(failure)
+      ));
+    }, (data) {
+      checkOutViewEntity = data;
+      emit(CheckOutViewSuccessState(
+          checkOutViewEntity: data
+      )
+      );
+    });
+  }
+
+
+  GetShippingAddressFeesEntity? getShippingAddressFeesEntity;
+  void getShippingAddressFees({
+    required int? city,
+    required int? addressID,
+    required context,
+  }) async {
+    emit(GetShippingAddressFeesLoadingState());
+    final result = await _getShippingAddressFeesUseCase(
+        GetShippingAddressFeesParams(
+            city: city,
+            addressID: addressID,
+        )
+    );
+    result.fold((failure) {
+      emit(GetShippingAddressFeesErrorState(
+          failure: mapFailureToMessage(failure)
+      ));
+    }, (data) {
+      getShippingAddressFeesEntity = data;
+      if(data.data.shopsCart!.notAvailableItems!.products!.isNotEmpty || data.data.shopsCart!.notAvailableItems!.offers!.isNotEmpty){
+        addressSelectedIndexes.clear();
+        selectedAddressCityId = 0;
+        selectedAddressAreaId = 0;
+        selectedAddressId = 0;
+        List<String> products = [];
+        for(int i = 0 ; i < data.data.shopsCart!.notAvailableItems!.products!.length ; i ++){
+          if(validationProducts.keys.toList().contains(data.data.shopsCart!.notAvailableItems!.products![i])){
+            products.add('${validationProducts[data.data.shopsCart!.notAvailableItems!.products![i]]!} ');
+          }
+        }
+        designToastDialog(context: context, toast: TOAST.error,text: '${isRTL == true? 'خارج نطاق التوصيل' : 'Out of Delivery Zone'} (${products.toString().replaceAll('[', '').replaceAll(']', '')})');
+        addressSelectedIndexes.clear();
+
+
+      }
+
+      emit(GetShippingAddressFeesSuccessState(
+          getShippingAddressFeesEntity: data
+      )
+      );
+    });
+  }
+
+
+  GetPaymentMethodEntity? getPaymentMethodEntity;
+  void getPaymentMethod({
+    required int? paymentID,
+  }) async {
+    emit(GetPaymentMethodLoadingState());
+    final result = await _getPaymentMethodUseCase(
+        GetPaymentMethodParams(
+          paymentID: paymentID,
+        )
+    );
+    result.fold((failure) {
+      emit(GetPaymentMethodErrorState(
+          failure: mapFailureToMessage(failure)
+      ));
+    }, (data) {
+      getPaymentMethodEntity = data;
+      emit(GetPaymentMethodSuccessState(
+          getPaymentMethodEntity: data
+      )
+      );
+    });
+  }
+
+
+  CheckoutEntity? checkoutEntity;
+  void checkout({
+    required int? paymentID,
+    required int? addressID,
+  }) async {
+    emit(CheckoutLoadingState());
+    final result = await _checkoutUseCase(
+        CheckoutParams(
+          paymentID: paymentID,
+          addressID: addressID,
+        )
+    );
+    result.fold((failure) {
+      emit(CheckoutErrorState(
+          failure: mapFailureToMessage(failure)
+      ));
+    }, (data) {
+      checkoutEntity = data;
+      emit(CheckoutSuccessState(
+          checkoutEntity: data
+      )
+      );
+    });
+  }
+
+
+
+
+
   ///Socket Part
 
   late IO.Socket socket;
@@ -1868,12 +2101,19 @@ class HomeCubit extends Cubit<HomeState> {
   double totalStoresPrice = 0;
   dynamic keys;
   String categoriesCart = '';
-
-
-
+  List<int> addressSelectedIndexes = [];
+  int selectedAddressCityId = 0;
+  int selectedAddressAreaId = 0;
+  int selectedAddressId = 0;
+  int initArea = 0;
+  List paymentSelectedIndexes = [];
+  int selectedPaymentId = 0;
 
   void _connectSocket(IO.Socket socket) {
     emit(InitState());
+    eventData == null;
+    paymentMethod == null;
+    deliveryMethod == null;
     socket.connect();
     Echo echo = Echo(
         broadcaster: EchoBroadcasterType.SocketIO,
@@ -1890,52 +2130,47 @@ class HomeCubit extends Cubit<HomeState> {
     echo.channel('Cart.$userId').listen('.AddToCart', (e) {
       emit(InitState());
       eventData = e;
-      if(eventData != null){
-        cartNum = eventData['count'].toString();
-        eventData == null;
-      }
+      cartNum = eventData['count'].toString();
+      cart();
       emit(SocketAddState());
     });
 
     echo.channel('Cart.$userId').listen('.UpdateCart', (e) {
       emit(InitState());
       eventData = e;
-      if(eventData != null){
-        cartNum = eventData['count'].toString();
-        eventData == null;
-      }
+      cartNum = eventData['count'].toString();
+      cart();
       emit(SocketUpdateState());
     });
     echo.channel('Cart.$userId').listen('.DeleteCart', (e) {
       emit(InitState());
       eventData = e;
-      if(eventData != null){
-        cartNum = eventData['count'].toString();
-        eventData == null;
-      }
+      cartNum = eventData['count'].toString();
+      cart();
       emit(SocketDeleteState());
     });
     echo.channel('Cart.$userId').listen('.ChooseAddress', (e) {
       emit(InitState());
-      eventData = e;
-      deliveryMethod = eventData['items']['address_id'] as int;
-      storesDiscounts = eventData['items']['cartShopsDetails']['stores_discounts'] ;
-      storesPromoAmount = eventData['items']['cartShopsDetails']['stores_subtotal'];
-      storesPromoAmount = eventData['items']['cartShopsDetails']['stores_promo_amount'];
-      totalCarts = eventData['items']['cartShopsDetails']['totalCarts'];
-      totalShipping = eventData['items']['cartShopsDetails']['totalShipping'];
-      cartTotalWithShipping = eventData['items']['cartShopsDetails']['cartTotalWithShipping'];
-      productsValidation = eventData['items']['cartShopsDetails']['notAvailableItems']['products'];
-      offersValidation = eventData['items']['cartShopsDetails']['notAvailableItems']['offers'];
-      eventData = null;
+      if(eventData != null && deliveryMethod != null){
+        eventData = e;
+        deliveryMethod = eventData['items']['address_id'] as int;
+        storesDiscounts = eventData['items']['cartShopsDetails']['stores_discounts'] ;
+        storesPromoAmount = eventData['items']['cartShopsDetails']['stores_subtotal'];
+        storesPromoAmount = eventData['items']['cartShopsDetails']['stores_promo_amount'];
+        totalCarts = eventData['items']['cartShopsDetails']['totalCarts'];
+        totalShipping = eventData['items']['cartShopsDetails']['totalShipping'];
+        cartTotalWithShipping = eventData['items']['cartShopsDetails']['cartTotalWithShipping'];
+        productsValidation = eventData['items']['cartShopsDetails']['notAvailableItems']['products'];
+        offersValidation = eventData['items']['cartShopsDetails']['notAvailableItems']['offers'];
+      }
       emit(SocketChooseAddressState());
     });
     echo.channel('Cart.$userId').listen('.ChoosePaymentMethod', (e) {
       emit(InitState());
-      eventData = e;
-      //paymentMethod = eventData['items']['paymentMethod'];
-      paymentMethod = eventData['items']['paymentMethod'] as int;
-      eventData = null;
+      if(eventData != null && paymentMethod != null){
+        eventData = e;
+        paymentMethod = eventData['items']['paymentMethod'] as int;
+      }
       emit(SocketChoosePaymentState());
     });
     socket.on('connect', (_) {

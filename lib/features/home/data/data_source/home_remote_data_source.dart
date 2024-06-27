@@ -16,13 +16,17 @@ import '../models/best_selling_products_model.dart';
 import '../models/cancel_order_model.dart';
 import '../models/cart_model.dart';
 import '../models/categories_model.dart';
+import '../models/check_out_view_model.dart';
+import '../models/checkout_model.dart';
 import '../models/cities_model.dart';
 import '../models/delete_account_model.dart';
 import '../models/delete_address_model.dart';
+import '../models/delete_cart_item_model.dart';
 import '../models/discover_new_stores_model.dart';
 import '../models/favourite_products_model.dart';
 import '../models/favourite_stores_model.dart';
 import '../models/get_location_model.dart';
+import '../models/get_payment_method_model.dart';
 import '../models/home_favourite_stores_model.dart';
 import '../models/hot_deals_model.dart';
 import '../models/landing_model.dart';
@@ -37,8 +41,10 @@ import '../models/payment_order_data_model.dart';
 import '../models/product_category_data_model.dart';
 import '../models/product_data_model.dart';
 import '../models/product_details_model.dart';
+import '../models/promo_code_model.dart';
 import '../models/recently_viewed_model.dart';
 import '../models/reset_password_model.dart';
+import '../models/shipping_address_fees_model.dart';
 import '../models/shop_data_model.dart';
 import '../models/shop_location_model.dart';
 import '../models/store_category_data_model.dart';
@@ -46,6 +52,7 @@ import '../models/store_offer_details_model.dart';
 import '../models/store_offers_model.dart';
 import '../models/submit_complain_model.dart';
 import '../models/top_categories_model.dart';
+import '../models/update_cart_offer_model.dart';
 import '../models/update_cart_product_model.dart';
 
 abstract class HomeBaseRemoteDataSource {
@@ -211,6 +218,34 @@ abstract class HomeBaseRemoteDataSource {
     required int? f2,
     required int? qty,
     required String? action,
+  });
+  Future<DeleteCartItemModel> deleteCartItem({
+    required int? shop,
+    required int? item,
+    required String? type,
+  });
+  Future<UpdateCartOfferModel> updateCartOffer({
+    required int? shop,
+    required int? item,
+    required int? qty,
+    required String? action,
+  });
+  Future<PromoCodeModel> promoCode({
+    required int? shop,
+    required String? promo,
+    required String? minAmount,
+  });
+  Future<CheckOutViewModel> checkOutView();
+  Future<GetShippingAddressFeesModel> getShippingAddressFees({
+    required int? city,
+    required int? addressID,
+  });
+  Future<GetPaymentMethodModel> getPaymentMethod({
+    required int? paymentID,
+  });
+  Future<CheckoutModel> checkout({
+    required int? paymentID,
+    required int? addressID,
   });
 }
 
@@ -1069,6 +1104,142 @@ class HomeRemoteDataSourceImpl
     );
     return UpdateCartProductModel.fromJson(f.data);
   }
+
+
+  @override
+  Future<DeleteCartItemModel> deleteCartItem({
+    required int? shop,
+    required int? item,
+    required String? type,
+}) async {
+
+    final Response f = await dioHelper.get(
+        url: deleteCartItemUrl,
+        query: {
+          'lang': isRTL == true ? 'ar' : 'en',
+          'shop': shop,
+          'item': item,
+          'type': type,
+        },
+        token: token
+    );
+    return DeleteCartItemModel.fromJson(f.data);
+  }
+
+
+  @override
+  Future<UpdateCartOfferModel> updateCartOffer({
+    required int? shop,
+    required int? item,
+    required int? qty,
+    required String? action,
+  }) async {
+
+    final Response f = await dioHelper.post(
+        url: updateCartOfferURL,
+        data: {
+          'lang': isRTL == true ? 'ar' : 'en',
+          'shop': shop,
+          'item': item,
+          'qty': qty,
+          'action': action
+        },
+        token: token
+    );
+    return UpdateCartOfferModel.fromJson(f.data);
+  }
+
+
+  @override
+  Future<PromoCodeModel> promoCode({
+    required int? shop,
+    required String? promo,
+    required String? minAmount,
+  }) async {
+
+    final Response f = await dioHelper.get(
+        url: updateCartOfferURL,
+        query: {
+          'lang': isRTL == true ? 'ar' : 'en',
+          'shop': shop,
+          'promo': promo,
+          'min_amount': minAmount,
+        },
+        token: token
+    );
+    return PromoCodeModel.fromJson(f.data);
+  }
+
+
+  @override
+  Future<CheckOutViewModel> checkOutView() async {
+
+    final Response f = await dioHelper.get(
+        url: checkoutViewsURL,
+        token: token
+    );
+    return CheckOutViewModel.fromJson(f.data);
+  }
+
+
+
+  @override
+  Future<GetShippingAddressFeesModel> getShippingAddressFees({
+    required int? city,
+    required int? addressID,
+  }) async {
+
+    final Response f = await dioHelper.get(
+        url: shippingAddressesFeesURL,
+        query: {
+          'lang': isRTL == true ? 'ar' : 'en',
+          'city': city,
+          'address_id': addressID,
+        },
+        token: token
+    );
+    return GetShippingAddressFeesModel.fromJson(f.data);
+  }
+
+
+
+  @override
+  Future<GetPaymentMethodModel> getPaymentMethod({
+    required int? paymentID,
+  }) async {
+
+    final Response f = await dioHelper.get(
+        url: paymentMethodURL,
+        query: {
+          'lang': isRTL == true ? 'ar' : 'en',
+          'paymentMethodId': paymentID,
+        },
+        token: token
+    );
+    return GetPaymentMethodModel.fromJson(f.data);
+  }
+
+
+  @override
+  Future<CheckoutModel> checkout({
+    required int? paymentID,
+    required int? addressID,
+  }) async {
+
+    final Response f = await dioHelper.post(
+        url: paymentMethodURL,
+        data: {
+          'lang': isRTL == true ? 'ar' : 'en',
+          'address': addressID,
+          'paymentMethod': paymentID,
+        },
+        token: token
+    );
+    return CheckoutModel.fromJson(f.data);
+  }
+
+
+
 
 
 }
