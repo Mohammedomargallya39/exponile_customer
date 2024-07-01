@@ -245,6 +245,10 @@
   "next": "التالي",
   "cart": "عربة التسوق",
   "free": "مجانا",
-  "checkout": "الدفع"
+  "checkout": "الدفع",
+  "receipt": "الإيصال",
+  "payNow": "إدفع الآن",
+  "payment": "الدفع",
+  "referenceNumber": "الرقم المرجعي"
 
 }

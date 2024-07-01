@@ -245,5 +245,9 @@
   "next": "Next",
   "cart": "Cart",
   "free": "Free",
-  "checkout": "Checkout"
+  "checkout": "Checkout",
+  "receipt": "Receipt",
+  "payNow": "Pay Now",
+  "payment": "Payment",
+  "referenceNumber": "Reference Number"
 }

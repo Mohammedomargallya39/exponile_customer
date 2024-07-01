@@ -22,6 +22,7 @@ import '../../domain/entities/delete_cart_item_entity.dart';
 import '../../domain/entities/discover_new_store_entity.dart';
 import '../../domain/entities/favourite_products_entity.dart';
 import '../../domain/entities/favourite_stores_entity.dart';
+import '../../domain/entities/fawry_payment_entity.dart';
 import '../../domain/entities/get_location_entity.dart';
 import '../../domain/entities/get_payment_method_entity.dart';
 import '../../domain/entities/home_favourite_store_entity.dart';
@@ -33,6 +34,7 @@ import '../../domain/entities/most_deals_entity.dart';
 import '../../domain/entities/new_arrivals_entity.dart';
 import '../../domain/entities/offers_entity.dart';
 import '../../domain/entities/order_details_entity.dart';
+import '../../domain/entities/order_reciept_entity.dart';
 import '../../domain/entities/orders_entity.dart';
 import '../../domain/entities/payment_order_data_entity.dart';
 import '../../domain/entities/product_category_details_entity.dart';
@@ -40,6 +42,7 @@ import '../../domain/entities/product_data_entity.dart';
 import '../../domain/entities/product_details_entity.dart';
 import '../../domain/entities/promo_code_entity.dart';
 import '../../domain/entities/recently_viewed_entity.dart';
+import '../../domain/entities/reciept_entity.dart';
 import '../../domain/entities/reset_password_entity.dart';
 import '../../domain/entities/shipping_address_entity.dart';
 import '../../domain/entities/shop_data_entity.dart';
@@ -1354,11 +1357,78 @@ class CheckoutErrorState extends HomeState {
 
 
 
+class OrderReceiptLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class OrderReceiptSuccessState extends HomeState {
+  final OrderReceiptEntity orderReceiptEntity;
+
+
+  OrderReceiptSuccessState({required this.orderReceiptEntity});
+
+  @override
+  List<Object?> get props => [orderReceiptEntity];
+}
+
+class OrderReceiptErrorState extends HomeState {
+  final String failure;
+
+  OrderReceiptErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
 
 
 
+class FawryPaymentLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class FawryPaymentSuccessState extends HomeState {
+  final FawryPaymentEntity fawryPaymentEntity;
 
 
+  FawryPaymentSuccessState({required this.fawryPaymentEntity});
+
+  @override
+  List<Object?> get props => [fawryPaymentEntity];
+}
+
+class FawryPaymentErrorState extends HomeState {
+  final String failure;
+
+  FawryPaymentErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
+
+
+
+class ReceiptLoadingState extends HomeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class ReceiptSuccessState extends HomeState {
+  final ReceiptEntity receiptEntity;
+
+
+  ReceiptSuccessState({required this.receiptEntity});
+
+  @override
+  List<Object?> get props => [receiptEntity];
+}
+
+class ReceiptErrorState extends HomeState {
+  final String failure;
+
+  ReceiptErrorState({required this.failure});
+  @override
+  List<Object?> get props => [failure];
+}
 
 
 

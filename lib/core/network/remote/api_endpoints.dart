@@ -53,4 +53,7 @@ const String updateCartOfferURL = 'website/cart/update/offer';
 const String checkoutViewsURL = 'website/cart/checkout-view';
 const String shippingAddressesFeesURL = 'website/cart/change-address';
 const String paymentMethodURL = 'website/cart/change-payment-method';
+const String orderReceiptURL = 'website/orders/check-order-payment';
+const fawryPaymentURL = 'fawry/mobile';
+const receiptURL = "order/receipt";
 

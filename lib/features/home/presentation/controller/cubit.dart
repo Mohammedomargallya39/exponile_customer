@@ -15,6 +15,12 @@ import 'package:exponile_customer/features/home/domain/usecase/recently_viewed_u
 import 'package:exponile_customer/features/home/presentation/controller/state.dart';
 import 'package:exponile_customer/features/home/presentation/screens/categories/categories.dart';
 import 'package:exponile_customer/features/home/presentation/screens/offers_screen/all_offer_screen.dart';
+import 'package:fawry_sdk/fawry_sdk.dart';
+import 'package:fawry_sdk/model/bill_item.dart';
+import 'package:fawry_sdk/model/fawry_launch_model.dart';
+import 'package:fawry_sdk/model/launch_customer_model.dart';
+import 'package:fawry_sdk/model/launch_merchant_model.dart';
+import 'package:fawry_sdk/model/payment_methods.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,6 +37,7 @@ import '../../domain/entities/cities_entity.dart';
 import '../../domain/entities/discover_new_store_entity.dart';
 import '../../domain/entities/favourite_products_entity.dart';
 import '../../domain/entities/favourite_stores_entity.dart';
+import '../../domain/entities/fawry_payment_entity.dart';
 import '../../domain/entities/get_location_entity.dart';
 import '../../domain/entities/home_favourite_store_entity.dart';
 import '../../domain/entities/hot_deals_entity.dart';
@@ -41,6 +48,7 @@ import '../../domain/entities/most_deals_entity.dart';
 import '../../domain/entities/new_arrivals_entity.dart';
 import '../../domain/entities/offers_entity.dart';
 import '../../domain/entities/order_details_entity.dart';
+import '../../domain/entities/order_reciept_entity.dart';
 import '../../domain/entities/orders_entity.dart';
 import '../../domain/entities/payment_order_data_entity.dart';
 import '../../domain/entities/product_category_details_entity.dart';
@@ -48,6 +56,7 @@ import '../../domain/entities/product_data_entity.dart';
 import '../../domain/entities/product_details_entity.dart';
 import '../../domain/entities/promo_code_entity.dart';
 import '../../domain/entities/recently_viewed_entity.dart';
+import '../../domain/entities/reciept_entity.dart';
 import '../../domain/entities/shipping_address_entity.dart';
 import '../../domain/entities/shop_data_entity.dart';
 import '../../domain/entities/shop_location_entity.dart';
@@ -74,15 +83,18 @@ import '../../domain/usecase/delete_cart_item_usecase.dart';
 import '../../domain/usecase/discover_new_stores_usecase.dart';
 import '../../domain/usecase/favourite_products_usecase.dart';
 import '../../domain/usecase/favourite_stores_usecase.dart';
+import '../../domain/usecase/fawry_payment_usecase.dart';
 import '../../domain/usecase/get_location_usecase.dart';
 import '../../domain/usecase/get_payment_method_usecase.dart';
 import '../../domain/usecase/get_payment_order_usecase.dart';
+import '../../domain/usecase/get_reciept_usecase.dart';
 import '../../domain/usecase/hot_deals_usecase.dart';
 import '../../domain/usecase/landing_usecase.dart';
 import '../../domain/usecase/location_usecase.dart';
 import '../../domain/usecase/main_search_product_usecase.dart';
 import '../../domain/usecase/main_search_shop_usecase.dart';
 import '../../domain/usecase/order_details_usecase.dart';
+import '../../domain/usecase/order_reciept_usecase.dart';
 import '../../domain/usecase/orders_usecase.dart';
 import '../../domain/usecase/product_category_details_usecase.dart';
 import '../../domain/usecase/product_data_usecase.dart';
@@ -170,6 +182,9 @@ class HomeCubit extends Cubit<HomeState> {
    final GetShippingAddressFeesUseCase _getShippingAddressFeesUseCase;
    final GetPaymentMethodUseCase _getPaymentMethodUseCase;
    final CheckoutUseCase _checkoutUseCase;
+   final OrderReceiptUseCase _orderReceiptUseCase;
+   final FawryPaymentUseCase _fawryPaymentUseCase;
+   final ReceiptUseCase _receiptUseCase;
 
   HomeCubit(
       {
@@ -224,6 +239,9 @@ class HomeCubit extends Cubit<HomeState> {
     required GetShippingAddressFeesUseCase getShippingAddressFeesUseCase,
     required GetPaymentMethodUseCase getPaymentMethodUseCase,
     required CheckoutUseCase checkoutUseCase,
+    required OrderReceiptUseCase orderReceiptUseCase,
+    required FawryPaymentUseCase fawryPaymentUseCase,
+    required ReceiptUseCase receiptUseCase,
   }
   ) :
        _mainSearchProductUseCase = mainSearchProductUseCase,
@@ -277,6 +295,9 @@ class HomeCubit extends Cubit<HomeState> {
        _getShippingAddressFeesUseCase= getShippingAddressFeesUseCase,
        _getPaymentMethodUseCase= getPaymentMethodUseCase,
        _checkoutUseCase= checkoutUseCase,
+       _orderReceiptUseCase= orderReceiptUseCase,
+       _fawryPaymentUseCase= fawryPaymentUseCase,
+       _receiptUseCase= receiptUseCase,
 
 
       super(Empty()){
@@ -2064,11 +2085,137 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
 
+  OrderReceiptEntity? orderReceiptEntity;
+  void checkOrderReceipt({
+    required String? purchaseOrderNumber,
+  }) async {
+    emit(OrderReceiptLoadingState());
+    final result = await _orderReceiptUseCase(
+        OrderReceiptParams(
+          purchaseOrderNumber: purchaseOrderNumber,
+        )
+    );
+    result.fold((failure) {
+      emit(OrderReceiptErrorState(
+          failure: mapFailureToMessage(failure)
+      ));
+    }, (data) {
+      orderReceiptEntity = data;
+      emit(OrderReceiptSuccessState(
+          orderReceiptEntity: data
+      )
+      );
+    });
+  }
+
+
+  FawryPaymentEntity? fawryPaymentEntity;
+  void fawryPayment({
+    required String purchaseNumber,
+    required String expirationTime,
+    required dynamic fawryFees,
+    required String orderAmount,
+    required String orderStatus,
+    required String paymentAmount,
+    required String paymentMethod,
+    required dynamic referenceNumber,
+    required dynamic shippingFees,
+    required dynamic taxes,
+  }) async {
+    emit(FawryPaymentLoadingState());
+    final result = await _fawryPaymentUseCase(
+        FawryPaymentParams(
+          paymentMethod: paymentMethod,
+          expirationTime: expirationTime,
+          fawryFees: fawryFees,
+          orderAmount: orderAmount,
+          orderStatus: orderStatus,
+          paymentAmount: paymentAmount,
+          purchaseNumber: purchaseNumber,
+          referenceNumber: referenceNumber,
+          shippingFees: shippingFees,
+          taxes: taxes
+        )
+    );
+    result.fold((failure) {
+      emit(FawryPaymentErrorState(
+          failure: mapFailureToMessage(failure)
+      ));
+    }, (data) {
+      fawryPaymentEntity = data;
+      emit(FawryPaymentSuccessState(
+          fawryPaymentEntity: data
+      )
+      );
+    });
+  }
+
+
+
+  ReceiptEntity? receiptEntity;
+  void getReceipt({
+    required String? purchaseOrderNumber,
+  }) async {
+    emit(ReceiptLoadingState());
+    final result = await _receiptUseCase(
+        ReceiptParams(
+          purchaseOrderNumber: purchaseOrderNumber,
+        )
+    );
+    result.fold((failure) {
+      emit(ReceiptErrorState(
+          failure: mapFailureToMessage(failure)
+      ));
+    }, (data) {
+      receiptEntity = data;
+      emit(ReceiptSuccessState(
+          receiptEntity: data
+      )
+      );
+    });
+  }
+
+
+
+
+
+  Future<void> startPayment({
+    required String customerProfileId,
+    required String customerName,
+    required String customerEmail,
+    required String customerMobile,
+    required String merchantCode,
+    required String merchantRefNum,
+    required List<BillItem> billItems,
+  }) async {
+    await FawrySDK.instance.startPayment(
+      launchModel: FawryLaunchModel(
+        allow3DPayment: true,
+        chargeItems: billItems,
+        launchCustomerModel: LaunchCustomerModel(
+            customerProfileId: customerProfileId,
+            customerName: customerName,
+            customerEmail: customerEmail,
+            customerMobile:  customerMobile
+        ),
+        launchMerchantModel: LaunchMerchantModel(
+          merchantCode: merchantCode,
+          merchantRefNum: merchantRefNum,
+          secureKey: 'ed62630b-d340-4593-ba09-9454a2d65c8f',
+        ),
+        skipLogin: true,
+        skipReceipt: false,
+        payWithCardToken: false,
+        paymentMethods: PaymentMethods.CREDIT_CARD,
+      ),
+      baseURL: "https://atfawry.fawrystaging.com/",
+      lang: FawrySDK.LANGUAGE_ENGLISH,
+    );
+  }
 
 
 
   ///Socket Part
-
   late IO.Socket socket;
   dynamic eventData;
   bool isAddress = false;

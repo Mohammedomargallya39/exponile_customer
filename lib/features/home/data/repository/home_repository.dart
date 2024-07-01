@@ -24,6 +24,7 @@ import '../../domain/entities/delete_address_entity.dart';
 import '../../domain/entities/discover_new_store_entity.dart';
 import '../../domain/entities/favourite_products_entity.dart';
 import '../../domain/entities/favourite_stores_entity.dart';
+import '../../domain/entities/fawry_payment_entity.dart';
 import '../../domain/entities/get_location_entity.dart';
 import '../../domain/entities/get_payment_method_entity.dart';
 import '../../domain/entities/home_favourite_store_entity.dart';
@@ -35,6 +36,7 @@ import '../../domain/entities/most_deals_entity.dart';
 import '../../domain/entities/new_arrivals_entity.dart';
 import '../../domain/entities/offers_entity.dart';
 import '../../domain/entities/order_details_entity.dart';
+import '../../domain/entities/order_reciept_entity.dart';
 import '../../domain/entities/orders_entity.dart';
 import '../../domain/entities/payment_order_data_entity.dart';
 import '../../domain/entities/product_category_details_entity.dart';
@@ -42,6 +44,7 @@ import '../../domain/entities/product_data_entity.dart';
 import '../../domain/entities/product_details_entity.dart';
 import '../../domain/entities/promo_code_entity.dart';
 import '../../domain/entities/recently_viewed_entity.dart';
+import '../../domain/entities/reciept_entity.dart';
 import '../../domain/entities/reset_password_entity.dart';
 import '../../domain/entities/shipping_address_entity.dart';
 import '../../domain/entities/shop_data_entity.dart';
@@ -54,6 +57,7 @@ import '../../domain/entities/top_categories_entity.dart';
 import '../../domain/entities/update_cart_offer_entity.dart';
 import '../../domain/entities/update_cart_product_entity.dart';
 import '../../domain/repository/home_base_rebository.dart';
+import '../../domain/usecase/fawry_payment_usecase.dart';
 import '../data_source/home_remote_data_source.dart';
 
 typedef CallAppInfo = Future<AppInfoEntity> Function();
@@ -108,6 +112,9 @@ typedef CallPromoCode= Future<PromoCodeEntity> Function();
 typedef CallGetShippingAddressFees= Future<GetShippingAddressFeesEntity> Function();
 typedef CallGetPaymentMethod= Future<GetPaymentMethodEntity> Function();
 typedef CallCheckout= Future<CheckoutEntity> Function();
+typedef CallOrderReceipt= Future<OrderReceiptEntity> Function();
+typedef CallFawryPayment= Future<FawryPaymentEntity> Function();
+typedef CallReceipt= Future<ReceiptEntity> Function();
 
 
 class HomeRepoImplementation extends HomeBaseRepository {
@@ -1675,6 +1682,95 @@ class HomeRepoImplementation extends HomeBaseRepository {
     });
   }
 
+
+
+
+  Future<Either<Failure, OrderReceiptEntity>> fetchOrderReceipt(
+      CallOrderReceipt mainMethod,
+      ) async {
+    try {
+      final orderReceipt = await mainMethod();
+      return Right(orderReceipt);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, OrderReceiptEntity>> orderReceipt({
+    required String? purchaseOrderNumber,
+  }) async {
+    return await fetchOrderReceipt(()
+    {
+      return remoteDataSource.orderReceipt(
+        purchaseOrderNumber:purchaseOrderNumber,
+      );
+    });
+  }
+
+
+
+
+  Future<Either<Failure, FawryPaymentEntity>> fetchFawryPayment(
+      CallFawryPayment mainMethod,
+      ) async {
+    try {
+      final fawryPayment = await mainMethod();
+      return Right(fawryPayment);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, FawryPaymentEntity>> fawryPayment({
+    required FawryPaymentParams params,
+  }) async {
+    return await fetchFawryPayment(()
+    {
+      return remoteDataSource.fawryPayment(
+        params:params,
+      );
+    });
+  }
+
+
+
+
+  Future<Either<Failure, ReceiptEntity>> fetchReceipt(
+      CallReceipt mainMethod,
+      ) async {
+    try {
+      final receipt = await mainMethod();
+      return Right(receipt);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        // error: e.error,
+        // code: e.code,
+        message: e.message,
+      ));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ReceiptEntity>> receipt({
+    required String? purchaseOrderNumber,
+  }) async {
+    return await fetchReceipt(()
+    {
+      return remoteDataSource.receipt(
+        purchaseOrderNumber:purchaseOrderNumber,
+      );
+    });
+  }
 
 
 

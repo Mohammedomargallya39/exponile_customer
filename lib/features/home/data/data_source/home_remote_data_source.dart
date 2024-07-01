@@ -3,6 +3,7 @@ import 'package:exponile_customer/features/home/data/models/add_favourite_model.
 import '../../../../../core/network/remote/api_endpoints.dart';
 import '../../../../../core/network/remote/dio_helper.dart';
 import '../../../../../core/util/resources/constants_manager.dart';
+import '../../domain/usecase/fawry_payment_usecase.dart';
 import '../models/about_exponile_model.dart';
 import '../models/account_data_model.dart';
 import '../models/add_location_model.dart';
@@ -25,6 +26,7 @@ import '../models/delete_cart_item_model.dart';
 import '../models/discover_new_stores_model.dart';
 import '../models/favourite_products_model.dart';
 import '../models/favourite_stores_model.dart';
+import '../models/fawry_payment_model.dart';
 import '../models/get_location_model.dart';
 import '../models/get_payment_method_model.dart';
 import '../models/home_favourite_stores_model.dart';
@@ -36,6 +38,7 @@ import '../models/most_offers_model.dart';
 import '../models/new_arrivals_model.dart';
 import '../models/offers_model.dart';
 import '../models/order_details_model.dart';
+import '../models/order_reciept_model.dart';
 import '../models/orders_model.dart';
 import '../models/payment_order_data_model.dart';
 import '../models/product_category_data_model.dart';
@@ -43,6 +46,7 @@ import '../models/product_data_model.dart';
 import '../models/product_details_model.dart';
 import '../models/promo_code_model.dart';
 import '../models/recently_viewed_model.dart';
+import '../models/reciept_model.dart';
 import '../models/reset_password_model.dart';
 import '../models/shipping_address_fees_model.dart';
 import '../models/shop_data_model.dart';
@@ -246,6 +250,15 @@ abstract class HomeBaseRemoteDataSource {
   Future<CheckoutModel> checkout({
     required int? paymentID,
     required int? addressID,
+  });
+  Future<OrderReceiptModel> orderReceipt({
+    required String? purchaseOrderNumber,
+  });
+  Future<FawryPaymentModel> fawryPayment({
+    required FawryPaymentParams params,
+  });
+  Future<ReceiptModel> receipt({
+    required String? purchaseOrderNumber,
   });
 }
 
@@ -1240,7 +1253,67 @@ class HomeRemoteDataSourceImpl
 
 
 
+  @override
+  Future<OrderReceiptModel> orderReceipt({
+    required String? purchaseOrderNumber,
+  }) async {
 
+    final Response f = await dioHelper.get(
+        url: orderReceiptURL,
+        data: {
+          'lang': isRTL == true ? 'ar' : 'en',
+          'purchase_order_number': purchaseOrderNumber,
+        },
+        token: token
+    );
+    return OrderReceiptModel.fromJson(f.data);
+  }
+
+
+
+  @override
+  Future<FawryPaymentModel> fawryPayment({
+    required FawryPaymentParams params
+  }) async {
+
+    final Response f = await dioHelper.get(
+        url: '$fawryPaymentURL/${params.purchaseNumber}',
+        data: {
+          'lang': isRTL == true ? 'ar' : 'en',
+          'expirationTime': params.expirationTime,
+          'fawryFees': params.fawryFees,
+          'orderAmount': params.orderAmount,
+          'orderStatus': params.orderStatus,
+          'paymentAmount': params.paymentAmount,
+          'paymentMethod': params.paymentMethod,
+          'referenceNumber': params.referenceNumber,
+          'shippingFees': params.shippingFees,
+          'taxes': params.taxes,
+          'statusCode': 200,
+        },
+        token: token
+    );
+    return FawryPaymentModel.fromJson(f.data);
+  }
+
+
+
+  @override
+  Future<ReceiptModel> receipt({
+    required String? purchaseOrderNumber,
+  }) async {
+
+    final Response f = await dioHelper.get(
+        url: receiptURL,
+        data: {
+          'lang': isRTL == true ? 'ar' : 'en',
+          'purchase_order_number': purchaseOrderNumber,
+          'user_id': userId,
+        },
+        token: token
+    );
+    return ReceiptModel.fromJson(f.data);
+  }
 
 }
 

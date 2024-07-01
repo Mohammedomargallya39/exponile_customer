@@ -246,6 +246,10 @@ class TranslationModel {
   late String cart;
   late String free;
   late String checkout;
+  late String receipt;
+  late String payNow;
+  late String payment;
+  late String referenceNumber;
 
 
 
@@ -496,5 +500,9 @@ class TranslationModel {
     cart= json['cart'];
     free= json['free'];
     checkout= json['checkout'];
+    receipt= json['receipt'];
+    payNow= json['payNow'];
+    payment= json['payment'];
+    referenceNumber= json['referenceNumber'];
   }
 }

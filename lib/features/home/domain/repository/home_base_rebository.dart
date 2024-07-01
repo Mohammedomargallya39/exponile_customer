@@ -23,6 +23,7 @@ import '../entities/delete_cart_item_entity.dart';
 import '../entities/discover_new_store_entity.dart';
 import '../entities/favourite_products_entity.dart';
 import '../entities/favourite_stores_entity.dart';
+import '../entities/fawry_payment_entity.dart';
 import '../entities/get_location_entity.dart';
 import '../entities/get_payment_method_entity.dart';
 import '../entities/home_favourite_store_entity.dart';
@@ -34,6 +35,7 @@ import '../entities/most_deals_entity.dart';
 import '../entities/new_arrivals_entity.dart';
 import '../entities/offers_entity.dart';
 import '../entities/order_details_entity.dart';
+import '../entities/order_reciept_entity.dart';
 import '../entities/orders_entity.dart';
 import '../entities/payment_order_data_entity.dart';
 import '../entities/product_category_details_entity.dart';
@@ -41,6 +43,7 @@ import '../entities/product_data_entity.dart';
 import '../entities/product_details_entity.dart';
 import '../entities/promo_code_entity.dart';
 import '../entities/recently_viewed_entity.dart';
+import '../entities/reciept_entity.dart';
 import '../entities/reset_password_entity.dart';
 import '../entities/shipping_address_entity.dart';
 import '../entities/shop_data_entity.dart';
@@ -52,6 +55,7 @@ import '../entities/submit_complain_entity.dart';
 import '../entities/top_categories_entity.dart';
 import '../entities/update_cart_offer_entity.dart';
 import '../entities/update_cart_product_entity.dart';
+import '../usecase/fawry_payment_usecase.dart';
 
 abstract class HomeBaseRepository {
   Future<Either<Failure, AppInfoEntity>> appInfo();
@@ -256,5 +260,14 @@ abstract class HomeBaseRepository {
   Future<Either<Failure, CheckoutEntity>> checkout({
     required int? paymentID,
     required int? addressID,
+  });
+  Future<Either<Failure, OrderReceiptEntity>> orderReceipt({
+    required String? purchaseOrderNumber,
+  });
+  Future<Either<Failure, FawryPaymentEntity>> fawryPayment({
+    required FawryPaymentParams params,
+  });
+  Future<Either<Failure, ReceiptEntity>> receipt({
+    required String? purchaseOrderNumber,
   });
 }
